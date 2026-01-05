@@ -17,7 +17,7 @@ db = SQLAlchemy(app)
 
 
 #***************************Models*******************
-class User(db.model):
+class User(db.Model):
     id  = db.Column(db.Integer,primary_key=True)
     userId = db.Column(db.String(20), unique=True, nullable=False)
     userName = db.Column(db.String(20),nullable=False)
@@ -108,5 +108,8 @@ def add_user():
         except Exception as e:
             flash(f"Error:{str(e),'Danger'}")
     return render_template('add_user.html')
+
+if __name__ == '__main__':
+    app.run(debug=True)
 #The following code is about to add measurment no sure is it at all according to talior system but i haven't check and run code i have added sectio too 
 # let me run the code and add fucntiolaty like upadate and delete button in this where update will work to update the user data and delete you know 
