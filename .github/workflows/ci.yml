@@ -21,29 +21,20 @@ jobs:
 
     - name: Install dependencies
       run: |
-        python -m venv venv
-        source venv/bin/activate
-        pip install --upgrade pip
-        if [ -f requirements.txt ]; then
-          pip install -r requirements.txt
-        else
-          pip install flask pytest
-        fi
+        python -m pip install --upgrade pip
+        pip install flask pytest
 
     - name: Run tests
       run: |
-        source venv/bin/activate
-        export PYTHONPATH=$PYTHONPATH:$(pwd)
-        pytest tests/ -v
+        export PYTHONPATH=$(pwd)
+        pytest tailors_managment_system/tests/ -v
 
   build:
     runs-on: ubuntu-latest
     needs: test
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-
+    - uses: actions/checkout@v3
     - name: Build Docker image
-      run: |
-        docker build -t tailors-app .
+      run: docker build -t tailors-app .
+

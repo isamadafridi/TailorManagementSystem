@@ -1,8 +1,9 @@
-from app import app
+from tailors_managment_system.app import app
 
 def test_home_page():
     client = app.test_client()
     response = client.get('/')
     assert response.status_code == 200
+
 
 
