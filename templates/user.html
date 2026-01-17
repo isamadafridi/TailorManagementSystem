@@ -1,235 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <meta charset="UTF-8">
-    <title>View Customers</title>
+    <title>All Customers - Tailor Management</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f6f8;
-            padding: 20px;
-        }
-
-        header {
-            background-color: #2c3e50;
-            color: white;
-            padding: 20px;
-            text-align: center;
-            border-radius: 6px;
-            margin-bottom: 30px;
-        }
-
-        header h1 {
-            margin-bottom: 5px;
-        }
-
-        header p {
-            font-size: 14px;
-            opacity: 0.9;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: white;
-            padding: 25px;
-            border-radius: 6px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
-        }
-
-        .table-wrapper {
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 25px;
-        }
-
-        thead {
-            background-color: #3498db;
-            color: white;
-        }
-
-        th {
-            padding: 15px;
-            text-align: left;
-            font-weight: 600;
-            border-bottom: 2px solid #3498db;
-        }
-
-        td {
-            padding: 12px 15px;
-            border-bottom: 1px solid #e0e0e0;
-        }
-
-        tbody tr:hover {
-            background-color: #f9f9f9;
-            transition: background-color 0.3s ease;
-        }
-
-        tbody tr:nth-child(even) {
-            background-color: #f5f5f5;
-        }
-
-        .no-data {
-            text-align: center;
-            padding: 40px;
-            color: #777;
-            font-size: 18px;
-        }
-
-        .back-btn {
-            display: inline-block;
-            margin-bottom: 20px;
-            padding: 10px 20px;
-            background-color: #95a5a6;
-            color: white;
-            text-decoration: none;
-            border-radius: 4px;
-            transition: background-color 0.3s ease;
-        }
-
-        .back-btn:hover {
-            background-color: #7f8c8d;
-        }
-
-        .action-btn {
-            padding: 6px 12px;
-            margin: 0 4px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 12px;
-            transition: background-color 0.3s ease;
-        }
-
-        .edit-btn {
-            background-color: #27ae60;
-            color: white;
-        }
-
-        .edit-btn:hover {
-            background-color: #229954;
-        }
-
-        .delete-btn {
-            background-color: #e74c3c;
-            color: white;
-        }
-
-        .delete-btn:hover {
-            background-color: #c0392b;
-        }
-
-        .stats {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 25px;
-            flex-wrap: wrap;
-        }
-
-        .stat-card {
-            flex: 1;
-            min-width: 200px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 6px;
-            text-align: center;
-        }
-
-        .stat-card h3 {
-            font-size: 14px;
-            opacity: 0.9;
-            margin-bottom: 10px;
-        }
-
-        .stat-card .number {
-            font-size: 32px;
-            font-weight: bold;
-        }
-
-        footer {
-            text-align: center;
-            margin-top: 30px;
-            color: #777;
-            padding: 20px;
-        }
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h1 { text-align: center; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .success { background-color: #d4edda; padding: 15px; border-radius: 5px; margin-bottom: 15px; }
+        .danger { background-color: #f8d7da; padding: 15px; border-radius: 5px; margin-bottom: 15px; }
+        a { color: #007bff; text-decoration: none; }
+        a:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
 
-<header>
-    <h1>Tailor Management System</h1>
-    <p>View All Customers</p>
-</header>
+    <h1>All Customers</h1>
 
-<div class="container">
-    <a href="/" class="back-btn">← Back to Home</a>
+    <!-- Flash Messages (Success/Error) -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="{{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
 
-    <div class="stats">
-        <div class="stat-card">
-            <h3>Total Customers</h3>
-            <div class="number">{% if users %}{{ users|length }}{% else %}0{% endif %}</div>
-        </div>
-    </div>
-
-    <div class="table-wrapper">
-        {% if users %}
+    <!-- Customers Table -->
+    {% if users %}
         <table>
             <thead>
                 <tr>
-                    <th>Customer ID</th>
+                    <th>ID</th>
                     <th>Name</th>
                     <th>Phone</th>
-                    <th>Address</th>
-                    <th>Number of Suits</th>
-                    <th>Date Added</th>
-                    <th>Width</th>
-                    <th>Height</th>
-                    <th>Color</th>
+                    <th>Suits</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
                 {% for user in users %}
                 <tr>
-                    <td><strong>{{ user.userId }}</strong></td>
+                    <td>{{ user.userId }}</td>
                     <td>{{ user.userName }}</td>
                     <td>{{ user.phone }}</td>
-                    <td>{{ user.address }}</td>
                     <td>{{ user.numberOfSuit }}</td>
-                    <td>{{ user.date.strftime('%d-%m-%Y') if user.date else 'N/A' }}</td>
-                    <td>{{ user.width }}</td>
-                    <td>{{ user.height }}</td>
-                    <td>{{ user.color }}</td>
                     <td>
-                        <button class="action-btn edit-btn">Edit</button>
-                        <button class="action-btn delete-btn">Delete</button>
+                        <a href="{{ url_for('print_customer', user_id=user.userId) }}">Print</a>
                     </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
-        {% else %}
-        <div class="no-data">
-            <p>No customers found. <a href="/add_user" style="color: #3498db;">Add a new customer</a></p>
-        </div>
-        {% endif %}
-    </div>
-</div>
+    {% else %}
+        <p style="text-align:center; color:gray;">No customers added yet. <a href="/add_user">Add one now!</a></p>
+    {% endif %}
 
-<footer>
-    <p>© 2026 Tailor Management System. All Rights Reserved</p>
-</footer>
+    <br>
+    <a href="/add_user">+ Add New Customer</a>
 
 </body>
 </html>

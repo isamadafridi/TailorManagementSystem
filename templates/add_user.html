@@ -1,102 +1,53 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Add Student</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f6f8;
-        }
-        .container {
-            width: 400px;
-            margin: 60px auto;
-            background: white;
-            padding: 25px;
-            border-radius: 6px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        h2 {
-            text-align: center;
-        }
-        label {
-            display: block;
-            margin-top: 12px;
-        }
-        input, select {
-            width: 100%;
-            padding: 8px;
-            margin-top: 5px;
-        }
-        button {
-            width: 100%;
-            margin-top: 20px;
-            padding: 10px;
-            background-color: #3498db;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #2980b9;
-        }
-        a {
-            display: block;
-            text-align: center;
-            margin-top: 15px;
-        }
-    </style>
-</head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Add Customer</title></head>
 <body>
+    <h1>Add New Customer</h1>
 
-<div class="container">
-    <h2>Add Customer</h2>
+    <!-- Flash messages show karne ke liye -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}" style="padding:15px; margin:10px; border-radius:5px;">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <style>
+        .alert-success { background-color: #d4edda; }
+        .alert-error { background-color: #f8d7da; }
+    </style>
 
     <form method="POST">
-        <label>Customer Name</label>
-        <input type="text" name="Customer Name" required>
+        <label>Customer Name:</label><br>
+        <input type="text" name="userName" required><br><br>
 
-        <label>Phone Number</label>
-        <input type="text" name="Phone Number" required>
+        <label>Phone Number:</label><br>
+        <input type="text" name="phone" required><br><br>
 
-        <label>Number Of Suit</label>
-        <input type="text" name="Number Of Suit" required>
+        <label>Number of Suits:</label><br>
+        <input type="number" name="numberOfSuit" required><br><br>
 
-        <label>Address</label>
-        <input type="text" name="Address" required>
+        <label>Address:</label><br>
+        <input type="text" name="address" required><br><br>
 
-        <label>Date</label>
-        <input type="text" name="Date" placeholder="dd-mm-yyyy" required>
+        <label>Date:</label><br>
+        <input type="date" name="date" required><br><br>
 
-        <label>Width (Shalwar)</label>
-        <input type="text" name="Width" required>
-
-        <label>Height (Shalwar)</label>
-        <input type="text" name="Height" required>
-
-        <label>Arm</label>
-        <input type="text" name="Arm" required>
-
-        <label>Color</label>
-        <input type="text" name="Color" required>
-
-        <label>Pocket</label>
-        <input type="text" name="Pocketr" required>
-
-        <label>Front Pocket</label>
-        <input type="text" name="Front Pocket" required>
-
-        <label>Chest Width</label>
-        <input type="text" name="Chest Width" required>
-
-        <label>Daman</label>
-        <input type="text" name="Daman" required>
+        <h3>Shalwar Measurements</h3>
+        <label>Width:</label> <input type="text" name="width" required><br>
+        <label>Height:</label> <input type="text" name="height" required><br>
+        <label>Arm:</label> <input type="text" name="arm" required><br>
+        <label>Color:</label> <input type="text" name="color" required><br>
+        <label>Pocket:</label> <input type="text" name="pocket" required><br>
+        <label>Front Pocket:</label> <input type="text" name="frontPocket" required><br>
+        <label>Chest Width:</label> <input type="text" name="chestWidth" required><br>
+        <label>Daman:</label> <input type="text" name="daman" required><br><br>
 
         <button type="submit">Add Customer</button>
     </form>
-
-    <a href="/">Back to Home</a>
-</div>
-
 </body>
 </html>
