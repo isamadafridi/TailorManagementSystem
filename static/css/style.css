@@ -1,95 +1,151 @@
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+/* =========================================
+   1. GLOBAL STYLES & HEADER
+   ========================================= */
+body { 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+    background: #f0f2f5; 
+    color: #333; 
     margin: 0;
-    padding: 20px;
-    background-color: #f8f9fa;
-    color: #333;
+    padding-bottom: 40px;
 }
 
-.container {
-    max-width: 900px;
-    margin: 0 auto;
-    background: white;
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-}
-
-h1, h2 {
-    color: #2c3e50;
+/* Blue Gradient Header (Slim) */
+.page-header {
+    background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+    color: white; 
+    padding: 15px 15px 45px 15px; /* Bottom padding creates space for container overlap */
     text-align: center;
+    border-bottom-left-radius: 20px; 
+    border-bottom-right-radius: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    position: relative;
 }
+.page-header h1 { margin: 0; font-size: 22px; }
+.page-header p { margin: 4px 0 0; opacity: 0.9; font-size: 13px; }
 
-form {
-    display: grid;
-    gap: 15px;
-}
-
-label {
-    font-weight: bold;
-}
-
-input {
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-}
-
-button, .btn {
-    background: #27ae60;
+/* Top Left Close Button */
+.btn-top-left {
+    position: absolute; 
+    top: 15px; 
+    left: 15px; /* <--- CHANGED from right to left */
+    background: rgba(255, 255, 255, 0.2); 
     color: white;
-    border: none;
-    padding: 12px 20px;
-    border-radius: 6px;
-    cursor: pointer;
-}
-
-button:hover, .btn:hover {
-    background: #219653;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-}
-
-th, td {
-    border: 1px solid #ddd;
-    padding: 12px;
-}
-
-th {
-    background: #34495e;
-    color: white;
-}
-
-.success-msg {
-    background: #d4edda;
-    color: #155724;
-    padding: 15px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-}
-
-.danger-msg {
-    background: #f8d7da;
-    color: #721c24;
-    padding: 15px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-}
-
-.back-btn {
-    display: inline-block;
-    margin-top: 20px;
-    background: #3498db;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 6px;
+    padding: 6px 12px; 
+    border-radius: 50px; 
     text-decoration: none;
+    font-size: 12px; 
+    font-weight: bold; 
+    backdrop-filter: blur(5px); 
+    transition: 0.2s;
+}
+.btn-top-left:hover { 
+    background: rgba(255, 255, 255, 0.4); 
+}
+/* Standard Container (Add/Update Pages) */
+.container { 
+    max-width: 950px; 
+    margin: -30px auto 0 auto; 
+    background: #fff; 
+    padding: 25px; 
+    border-radius: 10px; 
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+    position: relative;
 }
 
-.back-btn:hover {
-    background: #2980b9;
+/* Compact Container (View Page) */
+.container-compact {
+    max-width: 800px; 
+    margin: -30px auto 0 auto; 
+    background: #fff; 
+    padding: 20px; 
+    border-radius: 10px; 
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+    position: relative;
+}
+
+/* =========================================
+   2. FORM INPUT STYLES (Add/Update)
+   ========================================= */
+h3 { border-bottom: 1px solid #eee; padding-bottom: 5px; margin-top: 20px; margin-bottom: 15px; color: #2c3e50; font-size: 16px; text-transform: uppercase; }
+
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+.full-width { grid-column: span 2; }
+
+.input-row { display: flex; align-items: center; margin-bottom: 10px; }
+.input-row label { width: 120px; font-weight: 600; color: #555; font-size: 14px; }
+.input-row input, .input-row textarea { flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; }
+
+/* Selection Groups (Radios) */
+.style-section-label { font-weight: bold; margin: 15px 0 5px 0; display: block; color: #2c3e50; font-size: 14px; }
+.image-selector-group { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 10px; }
+.image-radio-item input { display: none; }
+.icon-box { border: 2px solid #eee; border-radius: 6px; padding: 5px; text-align: center; background: #fff; min-height: 85px; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: all 0.2s; }
+.icon-box img { width: 35px; height: 35px; object-fit: contain; margin-bottom: 5px; opacity: 0.6; filter: grayscale(100%); }
+.icon-label { font-size: 12px; font-weight: 600; color: #777; }
+.image-radio-item input:checked + .icon-box { border-color: #27ae60; background: #eafaf1; }
+.image-radio-item input:checked + .icon-box img { opacity: 1; filter: grayscale(0%); }
+
+/* Size Bar */
+.size-selection-row { display: flex; gap: 10px; margin-bottom: 15px; padding: 6px; background: #f8f9fa; border-radius: 6px; border: 1px dashed #ddd; }
+.size-label-text { font-weight: bold; color: #555; margin-right: 5px; font-size: 12px; display: flex; align-items: center;}
+.size-radio-group { display: flex; gap: 5px; flex: 1; }
+.size-radio-item input { display: none; }
+.size-box { display: block; width: 100%; padding: 4px 0; background: white; border: 1px solid #ccc; text-align: center; border-radius: 3px; cursor: pointer; font-size: 12px; font-weight: bold; }
+.size-radio-item input:checked + .size-box { background: #27ae60; color: white; border-color: #27ae60; }
+
+.btn-submit { width: 100%; padding: 12px; background: #27ae60; color: white; border: none; font-size: 16px; border-radius: 6px; cursor: pointer; margin-top: 15px; font-weight: bold; }
+.back-link { display: block; text-align: center; margin-top: 15px; color: #777; font-size: 13px; text-decoration: none; }
+
+/* =========================================
+   3. VIEW PAGE STYLES (Compact & Clean)
+   ========================================= */
+/* Small Section Headers */
+.section-title {
+    font-size: 13px; font-weight: bold; color: #2c3e50; text-transform: uppercase;
+    border-bottom: 1px solid #eee; padding-bottom: 3px; margin-bottom: 8px; margin-top: 15px;
+}
+
+/* 3-Column Info Grid */
+.info-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 15px; }
+.info-item { background: #f8f9fa; padding: 6px 10px; border-radius: 4px; border: 1px solid #eee; }
+.label { font-size: 10px; color: #999; text-transform: uppercase; display: block; font-weight: bold; letter-spacing: 0.5px; }
+.value { font-size: 15px; font-weight: 600; color: #333; }
+
+/* Measurement Boxes (Side by Side) */
+.measure-container { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+.measure-box { border: 1px solid #ddd; padding: 8px; border-radius: 5px; background: #fff; }
+.measure-header { margin: 0 0 6px 0; color: #2c3e50; font-size: 12px; font-weight: bold; border-bottom: 1px solid #eee; padding-bottom: 2px; }
+.measure-row { display: flex; justify-content: space-between; font-size: 13px; border-bottom: 1px dashed #f0f0f0; padding: 2px 0; color: #555;}
+.measure-row strong { color: #000; }
+.measure-row:last-child { border-bottom: none; }
+
+/* Style Grid (Small Icons) */
+.style-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
+.style-card { 
+    border: 1px solid #eee; border-radius: 5px; padding: 5px; text-align: center; background: #fff; 
+    transition: transform 0.2s;
+}
+.style-card:hover { border-color: #3498db; transform: translateY(-2px); }
+.style-icon { width: 30px; height: 30px; object-fit: contain; margin-bottom: 2px; }
+.style-name { font-size: 10px; font-weight: bold; color: #555; line-height: 1.2; }
+.style-size { background: #2c3e50; color: white; font-size: 9px; padding: 1px 5px; border-radius: 3px; display: inline-block; margin-top: 3px; }
+
+/* Action Buttons (Bottom) */
+.action-bar { margin-top: 25px; display: flex; gap: 10px; justify-content: center; }
+.btn { 
+    padding: 10px 25px; border-radius: 50px; text-decoration: none; 
+    font-weight: bold; font-size: 14px; color: white; display: flex; 
+    align-items: center; gap: 6px; border: none; cursor: pointer; transition: 0.2s;
+}
+.btn:hover { opacity: 0.9; transform: translateY(-2px); box-shadow: 0 3px 8px rgba(0,0,0,0.15); }
+
+/* Button Colors */
+.btn-back { background: #1a2627; }  /* Grey */
+.btn-edit { background: #5f3c03; }  /* Orange */
+.btn-print { background: #0e3f1c; } /* Green */
+
+/* Responsive Fixes */
+@media (max-width: 600px) {
+    .info-grid, .measure-container { grid-template-columns: 1fr; }
+    .image-selector-group, .style-grid { grid-template-columns: repeat(3, 1fr); }
 }

@@ -1,17 +1,83 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>All Customers</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer List</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    <style>
+        /* --- LIST PAGE STYLES --- */
+        body { background-color: #f0f2f5; font-family: 'Segoe UI', sans-serif; }
+        
+        /* HEADER */
+        .page-header {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white; padding: 20px 20px 60px 20px; text-align: center;
+            border-bottom-left-radius: 20px; border-bottom-right-radius: 20px;
+        }
+        .page-header h1 { margin: 0; font-size: 28px; }
+
+        /* CONTAINER */
+        .container {
+            max-width: 1100px; margin: -40px auto 20px auto; background: #fff;
+            padding: 20px; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        /* SEARCH & FILTER (Optional space) */
+        .toolbar {
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;
+        }
+        .btn-add {
+            background: #27ae60; color: white; padding: 10px 20px; text-decoration: none; 
+            border-radius: 50px; font-weight: bold; font-size: 14px;
+        }
+
+        /* TABLE STYLES */
+        .custom-table {
+            width: 100%; border-collapse: collapse; margin-bottom: 20px;
+        }
+        .custom-table th {
+            background: #f8f9fa; color: #2c3e50; font-weight: 600; text-align: left; 
+            padding: 15px; border-bottom: 2px solid #eee;
+        }
+        .custom-table td {
+            padding: 15px; border-bottom: 1px solid #eee; color: #555; vertical-align: middle;
+        }
+        .custom-table tr:hover { background-color: #fcfcfc; }
+
+        /* ACTION BUTTONS */
+        .action-btn {
+            padding: 6px 12px; border-radius: 4px; text-decoration: none; font-size: 13px; 
+            font-weight: bold; margin-right: 5px; display: inline-block; border: none; cursor: pointer;
+        }
+        .btn-view { background: #3498db; color: white; }
+        .btn-edit { background: #f39c12; color: white; }
+        .btn-del { background: #e74c3c; color: white; }
+
+        /* EMPTY STATE */
+        .empty-state { text-align: center; padding: 40px; color: #999; }
+    </style>
 </head>
 <body>
+
+    <div class="page-header">
+        <h1>Customer List</h1>
+        <p>Manage all your orders here</p>
+
+        <a href="/" class="btn-top-left">Back</a>
+    </div>
+
     <div class="container">
-        <h1>All Customers</h1>
+        <div class="toolbar">
+            <a href="/" style="color:#777; text-decoration:none;">← Back to Dashboard</a>
+            <a href="/add_user" class="btn-add">+ Add New Customer</a>
+        </div>
 
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
-                    <div class="{{ 'success-msg' if category == 'success' else 'danger-msg' }}">
+                    <div style="padding:10px; margin-bottom:15px; border-radius:5px; background:#d4edda; color:#155724; border:1px solid #c3e6cb;">
                         {{ message }}
                     </div>
                 {% endfor %}
@@ -19,48 +85,48 @@
         {% endwith %}
 
         {% if users %}
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Phone</th>
-                        <th>Suits</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for user in users %}
-                    <tr>
-                        <td>{{ user.userId }}</td>
-                        <td>{{ user.userName }}</td>
-                        <td>{{ user.phone }}</td>
-                        <td>{{ user.numberOfSuit }}</td>
+        <table class="custom-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th style="text-align:center;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td><strong>{{ user.userId }}</strong></td>
+                    <td>
+                        <div style="font-weight:bold; color:#333;">{{ user.userName }}</div>
+                        <div style="font-size:12px; color:#888;">{{ user.address }}</div>
+                    </td>
+                    <td>{{ user.phone }}</td>
+                    <td>{{ user.date.strftime('%d-%m-%Y') }}</td>
+                    <td><span style="background:#e8f5e9; color:#27ae60; padding:3px 8px; border-radius:10px; font-size:12px; font-weight:bold;">Active</span></td>
+                    <td style="text-align:center;">
+                        <a href="/view/{{ user.userId }}" class="action-btn btn-view">👁️ View</a>
                         
-                        <td>
-                            <a href="{{ url_for('update_customer', user_id=user.userId) }}" class="btn">Update</a>
-                            
-                            <form action="{{ url_for('delete_customer', user_id=user.userId) }}" method="POST" style="display:inline;">
-                                <button type="submit" class="btn" style="background:#e74c3c;" 
-                                        onclick="return confirm('Delete {{ user.userName }}? This cannot be undone.')">
-                                    Delete
-                                </button>
-                            </form>
-                            
-                            <a href="{{ url_for('print_customer', user_id=user.userId) }}" class="btn">Print</a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                        <a href="/update/{{ user.userId }}" class="action-btn btn-edit">✏️ Edit</a>
+                        
+                        <form action="/delete/{{ user.userId }}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this customer?');">
+                            <button type="submit" class="action-btn btn-del">🗑️</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
         {% else %}
-            <p>No customers yet. Add one!</p>
+            <div class="empty-state">
+                <h3>No Customers Found</h3>
+                <p>Click "Add New Customer" to get started.</p>
+            </div>
         {% endif %}
-
-        <br>
-        <a href="/add_user" class="btn">+ Add New Customer</a>
-        <br><br>
-        <a href="/" class="back-btn">← Back to Home</a>
     </div>
+
 </body>
 </html>

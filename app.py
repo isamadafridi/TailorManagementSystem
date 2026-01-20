@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+from sqlalchemy import or_
 import os
 
 app = Flask(__name__)
@@ -19,6 +20,7 @@ def generate_unique_id(prefix, model, column):
         number = 1
     return f"{prefix}{number:03d}"
 
+# --- DATABASE MODEL ---
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     userId = db.Column(db.String(20), unique=True, nullable=False)
@@ -28,27 +30,36 @@ class User(db.Model):
     address = db.Column(db.String(200), nullable=False)
     date = db.Column(db.Date, nullable=False)
     
-    # Shalwar measurements
-    width = db.Column(db.String(20), nullable=False)
-    height = db.Column(db.String(20), nullable=False)
-    arm = db.Column(db.String(20), nullable=False)
-    color = db.Column(db.String(50), nullable=False)
-    pocket = db.Column(db.String(20), nullable=False)
-    frontPocket = db.Column(db.String(20), nullable=False)
-    chestWidth = db.Column(db.String(20), nullable=False)
-    daman = db.Column(db.String(20), nullable=False)
+    # Kameez Measurements
+    height = db.Column(db.String(20))       # Length
+    width = db.Column(db.String(20))        # Chaati
+    chestWidth = db.Column(db.String(20))
+    arm = db.Column(db.String(20))
+    teera = db.Column(db.String(20))        # Shoulder
+    collar = db.Column(db.String(20))       # Neck
+    
+    # Shalwar Measurements
+    shalwarLength = db.Column(db.String(20)) 
+    poncha = db.Column(db.String(20))        
+    shalwarWidth = db.Column(db.String(20))  # Ghair
+    asan = db.Column(db.String(20))          # Crotch
+    
+    # Styling Options
+    style_collar = db.Column(db.String(50))
+    style_cuff = db.Column(db.String(50))
+    style_pocket = db.Column(db.String(50))
+    style_patti = db.Column(db.String(50))          # This was missing in your DB
+    style_daman = db.Column(db.String(50))          
+    style_shalwar_pocket = db.Column(db.String(50)) 
 
-with app.app_context():
-    db.create_all()
+    # Size Options (New fields for the numbers like 1.0, 1.5 etc)
+    size_collar = db.Column(db.String(20))
+    size_patti = db.Column(db.String(20))
+    size_cuff = db.Column(db.String(20))
+    
+    special_notes = db.Column(db.String(500))
 
-@app.route('/')
-def home():
-    return render_template('home.html')
-
-@app.route('/user')
-def user():
-    all_users = User.query.all()
-    return render_template('user.html', users=all_users)
+# --- ROUTES ---
 
 @app.route('/add_user', methods=['GET', 'POST'])
 def add_user():
@@ -56,37 +67,47 @@ def add_user():
         try:
             userId = generate_unique_id('AB', User, User.userId)
             
-            userName = request.form['userName']
-            phone = request.form['phone']
-            numberOfSuit = int(request.form['numberOfSuit'])
-            address = request.form['address']
-            date_str = request.form['date']
-            date_obj = datetime.strptime(date_str, '%Y-%m-%d').date()
-            
-            width = request.form['width']
-            height = request.form['height']
-            arm = request.form['arm']
-            color = request.form['color']
-            pocket = request.form['pocket']
-            frontPocket = request.form['frontPocket']
-            chestWidth = request.form['chestWidth']
-            daman = request.form['daman']
+            # Handling Style Pocket (List to String)
+            # Checkbox lists need special handling
+            pocket_list = request.form.getlist('style_pocket')
+            pocket_str = ", ".join(pocket_list) if pocket_list else request.form.get('style_pocket')
 
             new_user = User(
                 userId=userId,
-                userName=userName,
-                phone=phone,
-                numberOfSuit=numberOfSuit,
-                address=address,
-                date=date_obj,
-                width=width,
-                height=height,
-                arm=arm,
-                color=color,
-                pocket=pocket,
-                frontPocket=frontPocket,
-                chestWidth=chestWidth,
-                daman=daman
+                userName=request.form['userName'],
+                phone=request.form['phone'],
+                numberOfSuit=int(request.form['numberOfSuit']),
+                address=request.form['address'],
+                date=datetime.strptime(request.form['date'], '%Y-%m-%d').date(),
+                
+                # Kameez
+                height=request.form.get('height'),
+                width=request.form.get('width'),
+                chestWidth=request.form.get('chestWidth'),
+                arm=request.form.get('arm'),
+                teera=request.form.get('teera'),
+                collar=request.form.get('collar'),
+                
+                # Shalwar
+                shalwarLength=request.form.get('shalwarLength'),
+                poncha=request.form.get('poncha'),
+                shalwarWidth=request.form.get('shalwarWidth'),
+                asan=request.form.get('asan'),
+                
+                # Styles
+                style_collar=request.form.get('style_collar'),
+                style_cuff=request.form.get('style_cuff'),
+                style_pocket=pocket_str, # Using the processed string
+                style_daman=request.form.get('style_daman'),
+                style_patti=request.form.get('style_patti'),
+                style_shalwar_pocket=request.form.get('style_shalwar_pocket'),
+
+                # Sizes
+                size_collar=request.form.get('size_collar'),
+                size_patti=request.form.get('size_patti'),
+                size_cuff=request.form.get('size_cuff'),
+                
+                special_notes=request.form.get('special_notes')
             )
             
             db.session.add(new_user)
@@ -97,8 +118,18 @@ def add_user():
             
         except Exception as e:
             flash(f"Error: {str(e)}", 'danger')
+            return redirect(url_for('add_user')) # Redirect back to form on error
     
     return render_template('add_user.html')
+
+@app.route('/')
+def home():
+    return render_template('home.html')
+
+@app.route('/user')
+def user():
+    all_users = User.query.all()
+    return render_template('user.html', users=all_users)
 
 @app.route('/print/<string:user_id>')
 def print_customer(user_id):
@@ -111,29 +142,60 @@ def update_customer(user_id):
 
     if request.method == 'POST':
         try:
+            # 1. Update Basic Info
             customer.userName = request.form['userName']
             customer.phone = request.form['phone']
             customer.numberOfSuit = int(request.form['numberOfSuit'])
             customer.address = request.form['address']
             customer.date = datetime.strptime(request.form['date'], '%Y-%m-%d').date()
             
-            customer.width = request.form['width']
-            customer.height = request.form['height']
-            customer.arm = request.form['arm']
-            customer.color = request.form['color']
-            customer.pocket = request.form['pocket']
-            customer.frontPocket = request.form['frontPocket']
-            customer.chestWidth = request.form['chestWidth']
-            customer.daman = request.form['daman']
+            # 2. Update Measurements
+            customer.height = request.form.get('height')
+            customer.width = request.form.get('width')
+            customer.chestWidth = request.form.get('chestWidth')
+            customer.arm = request.form.get('arm')
+            customer.teera = request.form.get('teera')
+            customer.collar = request.form.get('collar')
+            
+            # 3. Update Shalwar
+            customer.shalwarLength = request.form.get('shalwarLength')
+            customer.poncha = request.form.get('poncha')
+            customer.shalwarWidth = request.form.get('shalwarWidth')
+            customer.asan = request.form.get('asan')
+
+            # 4. Update Styles (Radio Buttons)
+            customer.style_collar = request.form.get('style_collar')
+            customer.style_cuff = request.form.get('style_cuff')
+            customer.style_daman = request.form.get('style_daman')
+            customer.style_patti = request.form.get('style_patti')
+            customer.style_shalwar_pocket = request.form.get('style_shalwar_pocket')
+
+            # Handle Pockets (List to String)
+            pocket_list = request.form.getlist('style_pocket')
+            if pocket_list:
+                 customer.style_pocket = ", ".join(pocket_list)
+            else:
+                 # If user didn't check anything new, keep old or set empty? 
+                 # Usually better to overwrite if empty means "None". 
+                 # Let's assume if they send nothing, they mean "None" or we check single val
+                 customer.style_pocket = request.form.get('style_pocket')
+
+            # 5. Update Sizes
+            customer.size_collar = request.form.get('size_collar')
+            customer.size_patti = request.form.get('size_patti')
+            customer.size_cuff = request.form.get('size_cuff')
+            
+            customer.special_notes = request.form.get('special_notes')
 
             db.session.commit()
             flash('Customer Updated Successfully!', 'success')
             return redirect('/user')
+            
         except Exception as e:
             flash(f"Update Error: {str(e)}", 'danger')
 
     return render_template('update_customer.html', customer=customer)
-# ... (baaki code same rahega, sirf neeche wala naya route add kar)
+
 
 @app.route('/view/<string:user_id>')
 def view_customer(user_id):
@@ -152,6 +214,31 @@ def delete_customer(user_id):
         flash(f"Delete Error: {str(e)}", 'danger')
 
     return redirect('/user')
+
+@app.route('/search', methods=['POST'])
+def search_customer():
+    # Get the text from the search bar
+    query = request.form.get('search_query')
+    
+    # Search logic: Check if Phone matches OR if Name contains the text
+    customer = User.query.filter(
+        or_(
+            User.phone == query,                 # Exact phone match
+            User.userName.ilike(f"%{query}%")    # Name contains text (Case-insensitive)
+        )
+    ).first()
+    
+    if customer:
+        flash(f'Found: {customer.userName}', 'success')
+        # CHANGED: Now redirects to VIEW instead of PRINT
+        return redirect(url_for('view_customer', user_id=customer.userId))
+    else:
+        flash('No customer found with that Name or Phone!', 'danger')
+        return redirect(url_for('home'))
+
+# Initialize Database
+with app.app_context():
+    db.create_all()
 
 if __name__ == '__main__':
     app.run(debug=True)

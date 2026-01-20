@@ -1,17 +1,23 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Update Customer</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <div class="container">
-        <h1>Update Customer: {{ customer.userName }}</h1>
 
+    <div class="page-header">
+        <h1>Update Customer</h1>
+        <p>Editing: <strong>{{ customer.userName }}</strong> ({{ customer.userId }})</p>
+        <a href="/user" class="btn-top-left">Back</a>
+    </div>
+
+    <div class="container">
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
-                    <div class="{{ 'success-msg' if category == 'success' else 'danger-msg' }}">
+                    <div style="padding:10px; margin-bottom:15px; background:#d4edda; color:#155724; border-radius:4px;">
                         {{ message }}
                     </div>
                 {% endfor %}
@@ -19,36 +25,138 @@
         {% endwith %}
 
         <form method="POST">
-            <label>Customer Name:</label><br>
-            <input type="text" name="userName" value="{{ customer.userName }}" required><br><br>
+            <h3>👤 Personal Details</h3>
+            <div class="form-grid">
+                <div class="input-row"><label>Name:</label><input type="text" name="userName" value="{{ customer.userName }}" required></div>
+                <div class="input-row"><label>Phone:</label><input type="text" name="phone" value="{{ customer.phone }}" required></div>
+                <div class="input-row"><label>Suits:</label><input type="number" name="numberOfSuit" value="{{ customer.numberOfSuit }}" required></div>
+                <div class="input-row"><label>Date:</label><input type="date" name="date" value="{{ customer.date }}" required></div>
+                <div class="input-row full-width"><label>Address:</label><input type="text" name="address" value="{{ customer.address }}" required></div>
+            </div>
 
-            <label>Phone Number:</label><br>
-            <input type="text" name="phone" value="{{ customer.phone }}" required><br><br>
+            <h3>📏 Measurements</h3>
+            <div class="form-grid">
+                <div class="measure-box-bg">
+                    <div class="measure-title">Shirt / Kameez</div>
+                    <div class="input-row"><label>Length:</label><input type="text" name="height" value="{{ customer.height }}"></div>
+                    <div class="input-row"><label>Width:</label><input type="text" name="width" value="{{ customer.width }}"></div>
+                    <div class="input-row"><label>Chest:</label><input type="text" name="chestWidth" value="{{ customer.chestWidth }}"></div>
+                    <div class="input-row"><label>Arm:</label><input type="text" name="arm" value="{{ customer.arm }}"></div>
+                    <div class="input-row"><label>Teera:</label><input type="text" name="teera" value="{{ customer.teera }}"></div>
+                    <div class="input-row"><label>Collar:</label><input type="text" name="collar" value="{{ customer.collar }}"></div>
+                </div>
+                
+                <div class="measure-box-bg">
+                    <div class="measure-title">Trouser / Shalwar</div>
+                    <div class="input-row"><label>Length:</label><input type="text" name="shalwarLength" value="{{ customer.shalwarLength }}"></div>
+                    <div class="input-row"><label>Poncha:</label><input type="text" name="poncha" value="{{ customer.poncha }}"></div>
+                    <div class="input-row"><label>Ghair:</label><input type="text" name="shalwarWidth" value="{{ customer.shalwarWidth }}"></div>
+                    <div class="input-row"><label>Asan:</label><input type="text" name="asan" value="{{ customer.asan }}"></div>
+                </div>
+            </div>
 
-            <label>Number of Suits:</label><br>
-            <input type="number" name="numberOfSuit" value="{{ customer.numberOfSuit }}" required><br><br>
+            <h3>✂️ Stitching Styles</h3>
+            
+            <label class="style-section-label">1. Collar Style</label>
+            <div class="image-selector-group">
+                <label class="image-radio-item"><input type="radio" name="style_collar" value="Normal" {% if customer.style_collar == 'Normal' %}checked{% endif %}>
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/collar.png') }}"><span class="icon-label">Collar</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_collar" value="Ban" {% if customer.style_collar == 'Ban' %}checked{% endif %}>
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/ban.png') }}"><span class="icon-label">Ban</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_collar" value="Spread" {% if customer.style_collar == 'Spread' %}checked{% endif %}>
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/ScoopNeck.png') }}"><span class="icon-label">Scoop</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_collar" value="Maghzi" {% if customer.style_collar == 'Maghzi' %}checked{% endif %}>
+                    <div class="icon-box"><span class="icon-label">Maghzi</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_collar" value="Other" {% if customer.style_collar == 'Other' %}checked{% endif %}>
+                    <div class="icon-box"><span class="icon-label">Other</span></div></label>
+            </div>
+            <div class="size-selection-row">
+                <div class="size-label-text">Width:</div>
+                <div class="size-radio-group">
+                    {% for size in ['0.75', '1.0', '1.25', '1.5', '1.75'] %}
+                    <label class="size-radio-item" style="flex:1;">
+                        <input type="radio" name="size_collar" value="{{ size }}" {% if customer.size_collar == size %}checked{% endif %}>
+                        <span class="size-box">{{ size }}"</span>
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
 
-            <label>Address:</label><br>
-            <input type="text" name="address" value="{{ customer.address }}" required><br><br>
+            <label class="style-section-label">2. Patti Style</label>
+            <div class="image-selector-group">
+                <label class="image-radio-item"><input type="radio" name="style_patti" value="Normal" {% if customer.style_patti == 'Normal' %}checked{% endif %}>
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/patti.png') }}"><span class="icon-label">Normal</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_patti" value="Open" {% if customer.style_patti == 'Open' %}checked{% endif %}>
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/linePatti.png') }}"><span class="icon-label">Open</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_patti" value="Hidden" {% if customer.style_patti == 'Hidden' %}checked{% endif %}>
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/hiddenPatti.png') }}"><span class="icon-label">Hidden</span></div></label>
+            </div>
+            <div class="size-selection-row">
+                <div class="size-label-text">Width:</div>
+                <div class="size-radio-group">
+                    {% for size in ['0.75', '1.0', '1.25', '1.5', '1.75'] %}
+                    <label class="size-radio-item" style="flex:1;">
+                        <input type="radio" name="size_patti" value="{{ size }}" {% if customer.size_patti == size %}checked{% endif %}>
+                        <span class="size-box">{{ size }}"</span>
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
 
-            <label>Date:</label><br>
-            <input type="date" name="date" value="{{ customer.date.strftime('%Y-%m-%d') }}" required><br><br>
+            <label class="style-section-label">3. Cuff Style</label>
+            <div class="image-selector-group">
+                <label class="image-radio-item"><input type="radio" name="style_cuff" value="Button" {% if customer.style_cuff == 'Button' %}checked{% endif %}>
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/culf.png') }}"><span class="icon-label">Button</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_cuff" value="French" {% if customer.style_cuff == 'French' %}checked{% endif %}>
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/openCulf.png') }}"><span class="icon-label">French</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_cuff" value="Open" {% if customer.style_cuff == 'Open' %}checked{% endif %}>
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/NoCulf.png') }}"><span class="icon-label">None</span></div></label>
+            </div>
+             <div class="size-selection-row">
+                <div class="size-label-text">Width:</div>
+                <div class="size-radio-group">
+                    {% for size in ['2.0', '2.25', '2.5', '2.75', '3.0'] %}
+                    <label class="size-radio-item" style="flex:1;">
+                        <input type="radio" name="size_cuff" value="{{ size }}" {% if customer.size_cuff == size %}checked{% endif %}>
+                        <span class="size-box">{{ size }}"</span>
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
 
-            <h3>Shalwar Measurements</h3>
-            <label>Width:</label> <input type="text" name="width" value="{{ customer.width }}" required><br>
-            <label>Height:</label> <input type="text" name="height" value="{{ customer.height }}" required><br>
-            <label>Arm:</label> <input type="text" name="arm" value="{{ customer.arm }}" required><br>
-            <label>Color:</label> <input type="text" name="color" value="{{ customer.color }}" required><br>
-            <label>Pocket:</label> <input type="text" name="pocket" value="{{ customer.pocket }}" required><br>
-            <label>Front Pocket:</label> <input type="text" name="frontPocket" value="{{ customer.frontPocket }}" required><br>
-            <label>Chest Width:</label> <input type="text" name="chestWidth" value="{{ customer.chestWidth }}" required><br>
-            <label>Daman:</label> <input type="text" name="daman" value="{{ customer.daman }}" required><br><br>
+            <label class="style-section-label">4. Shirt Pocket</label>
+            <div class="image-selector-group">
+                <label class="image-radio-item"><input type="radio" name="style_pocket" value="Front" {% if 'Front' in customer.style_pocket %}checked{% endif %}>
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/pocket.png') }}"><span class="icon-label">Front</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_pocket" value="Both" {% if 'Both' in customer.style_pocket %}checked{% endif %}>
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/shirtPocket.png') }}"><span class="icon-label">Both</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_pocket" value="None" {% if 'None' in customer.style_pocket %}checked{% endif %}>
+                    <div class="icon-box"><span class="icon-label">None</span></div></label>
+            </div>
 
-            <button type="submit" class="btn">Update Customer</button>
+            <label class="style-section-label">5. Daman Style</label>
+            <div class="image-selector-group">
+                <label class="image-radio-item"><input type="radio" name="style_daman" value="Straight" {% if customer.style_daman == 'Straight' %}checked{% endif %}>
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/straightDaman.png') }}"><span class="icon-label">Straight</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_daman" value="Round" {% if customer.style_daman == 'Round' %}checked{% endif %}>
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/roundDaman.png') }}"><span class="icon-label">Round</span></div></label>
+            </div>
+
+            <label class="style-section-label">6. Shalwar Pocket</label>
+            <div class="image-selector-group">
+                <label class="image-radio-item"><input type="radio" name="style_shalwar_pocket" value="Side" {% if customer.style_shalwar_pocket == 'Side' %}checked{% endif %}>
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/pantPocket.png') }}"><span class="icon-label">Side</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_shalwar_pocket" value="None" {% if customer.style_shalwar_pocket == 'None' %}checked{% endif %}>
+                    <div class="icon-box"><span class="icon-label">None</span></div></label>
+            </div>
+
+            <label class="style-section-label" style="margin-top:15px;">Special Tailor Notes:</label>
+            <textarea name="special_notes" rows="2" style="width:100%;">{{ customer.special_notes }}</textarea>
+
+            <button type="submit" class="btn-submit">💾 Save Changes</button>
+            <a href="/user" class="back-link">Cancel</a>
         </form>
-
-        <br>
-        <a href="/user" class="back-btn">← Back to Customers</a>
     </div>
+
 </body>
 </html>

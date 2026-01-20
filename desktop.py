@@ -19,3 +19,4 @@ if __name__ == '__main__':
         # icon='static/icon.ico'   ← pehle .ico file bana ke yahan path daal
     )
     webview.start()
+    

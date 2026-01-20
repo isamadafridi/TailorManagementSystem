@@ -1,38 +1,131 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>View Customer - {{ customer.userName }}</title>
+    <meta charset="UTF-8">
+    <title>View Customer</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <div class="container">
-        <h1>Customer Details: {{ customer.userName }}</h1>
 
-        <p><strong>ID:</strong> {{ customer.userId }}</p>
-        <p><strong>Date:</strong> {{ customer.date.strftime('%d-%m-%Y') }}</p>
-
-        <h2>Basic Info</h2>
-        <table>
-            <tr><th>Phone</th><td>{{ customer.phone }}</td></tr>
-            <tr><th>Address</th><td>{{ customer.address }}</td></tr>
-            <tr><th>Number of Suits</th><td>{{ customer.numberOfSuit }}</td></tr>
-        </table>
-
-        <h2>Shalwar Measurements</h2>
-        <table>
-            <tr><th>Width</th><td>{{ customer.width }}</td></tr>
-            <tr><th>Height</th><td>{{ customer.height }}</td></tr>
-            <tr><th>Arm</th><td>{{ customer.arm }}</td></tr>
-            <tr><th>Color</th><td>{{ customer.color }}</td></tr>
-            <tr><th>Pocket</th><td>{{ customer.pocket }}</td></tr>
-            <tr><th>Front Pocket</th><td>{{ customer.frontPocket }}</td></tr>
-            <tr><th>Chest Width</th><td>{{ customer.chestWidth }}</td></tr>
-            <tr><th>Daman</th><td>{{ customer.daman }}</td></tr>
-        </table>
-
-        <br><br>
-        <a href="{{ url_for('update_customer', user_id=customer.userId) }}" class="btn">Edit / Update</a>
-        <a href="/" class="back-btn">← Back to Home</a>
+    <div class="page-header">
+        <h1>{{ customer.userName }}</h1>
+        <p>Order #{{ customer.userId }} | {{ customer.date.strftime('%d-%m-%Y') }}</p>
+        
+        <!-- <a href="/user" class="btn-top-left">Back</a> -->
+        <a href="/" class="btn-top-left">Home</a>
     </div>
+
+    <div class="container-compact">
+        
+        <div class="info-grid">
+            <div class="info-item"><span class="label">Phone</span><span class="value">{{ customer.phone }}</span></div>
+            <div class="info-item"><span class="label">Suits</span><span class="value">{{ customer.numberOfSuit }}</span></div>
+            <div class="info-item"><span class="label">Address</span><span class="value">{{ customer.address }}</span></div>
+        </div>
+
+        <div class="section-title">Measurements</div>
+        <div class="measure-container">
+            <div class="measure-box">
+                <div class="measure-header">Kameez</div>
+                <div class="measure-row"><span>Length:</span> <strong>{{ customer.height }}</strong></div>
+                <div class="measure-row"><span>Width:</span> <strong>{{ customer.width }}</strong></div>
+                <div class="measure-row"><span>Chest:</span> <strong>{{ customer.chestWidth }}</strong></div>
+                <div class="measure-row"><span>Arm:</span> <strong>{{ customer.arm }}</strong></div>
+                <div class="measure-row"><span>Teera:</span> <strong>{{ customer.teera }}</strong></div>
+                <div class="measure-row"><span>Collar:</span> <strong>{{ customer.collar }}</strong></div>
+            </div>
+            <div class="measure-box">
+                <div class="measure-header">Shalwar</div>
+                <div class="measure-row"><span>Length:</span> <strong>{{ customer.shalwarLength }}</strong></div>
+                <div class="measure-row"><span>Poncha:</span> <strong>{{ customer.poncha }}</strong></div>
+                <div class="measure-row"><span>Ghair:</span> <strong>{{ customer.shalwarWidth }}</strong></div>
+                <div class="measure-row"><span>Asan:</span> <strong>{{ customer.asan }}</strong></div>
+            </div>
+        </div>
+
+        <div class="section-title">Styles</div>
+        <div class="style-grid">
+            <div class="style-card">
+                {% if customer.style_collar == 'Ban' %}
+                    <img src="{{ url_for('static', filename='icon/ban.png') }}" class="style-icon">
+                {% elif customer.style_collar == 'Spread' %}
+                    <img src="{{ url_for('static', filename='icon/ScoopNeck.png') }}" class="style-icon">
+                {% else %}
+                    <img src="{{ url_for('static', filename='icon/collar.png') }}" class="style-icon">
+                {% endif %}
+                <div class="style-name">{{ customer.style_collar }}</div>
+                {% if customer.size_collar %}<div class="style-size">{{ customer.size_collar }}"</div>{% endif %}
+            </div>
+
+            <div class="style-card">
+                {% if customer.style_patti == 'Open' %}
+                    <img src="{{ url_for('static', filename='icon/linePatti.png') }}" class="style-icon">
+                {% elif customer.style_patti == 'Hidden' %}
+                    <img src="{{ url_for('static', filename='icon/hiddenPatti.png') }}" class="style-icon">
+                {% else %}
+                    <img src="{{ url_for('static', filename='icon/patti.png') }}" class="style-icon">
+                {% endif %}
+                <div class="style-name">{{ customer.style_patti }}</div>
+                {% if customer.size_patti %}<div class="style-size">{{ customer.size_patti }}"</div>{% endif %}
+            </div>
+
+            <div class="style-card">
+                {% if customer.style_cuff == 'French' %}
+                    <img src="{{ url_for('static', filename='icon/openCulf.png') }}" class="style-icon">
+                {% elif customer.style_cuff == 'Open' %}
+                    <img src="{{ url_for('static', filename='icon/NoCulf.png') }}" class="style-icon">
+                {% else %}
+                    <img src="{{ url_for('static', filename='icon/culf.png') }}" class="style-icon">
+                {% endif %}
+                <div class="style-name">{{ customer.style_cuff }}</div>
+                {% if customer.size_cuff %}<div class="style-size">{{ customer.size_cuff }}"</div>{% endif %}
+            </div>
+
+            <div class="style-card">
+                {% if 'Both' in customer.style_pocket %}
+                    <img src="{{ url_for('static', filename='icon/shirtPocket.png') }}" class="style-icon">
+                {% elif 'None' in customer.style_pocket %}
+                     <div style="font-size:16px; font-weight:bold; height:30px; line-height:30px; color:#ccc;">X</div>
+                {% else %}
+                    <img src="{{ url_for('static', filename='icon/pocket.png') }}" class="style-icon">
+                {% endif %}
+                <div class="style-name">{{ customer.style_pocket }}</div>
+            </div>
+
+            <div class="style-card">
+                {% if customer.style_daman == 'Round' %}
+                    <img src="{{ url_for('static', filename='icon/roundDaman.png') }}" class="style-icon">
+                {% else %}
+                    <img src="{{ url_for('static', filename='icon/straightDaman.png') }}" class="style-icon">
+                {% endif %}
+                <div class="style-name">{{ customer.style_daman }}</div>
+            </div>
+             
+             <div class="style-card">
+                {% if customer.style_shalwar_pocket == 'Side' %}
+                    <img src="{{ url_for('static', filename='icon/pantPocket.png') }}" class="style-icon">
+                {% else %}
+                    <div style="font-size:16px; font-weight:bold; height:30px; line-height:30px; color:#ccc;">X</div>
+                {% endif %}
+                <div class="style-name">{{ customer.style_shalwar_pocket }}</div>
+            </div>
+        </div>
+
+        {% if customer.special_notes %}
+        <div style="margin-top:10px; background:#fff3cd; padding:8px 10px; border-radius:4px; font-size:12px; color:#856404; border:1px solid #ffeeba;">
+            <strong>Note:</strong> {{ customer.special_notes }}
+        </div>
+        {% endif %}
+
+        <div class="action-bar">
+            <a href="/user" class="btn btn-back">← Back</a>
+            
+            <a href="/update/{{ customer.userId }}" class="btn btn-edit">✏️ Edit</a>
+            
+            <a href="/print/{{ customer.userId }}" class="btn btn-print">🖨️ Print</a>
+        </div>
+
+    </div>
+
 </body>
 </html>

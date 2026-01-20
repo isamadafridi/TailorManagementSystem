@@ -1,53 +1,292 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Customer</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <title>Add Customer</title></head>
-<body>
-    <h1>Add New Customer</h1>
-
-    <!-- Flash messages show karne ke liye -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            {% for category, message in messages %}
-                <div class="alert alert-{{ category }}" style="padding:15px; margin:10px; border-radius:5px;">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
+    
     <style>
-        .alert-success { background-color: #d4edda; }
-        .alert-error { background-color: #f8d7da; }
+        /* --- COMPACT & BEAUTIFUL OVERRIDES --- */
+        body {
+            background-color: #f0f2f5;
+            font-family: 'Segoe UI', sans-serif;
+            padding-bottom: 40px; /* Space for footer */
+        }
+
+        /* 1. COMPACT HERO HEADER */
+        .page-header {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            padding: 20px 20px 50px 20px; /* Short padding to pull content up */
+            text-align: center;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .page-header h1 { margin: 0; font-size: 28px; }
+        .page-header p { margin: 5px 0 0; opacity: 0.9; font-size: 14px; }
+
+        /* 2. MAIN CARD MOVED UP */
+        .container {
+            max-width: 1000px;
+            margin: -40px auto 0 auto; /* Negative margin pulls it UP into the blue header */
+            background: #fff;
+            padding: 25px; /* Reduced from 40px */
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        /* 3. TIGHTER SECTIONS */
+        h3 {
+            margin-top: 20px; /* Reduced space above titles */
+            margin-bottom: 15px;
+            font-size: 16px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+            color: #2c3e50;
+        }
+
+        /* 4. COMPACT FORM GRID */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px; /* Reduced from 30px */
+        }
+        
+        .full-width { grid-column: span 2; }
+
+        /* 5. SLIMMER INPUT ROWS */
+        .input-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px; /* Reduced from 15px */
+        }
+        
+        .input-row label {
+            width: 130px;
+            min-width: 130px;
+            font-size: 14px;
+            color: #555;
+            font-weight: 600;
+        }
+        
+        .input-row input, .input-row textarea {
+            flex: 1;
+            padding: 8px; /* Slimmer inputs */
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        /* 6. COMPACT ICONS & SIZES */
+        .image-selector-group {
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        
+        .icon-box {
+            padding: 5px;
+            min-height: 90px; /* Shorter boxes */
+        }
+        
+        .icon-box img {
+            width: 45px; /* Smaller icons */
+            height: 45px;
+            margin-bottom: 5px;
+        }
+
+        /* SIZE BAR */
+        .size-selection-row {
+            padding: 4px;
+            margin-bottom: 15px;
+            background: #f8f9fa;
+        }
+
+        /* Buttons */
+        .btn-submit {
+            margin-top: 20px;
+            padding: 15px;
+            background: #27ae60;
+            font-size: 18px;
+        }
+        .back-link { font-size: 14px; margin-top: 15px; }
+
+        /* Measurement Box Styling */
+        .measure-box-bg {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #eee;
+        }
+        .measure-title {
+            margin: 0 0 10px 0;
+            color: #2c3e50;
+            font-weight: bold;
+            font-size: 15px;
+        }
+
     </style>
+</head>
+<body>
 
-    <form method="POST">
-        <label>Customer Name:</label><br>
-        <input type="text" name="userName" required><br><br>
+    <div class="page-header">
+        <h1>Add New Customer</h1>
+        <p>Enter measurements and style details below.</p>
 
-        <label>Phone Number:</label><br>
-        <input type="text" name="phone" required><br><br>
+        <a href="/" class="btn-top-left">Back</a>
+    </div>
 
-        <label>Number of Suits:</label><br>
-        <input type="number" name="numberOfSuit" required><br><br>
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}" style="padding:10px; margin-bottom:15px; border-radius:5px; background:#d4edda; color:#155724;">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
 
-        <label>Address:</label><br>
-        <input type="text" name="address" required><br><br>
+        <form method="POST">
+            <h3>👤 Personal Details</h3>
+            <div class="form-grid">
+                <div class="input-row"><label>Name:</label><input type="text" name="userName" required></div>
+                <div class="input-row"><label>Phone:</label><input type="text" name="phone" required></div>
+                <div class="input-row"><label>Suits:</label><input type="number" name="numberOfSuit" value="1" required></div>
+                <div class="input-row"><label>Date:</label><input type="date" name="date" required></div>
+                <div class="input-row full-width"><label>Address:</label><input type="text" name="address" required></div>
+            </div>
 
-        <label>Date:</label><br>
-        <input type="date" name="date" required><br><br>
+            <h3>📏 Measurements</h3>
+            <div class="form-grid">
+                <div class="measure-box-bg">
+                    <div class="measure-title">Shirt / Kameez</div>
+                    <div class="input-row"><label>Length:</label><input type="text" name="height"></div>
+                    <div class="input-row"><label>Width:</label><input type="text" name="width"></div>
+                    <div class="input-row"><label>Chest:</label><input type="text" name="chestWidth"></div>
+                    <div class="input-row"><label>Arm:</label><input type="text" name="arm"></div>
+                    <div class="input-row"><label>Teera:</label><input type="text" name="teera"></div>
+                    <div class="input-row"><label>Collar:</label><input type="text" name="collar"></div>
+                </div>
+                
+                <div class="measure-box-bg">
+                    <div class="measure-title">Trouser / Shalwar</div>
+                    <div class="input-row"><label>Length:</label><input type="text" name="shalwarLength"></div>
+                    <div class="input-row"><label>Poncha:</label><input type="text" name="poncha"></div>
+                    <div class="input-row"><label>Ghair:</label><input type="text" name="shalwarWidth"></div>
+                    <div class="input-row"><label>Asan:</label><input type="text" name="asan"></div>
+                </div>
+            </div>
 
-        <h3>Shalwar Measurements</h3>
-        <label>Width:</label> <input type="text" name="width" required><br>
-        <label>Height:</label> <input type="text" name="height" required><br>
-        <label>Arm:</label> <input type="text" name="arm" required><br>
-        <label>Color:</label> <input type="text" name="color" required><br>
-        <label>Pocket:</label> <input type="text" name="pocket" required><br>
-        <label>Front Pocket:</label> <input type="text" name="frontPocket" required><br>
-        <label>Chest Width:</label> <input type="text" name="chestWidth" required><br>
-        <label>Daman:</label> <input type="text" name="daman" required><br><br>
+            <h3>✂️ Stitching Styles</h3>
+            
+            <label class="style-section-label">1. Collar Style</label>
+            <div class="image-selector-group">
+                <label class="image-radio-item"><input type="radio" name="style_collar" value="Normal" checked>
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/collar.png') }}"><span>Collar</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_collar" value="Ban">
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/ban.png') }}"><span>Ban</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_collar" value="Spread">
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/ScoopNeck.png') }}"><span>Scoop</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_collar" value="Maghzi">
+                    <div class="icon-box"><div style="font-size:20px; font-weight:bold; margin-bottom:5px;">M</div><span>Maghzi</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_collar" value="Other">
+                    <div class="icon-box"><div style="font-size:20px; font-weight:bold; margin-bottom:5px;">?</div><span>Other</span></div></label>
+            </div>
+            <div class="size-selection-row">
+                <div class="size-label-text">Width:</div>
+                <div class="size-radio-group">
+                    <label class="size-radio-item" style="flex:1;"><input type="radio" name="size_collar" value="0.75"><span class="size-box">0.75"</span></label>
+                    <label class="size-radio-item" style="flex:1;"><input type="radio" name="size_collar" value="1.0" checked><span class="size-box">1.0"</span></label>
+                    <label class="size-radio-item" style="flex:1;"><input type="radio" name="size_collar" value="1.25"><span class="size-box">1.25"</span></label>
+                    <label class="size-radio-item" style="flex:1;"><input type="radio" name="size_collar" value="1.5"><span class="size-box">1.5"</span></label>
+                    <label class="size-radio-item" style="flex:1;"><input type="radio" name="size_collar" value="1.75"><span class="size-box">1.75"</span></label>
+                </div>
+            </div>
 
-        <button type="submit">Add Customer</button>
-    </form>
+            <label class="style-section-label">2. Patti Style</label>
+            <div class="image-selector-group">
+                <label class="image-radio-item"><input type="radio" name="style_patti" value="Normal" checked>
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/patti.png') }}"><span>Normal</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_patti" value="Open">
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/linePatti.png') }}"><span>Open</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_patti" value="Hidden">
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/hiddenPatti.png') }}"><span>Hidden</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_patti" value="Double">
+                    <div class="icon-box"><div style="font-size:20px; font-weight:bold; margin-bottom:5px;">=</div><span>Double</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_patti" value="Zip">
+                    <div class="icon-box"><div style="font-size:20px; font-weight:bold; margin-bottom:5px;">Z</div><span>Zip</span></div></label>
+            </div>
+            <div class="size-selection-row">
+                <div class="size-label-text">Width:</div>
+                <div class="size-radio-group">
+                    <label class="size-radio-item" style="flex:1;"><input type="radio" name="size_patti" value="0.75"><span class="size-box">0.75"</span></label>
+                    <label class="size-radio-item" style="flex:1;"><input type="radio" name="size_patti" value="1.0" checked><span class="size-box">1.0"</span></label>
+                    <label class="size-radio-item" style="flex:1;"><input type="radio" name="size_patti" value="1.25"><span class="size-box">1.25"</span></label>
+                    <label class="size-radio-item" style="flex:1;"><input type="radio" name="size_patti" value="1.5"><span class="size-box">1.5"</span></label>
+                    <label class="size-radio-item" style="flex:1;"><input type="radio" name="size_patti" value="1.75"><span class="size-box">1.75"</span></label>
+                </div>
+            </div>
+
+            <label class="style-section-label">3. Cuff Style</label>
+            <div class="image-selector-group">
+                <label class="image-radio-item"><input type="radio" name="style_cuff" value="Button" checked>
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/culf.png') }}"><span>Button</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_cuff" value="French">
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/openCulf.png') }}"><span>French</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_cuff" value="Open">
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/NoCulf.png') }}"><span>No Cuff</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_cuff" value="Half">
+                    <div class="icon-box"><div style="font-size:20px; font-weight:bold; margin-bottom:5px;">C</div><span>Half</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_cuff" value="Design">
+                    <div class="icon-box"><div style="font-size:20px; font-weight:bold; margin-bottom:5px;">★</div><span>Design</span></div></label>
+            </div>
+            <div class="size-selection-row">
+                <div class="size-label-text">Width:</div>
+                <div class="size-radio-group">
+                    <label class="size-radio-item" style="flex:1;"><input type="radio" name="size_cuff" value="2.0"><span class="size-box">2.0"</span></label>
+                    <label class="size-radio-item" style="flex:1;"><input type="radio" name="size_cuff" value="2.25"><span class="size-box">2.25"</span></label>
+                    <label class="size-radio-item" style="flex:1;"><input type="radio" name="size_cuff" value="2.5" checked><span class="size-box">2.5"</span></label>
+                    <label class="size-radio-item" style="flex:1;"><input type="radio" name="size_cuff" value="2.75"><span class="size-box">2.75"</span></label>
+                    <label class="size-radio-item" style="flex:1;"><input type="radio" name="size_cuff" value="3.0"><span class="size-box">3.0"</span></label>
+                </div>
+            </div>
+
+            <label class="style-section-label">4. Shirt Pocket</label>
+            <div class="image-selector-group">
+                <label class="image-radio-item"><input type="radio" name="style_pocket" value="Front" checked>
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/pocket.png') }}"><span>Front</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_pocket" value="Both">
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/shirtPocket.png') }}"><span>Both</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_pocket" value="None">
+                    <div class="icon-box"><div style="font-size:20px; font-weight:bold; margin-bottom:5px; color:#ccc;">X</div><span>None</span></div></label>
+            </div>
+
+            <label class="style-section-label">5. Daman Style</label>
+            <div class="image-selector-group">
+                <label class="image-radio-item"><input type="radio" name="style_daman" value="Straight" checked>
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/straightDaman.png') }}"><span>Straight</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_daman" value="Round">
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/roundDaman.png') }}"><span>Round</span></div></label>
+            </div>
+
+            <label class="style-section-label">6. Shalwar Pocket</label>
+            <div class="image-selector-group">
+                <label class="image-radio-item"><input type="radio" name="style_shalwar_pocket" value="Side">
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/pantPocket.png') }}"><span>Side</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_shalwar_pocket" value="None" checked>
+                    <div class="icon-box"><div style="font-size:20px; font-weight:bold; margin-bottom:5px; color:#ccc;">X</div><span>None</span></div></label>
+            </div>
+
+            <label class="style-section-label" style="margin-top:15px;">Special Tailor Notes:</label>
+            <textarea name="special_notes" rows="2" placeholder="Enter details..." style="width:100%; padding:8px; border:1px solid #ccc; border-radius:4px;"></textarea>
+
+            <button type="submit" class="btn-submit">Save & Print Order</button>
+            <a href="/" class="back-link" style="display:block; text-align:center; color:#666; text-decoration:none;">Cancel & Go Back</a>
+        </form>
+    </div>
+
 </body>
 </html>
