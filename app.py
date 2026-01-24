@@ -1,24 +1,58 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
+from sqlalchemy import text 
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from sqlalchemy import or_
+import sys
 import os
 
 app = Flask(__name__)
 app.secret_key = 'super_secret_key_123'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tailor.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# --- DATABASE SETUP ---
+if getattr(sys, 'frozen', False):
+    application_path = os.path.dirname(sys.executable)
+else:
+    application_path = os.path.dirname(os.path.abspath(__file__))
+
+db_path = os.path.join(application_path, 'tailor.db')
+app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{db_path}'
 
 db = SQLAlchemy(app)
 
+# --- HELPER FUNCTIONS ---
 def generate_unique_id(prefix, model, column):
     last_user = model.query.order_by(column.desc()).first()
     if last_user:
         last_id = getattr(last_user, column.name)
-        number = int(last_id.replace(prefix, '')) + 1
+        try:
+            number = int(last_id.replace(prefix, '')) + 1
+        except:
+            number = 1
     else:
         number = 1
     return f"{prefix}{number:03d}"
+
+def update_database_schema():
+    """ Auto-Fixer: Checks for new columns and adds them if missing. """
+    print("Checking Database Schema...")
+    with app.app_context():
+        inspector = db.inspect(db.engine)
+        existing_columns = [col['name'] for col in inspector.get_columns('user')]
+
+        new_columns_to_add = [
+            ("kaj_count", "VARCHAR(50)"),
+            ("pocket_size", "VARCHAR(50)"),
+            ("style_patti", "VARCHAR(50)"),
+        ]
+
+        with db.engine.connect() as conn:
+            for col_name, col_type in new_columns_to_add:
+                if col_name not in existing_columns:
+                    print(f"🔧 Update: Adding missing column '{col_name}'...")
+                    conn.execute(text(f'ALTER TABLE user ADD COLUMN {col_name} {col_type}'))
+                    conn.commit()
 
 # --- DATABASE MODEL ---
 class User(db.Model):
@@ -30,36 +64,42 @@ class User(db.Model):
     address = db.Column(db.String(200), nullable=False)
     date = db.Column(db.Date, nullable=False)
     
-    # Kameez Measurements
-    height = db.Column(db.String(20))       # Length
-    width = db.Column(db.String(20))        # Chaati
+    # Measurements
+    height = db.Column(db.String(20))
+    width = db.Column(db.String(20))
     chestWidth = db.Column(db.String(20))
     arm = db.Column(db.String(20))
-    teera = db.Column(db.String(20))        # Shoulder
-    collar = db.Column(db.String(20))       # Neck
+    teera = db.Column(db.String(20))
+    collar = db.Column(db.String(20))
     
-    # Shalwar Measurements
     shalwarLength = db.Column(db.String(20)) 
     poncha = db.Column(db.String(20))        
-    shalwarWidth = db.Column(db.String(20))  # Ghair
-    asan = db.Column(db.String(20))          # Crotch
+    shalwarWidth = db.Column(db.String(20))
+    asan = db.Column(db.String(20))
     
-    # Styling Options
+    # Styles
     style_collar = db.Column(db.String(50))
     style_cuff = db.Column(db.String(50))
     style_pocket = db.Column(db.String(50))
-    style_patti = db.Column(db.String(50))          # This was missing in your DB
-    style_daman = db.Column(db.String(50))          
+    style_patti = db.Column(db.String(50))
+    style_daman = db.Column(db.String(50))
     style_shalwar_pocket = db.Column(db.String(50)) 
 
-    # Size Options (New fields for the numbers like 1.0, 1.5 etc)
+    # Sizes
     size_collar = db.Column(db.String(20))
     size_patti = db.Column(db.String(20))
     size_cuff = db.Column(db.String(20))
     
+    # NEW FIELDS
+    kaj_count = db.Column(db.String(50))
+    pocket_size = db.Column(db.String(50))
     special_notes = db.Column(db.String(500))
 
 # --- ROUTES ---
+
+@app.route('/')
+def home():
+    return render_template('home.html')
 
 @app.route('/add_user', methods=['GET', 'POST'])
 def add_user():
@@ -67,20 +107,22 @@ def add_user():
         try:
             userId = generate_unique_id('AB', User, User.userId)
             
-            # Handling Style Pocket (List to String)
-            # Checkbox lists need special handling
             pocket_list = request.form.getlist('style_pocket')
             pocket_str = ", ".join(pocket_list) if pocket_list else request.form.get('style_pocket')
+
+            try:
+                num_suits = int(request.form['numberOfSuit'])
+            except:
+                num_suits = 1 
 
             new_user = User(
                 userId=userId,
                 userName=request.form['userName'],
                 phone=request.form['phone'],
-                numberOfSuit=int(request.form['numberOfSuit']),
+                numberOfSuit=num_suits,
                 address=request.form['address'],
                 date=datetime.strptime(request.form['date'], '%Y-%m-%d').date(),
                 
-                # Kameez
                 height=request.form.get('height'),
                 width=request.form.get('width'),
                 chestWidth=request.form.get('chestWidth'),
@@ -88,24 +130,24 @@ def add_user():
                 teera=request.form.get('teera'),
                 collar=request.form.get('collar'),
                 
-                # Shalwar
                 shalwarLength=request.form.get('shalwarLength'),
                 poncha=request.form.get('poncha'),
                 shalwarWidth=request.form.get('shalwarWidth'),
                 asan=request.form.get('asan'),
                 
-                # Styles
                 style_collar=request.form.get('style_collar'),
                 style_cuff=request.form.get('style_cuff'),
-                style_pocket=pocket_str, # Using the processed string
+                style_pocket=pocket_str,
                 style_daman=request.form.get('style_daman'),
                 style_patti=request.form.get('style_patti'),
                 style_shalwar_pocket=request.form.get('style_shalwar_pocket'),
 
-                # Sizes
                 size_collar=request.form.get('size_collar'),
                 size_patti=request.form.get('size_patti'),
                 size_cuff=request.form.get('size_cuff'),
+                
+                kaj_count=request.form.get('kaj_count'),
+                pocket_size=request.form.get('pocket_size'),
                 
                 special_notes=request.form.get('special_notes')
             )
@@ -118,13 +160,9 @@ def add_user():
             
         except Exception as e:
             flash(f"Error: {str(e)}", 'danger')
-            return redirect(url_for('add_user')) # Redirect back to form on error
+            return redirect(url_for('add_user'))
     
     return render_template('add_user.html')
-
-@app.route('/')
-def home():
-    return render_template('home.html')
 
 @app.route('/user')
 def user():
@@ -142,14 +180,16 @@ def update_customer(user_id):
 
     if request.method == 'POST':
         try:
-            # 1. Update Basic Info
             customer.userName = request.form['userName']
             customer.phone = request.form['phone']
-            customer.numberOfSuit = int(request.form['numberOfSuit'])
+            try:
+                customer.numberOfSuit = int(request.form['numberOfSuit'])
+            except:
+                customer.numberOfSuit = 1
+
             customer.address = request.form['address']
             customer.date = datetime.strptime(request.form['date'], '%Y-%m-%d').date()
             
-            # 2. Update Measurements
             customer.height = request.form.get('height')
             customer.width = request.form.get('width')
             customer.chestWidth = request.form.get('chestWidth')
@@ -157,33 +197,29 @@ def update_customer(user_id):
             customer.teera = request.form.get('teera')
             customer.collar = request.form.get('collar')
             
-            # 3. Update Shalwar
             customer.shalwarLength = request.form.get('shalwarLength')
             customer.poncha = request.form.get('poncha')
             customer.shalwarWidth = request.form.get('shalwarWidth')
             customer.asan = request.form.get('asan')
 
-            # 4. Update Styles (Radio Buttons)
             customer.style_collar = request.form.get('style_collar')
             customer.style_cuff = request.form.get('style_cuff')
             customer.style_daman = request.form.get('style_daman')
             customer.style_patti = request.form.get('style_patti')
             customer.style_shalwar_pocket = request.form.get('style_shalwar_pocket')
 
-            # Handle Pockets (List to String)
             pocket_list = request.form.getlist('style_pocket')
             if pocket_list:
                  customer.style_pocket = ", ".join(pocket_list)
             else:
-                 # If user didn't check anything new, keep old or set empty? 
-                 # Usually better to overwrite if empty means "None". 
-                 # Let's assume if they send nothing, they mean "None" or we check single val
                  customer.style_pocket = request.form.get('style_pocket')
 
-            # 5. Update Sizes
             customer.size_collar = request.form.get('size_collar')
             customer.size_patti = request.form.get('size_patti')
             customer.size_cuff = request.form.get('size_cuff')
+            
+            customer.kaj_count = request.form.get('kaj_count')
+            customer.pocket_size = request.form.get('pocket_size')
             
             customer.special_notes = request.form.get('special_notes')
 
@@ -196,49 +232,77 @@ def update_customer(user_id):
 
     return render_template('update_customer.html', customer=customer)
 
-
 @app.route('/view/<string:user_id>')
 def view_customer(user_id):
     customer = User.query.filter_by(userId=user_id).first_or_404()
     return render_template('view_customer.html', customer=customer)
 
-@app.route('/delete/<string:user_id>', methods=['POST'])
-def delete_customer(user_id):
-    customer = User.query.filter_by(userId=user_id).first_or_404()
-
-    try:
-        db.session.delete(customer)
-        db.session.commit()
-        flash('Customer Deleted Successfully!', 'success')
-    except Exception as e:
-        flash(f"Delete Error: {str(e)}", 'danger')
-
-    return redirect('/user')
-
 @app.route('/search', methods=['POST'])
 def search_customer():
-    # Get the text from the search bar
     query = request.form.get('search_query')
-    
-    # Search logic: Check if Phone matches OR if Name contains the text
     customer = User.query.filter(
         or_(
-            User.phone == query,                 # Exact phone match
-            User.userName.ilike(f"%{query}%")    # Name contains text (Case-insensitive)
+            User.phone == query,
+            User.userName.ilike(f"%{query}%")
         )
     ).first()
     
     if customer:
         flash(f'Found: {customer.userName}', 'success')
-        # CHANGED: Now redirects to VIEW instead of PRINT
         return redirect(url_for('view_customer', user_id=customer.userId))
     else:
         flash('No customer found with that Name or Phone!', 'danger')
         return redirect(url_for('home'))
 
-# Initialize Database
-with app.app_context():
-    db.create_all()
+# --- NEW DELETE PAGE LOGIC (REQUIRED FOR THE NEW HTML) ---
+@app.route('/deleteCustomer', methods=['GET', 'POST'])
+def remove_customer_page():
+    found_customer = None
+    error = None
+    
+    if request.method == 'POST':
+        search_id = request.form.get('search_id')
+        # Search by UserID
+        found_customer = User.query.filter_by(userId=search_id).first()
+        if not found_customer:
+            error = f"No customer found with ID: {search_id}"
 
+    # IMPORTANT: Ensure your HTML file is named 'remove_customer.html'
+    return render_template('remove_customer.html', customer=found_customer, error=error)
+
+@app.route('/deleteCustomer_submit', methods=['POST'])
+def remove_customer_submit():
+    user_id = request.form.get('customer_userId')
+    customer = User.query.filter_by(userId=user_id).first_or_404()
+
+@app.route('/delete/<string:user_id>', methods=['POST'])
+def delete_customer(user_id):
+    # 1. Find the customer
+    customer = User.query.filter_by(userId=user_id).first_or_404()
+    
+    try:
+        # 2. Delete from DB
+        db.session.delete(customer)
+        db.session.commit()
+        flash('Customer Deleted Successfully!', 'success')
+        return redirect('/user') # Go back to the list
+        
+    except Exception as e:
+        flash(f"Error deleting customer: {str(e)}", 'danger')
+        return redirect(url_for('view_customer', user_id=user_id))
+    
+    try:
+        db.session.delete(customer)
+        db.session.commit()
+        return render_template('remove_customer.html', success=f"Customer {user_id} deleted successfully.")
+    except Exception as e:
+        return render_template('remove_customer.html', error=f"Error deleting: {str(e)}")
+
+
+# --- MAIN EXECUTION ---
 if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()
+        update_database_schema() 
+    
     app.run(debug=True)

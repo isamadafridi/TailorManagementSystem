@@ -4,128 +4,244 @@
     <meta charset="UTF-8">
     <title>View Customer</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        /* --- STYLES MATCHING YOUR OTHER PAGES --- */
+        body { background-color: #f0f2f5; font-family: 'Segoe UI', sans-serif; padding-bottom: 40px; }
+        
+        /*COMPACT HERO HEADER */
+        .page-header {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            padding: 20px 20px 50px 20px; 
+            text-align: center;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .page-header h1 { margin: 0; font-size: 28px; }
+        .page-header p { margin: 5px 0 0; opacity: 0.9; font-size: 14px; }
+
+        /* CONTAINER */
+        .container { max-width: 900px; margin: -30px auto 0 auto; background: #fff; padding: 25px; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); position: relative; }
+
+        /* GRID LAYOUT */
+        .details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
+        .detail-box { background: #f9f9f9; padding: 15px; border-radius: 8px; border: 1px solid #eee; }
+        .detail-label { font-weight: bold; color: #7f8c8d; font-size: 12px; text-transform: uppercase; margin-bottom: 5px; display: block; }
+        .detail-value { font-size: 16px; color: #2c3e50; font-weight: 600; }
+        .full-width { grid-column: span 2; }
+
+        /* MEASUREMENT TABLE LOOK */
+        .measure-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; margin-top: 10px; }
+        .measure-item { background: white; padding: 8px; text-align: center; border: 1px solid #ddd; border-radius: 5px; }
+        .m-label { display: block; font-size: 11px; color: #888; margin-bottom: 2px; }
+        .m-val { font-weight: bold; color: #333; font-size: 15px; }
+
+        /* VISUAL STYLE BOXES (NEW) */
+        .visual-style-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+        .visual-box {
+            border: 2px solid #eee; border-radius: 10px; padding: 15px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            text-align: center; background: white; transition: 0.2s;
+        }
+        .visual-box:hover { border-color: #3498db; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        
+        .visual-img { width: 50px; height: 50px; object-fit: contain; margin-bottom: 8px; }
+        .visual-name { font-weight: bold; color: #2c3e50; font-size: 14px; }
+        .visual-size { 
+            background: #2c3e50; color: white; padding: 2px 8px; border-radius: 10px; 
+            font-size: 12px; margin-top: 5px; display: inline-block;
+        }
+
+        /* ACTION BUTTONS */
+        .action-bar { display: flex; gap: 15px; margin-top: 30px; border-top: 2px solid #f0f0f0; padding-top: 20px; }
+        .btn { flex: 1; padding: 12px; text-align: center; border-radius: 6px; text-decoration: none; font-weight: bold; transition: 0.2s; border: none; cursor: pointer; font-size: 16px; }
+        
+        .btn-edit { background: #f39c12; color: white; }
+        .btn-edit:hover { background: #e67e22; }
+        
+        .btn-print { background: #3498db; color: white; }
+        .btn-print:hover { background: #2980b9; }
+
+        .btn-delete { background: #e74c3c; color: white; }
+        .btn-delete:hover { background: #c0392b; }
+
+        .btn-back { position: absolute; top: 20px; left: 20px; color: white; border: 1px solid white; padding: 5px 15px; border-radius: 20px; text-decoration: none; font-weight: bold; }
+        .btn-back:hover { background: white; color: #2c3e50; }
+
+        /* --- MODAL (POPUP) STYLES --- */
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.5); z-index: 1000;
+            justify-content: center; align-items: center;
+        }
+        .modal-box {
+            background: white; width: 400px; padding: 25px; border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3); text-align: center;
+            animation: popIn 0.3s ease;
+        }
+        @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .modal-icon { font-size: 50px; margin-bottom: 15px; }
+        .modal-title { font-size: 20px; font-weight: bold; color: #e74c3c; margin-bottom: 10px; }
+        .modal-text { color: #555; margin-bottom: 25px; }
+        .modal-buttons { display: flex; gap: 10px; }
+        .btn-modal-cancel { background: #95a5a6; color: white; }
+        .btn-modal-delete { background: #c0392b; color: white; }
+    </style>
 </head>
 <body>
 
     <div class="page-header">
         <h1>{{ customer.userName }}</h1>
-        <p>Order #{{ customer.userId }} | {{ customer.date.strftime('%d-%m-%Y') }}</p>
-        
-        <!-- <a href="/user" class="btn-top-left">Back</a> -->
-        <a href="/" class="btn-top-left">Home</a>
+        <p>Customer ID: <strong>{{ customer.userId }}</strong></p>
+        <a href="/user" class="btn-back">Back</a>
     </div>
 
-    <div class="container-compact">
+    <div class="container">
+        <h3>👤 Customer Profile</h3>
+        <div class="details-grid">
+            <div class="detail-box">
+                <span class="detail-label">Phone</span>
+                <span class="detail-value">{{ customer.phone }}</span>
+            </div>
+            <div class="detail-box">
+                <span class="detail-label">Address</span>
+                <span class="detail-value">{{ customer.address }}</span>
+            </div>
+            <div class="detail-box">
+                <span class="detail-label">Total Suits</span>
+                <span class="detail-value">{{ customer.numberOfSuit }}</span>
+            </div>
+            <div class="detail-box">
+                <span class="detail-label">Date Added</span>
+                <span class="detail-value">{{ customer.date }}</span>
+            </div>
+        </div>
+
+        <h3 style="margin-top:25px;">📏 Measurements</h3>
         
-        <div class="info-grid">
-            <div class="info-item"><span class="label">Phone</span><span class="value">{{ customer.phone }}</span></div>
-            <div class="info-item"><span class="label">Suits</span><span class="value">{{ customer.numberOfSuit }}</span></div>
-            <div class="info-item"><span class="label">Address</span><span class="value">{{ customer.address }}</span></div>
-        </div>
-
-        <div class="section-title">Measurements</div>
-        <div class="measure-container">
-            <div class="measure-box">
-                <div class="measure-header">Kameez</div>
-                <div class="measure-row"><span>Length:</span> <strong>{{ customer.height }}</strong></div>
-                <div class="measure-row"><span>Width:</span> <strong>{{ customer.width }}</strong></div>
-                <div class="measure-row"><span>Chest:</span> <strong>{{ customer.chestWidth }}</strong></div>
-                <div class="measure-row"><span>Arm:</span> <strong>{{ customer.arm }}</strong></div>
-                <div class="measure-row"><span>Teera:</span> <strong>{{ customer.teera }}</strong></div>
-                <div class="measure-row"><span>Collar:</span> <strong>{{ customer.collar }}</strong></div>
-            </div>
-            <div class="measure-box">
-                <div class="measure-header">Shalwar</div>
-                <div class="measure-row"><span>Length:</span> <strong>{{ customer.shalwarLength }}</strong></div>
-                <div class="measure-row"><span>Poncha:</span> <strong>{{ customer.poncha }}</strong></div>
-                <div class="measure-row"><span>Ghair:</span> <strong>{{ customer.shalwarWidth }}</strong></div>
-                <div class="measure-row"><span>Asan:</span> <strong>{{ customer.asan }}</strong></div>
+        <div class="detail-box" style="margin-bottom: 15px;">
+            <span class="detail-label">Shirt / Kameez</span>
+            <div class="measure-grid">
+                <div class="measure-item"><span class="m-label">Length</span><span class="m-val">{{ customer.height }}</span></div>
+                <div class="measure-item"><span class="m-label">Width</span><span class="m-val">{{ customer.width }}</span></div>
+                <div class="measure-item"><span class="m-label">Chest</span><span class="m-val">{{ customer.chestWidth }}</span></div>
+                <div class="measure-item"><span class="m-label">Arm</span><span class="m-val">{{ customer.arm }}</span></div>
+                <div class="measure-item"><span class="m-label">Teera</span><span class="m-val">{{ customer.teera }}</span></div>
+                <div class="measure-item"><span class="m-label">Collar</span><span class="m-val">{{ customer.collar }}</span></div>
             </div>
         </div>
 
-        <div class="section-title">Styles</div>
-        <div class="style-grid">
-            <div class="style-card">
-                {% if customer.style_collar == 'Ban' %}
-                    <img src="{{ url_for('static', filename='icon/ban.png') }}" class="style-icon">
-                {% elif customer.style_collar == 'Spread' %}
-                    <img src="{{ url_for('static', filename='icon/ScoopNeck.png') }}" class="style-icon">
-                {% else %}
-                    <img src="{{ url_for('static', filename='icon/collar.png') }}" class="style-icon">
-                {% endif %}
-                <div class="style-name">{{ customer.style_collar }}</div>
-                {% if customer.size_collar %}<div class="style-size">{{ customer.size_collar }}"</div>{% endif %}
-            </div>
-
-            <div class="style-card">
-                {% if customer.style_patti == 'Open' %}
-                    <img src="{{ url_for('static', filename='icon/linePatti.png') }}" class="style-icon">
-                {% elif customer.style_patti == 'Hidden' %}
-                    <img src="{{ url_for('static', filename='icon/hiddenPatti.png') }}" class="style-icon">
-                {% else %}
-                    <img src="{{ url_for('static', filename='icon/patti.png') }}" class="style-icon">
-                {% endif %}
-                <div class="style-name">{{ customer.style_patti }}</div>
-                {% if customer.size_patti %}<div class="style-size">{{ customer.size_patti }}"</div>{% endif %}
-            </div>
-
-            <div class="style-card">
-                {% if customer.style_cuff == 'French' %}
-                    <img src="{{ url_for('static', filename='icon/openCulf.png') }}" class="style-icon">
-                {% elif customer.style_cuff == 'Open' %}
-                    <img src="{{ url_for('static', filename='icon/NoCulf.png') }}" class="style-icon">
-                {% else %}
-                    <img src="{{ url_for('static', filename='icon/culf.png') }}" class="style-icon">
-                {% endif %}
-                <div class="style-name">{{ customer.style_cuff }}</div>
-                {% if customer.size_cuff %}<div class="style-size">{{ customer.size_cuff }}"</div>{% endif %}
-            </div>
-
-            <div class="style-card">
-                {% if 'Both' in customer.style_pocket %}
-                    <img src="{{ url_for('static', filename='icon/shirtPocket.png') }}" class="style-icon">
-                {% elif 'None' in customer.style_pocket %}
-                     <div style="font-size:16px; font-weight:bold; height:30px; line-height:30px; color:#ccc;">X</div>
-                {% else %}
-                    <img src="{{ url_for('static', filename='icon/pocket.png') }}" class="style-icon">
-                {% endif %}
-                <div class="style-name">{{ customer.style_pocket }}</div>
-            </div>
-
-            <div class="style-card">
-                {% if customer.style_daman == 'Round' %}
-                    <img src="{{ url_for('static', filename='icon/roundDaman.png') }}" class="style-icon">
-                {% else %}
-                    <img src="{{ url_for('static', filename='icon/straightDaman.png') }}" class="style-icon">
-                {% endif %}
-                <div class="style-name">{{ customer.style_daman }}</div>
-            </div>
-             
-             <div class="style-card">
-                {% if customer.style_shalwar_pocket == 'Side' %}
-                    <img src="{{ url_for('static', filename='icon/pantPocket.png') }}" class="style-icon">
-                {% else %}
-                    <div style="font-size:16px; font-weight:bold; height:30px; line-height:30px; color:#ccc;">X</div>
-                {% endif %}
-                <div class="style-name">{{ customer.style_shalwar_pocket }}</div>
+        <div class="detail-box">
+            <span class="detail-label">Trouser / Shalwar</span>
+            <div class="measure-grid">
+                <div class="measure-item"><span class="m-label">Length</span><span class="m-val">{{ customer.shalwarLength }}</span></div>
+                <div class="measure-item"><span class="m-label">Poncha</span><span class="m-val">{{ customer.poncha }}</span></div>
+                <div class="measure-item"><span class="m-label">Ghair</span><span class="m-val">{{ customer.shalwarWidth }}</span></div>
+                <div class="measure-item"><span class="m-label">Asan</span><span class="m-val">{{ customer.asan }}</span></div>
             </div>
         </div>
 
-        {% if customer.special_notes %}
-        <div style="margin-top:10px; background:#fff3cd; padding:8px 10px; border-radius:4px; font-size:12px; color:#856404; border:1px solid #ffeeba;">
-            <strong>Note:</strong> {{ customer.special_notes }}
+        <h3 style="margin-top:25px;">✂️ Style & Design</h3>
+        
+        <div class="visual-style-grid">
+            <div class="visual-box">
+                {% if customer.style_collar == 'Ban' %} <img src="{{ url_for('static', filename='icon/ban.png') }}" class="visual-img">
+                {% elif customer.style_collar == 'Spread' %} <img src="{{ url_for('static', filename='icon/ScoopNeck.png') }}" class="visual-img">
+                {% elif customer.style_collar == 'Maghzi' %} <img src="{{ url_for('static', filename='icon/halfBan.png') }}" class="visual-img">
+                {% else %} <img src="{{ url_for('static', filename='icon/collar.png') }}" class="visual-img"> {% endif %}
+                <div class="visual-name">Collar: {{ customer.style_collar }}</div>
+                {% if customer.size_collar %}<span class="visual-size">{{ customer.size_collar }}"</span>{% endif %}
+            </div>
+
+            <div class="visual-box">
+                {% if customer.style_patti == 'Open' %} <img src="{{ url_for('static', filename='icon/linePatti.png') }}" class="visual-img">
+                {% elif customer.style_patti == 'Hidden' %} <img src="{{ url_for('static', filename='icon/hiddenPatti.png') }}" class="visual-img">
+                {% else %} <img src="{{ url_for('static', filename='icon/patti.png') }}" class="visual-img"> {% endif %}
+                <div class="visual-name">Patti: {{ customer.style_patti }}</div>
+                {% if customer.size_patti %}<span class="visual-size">{{ customer.size_patti }}"</span>{% endif %}
+                {% if customer.kaj_count %}
+                <div style="font-size:12px; color:#555; margin-top:2px;">Kaj: {{ customer.kaj_count }}</div>
+                {% endif %}
+            </div>
+
+            <div class="visual-box">
+                {% if customer.style_cuff == 'French' %} <img src="{{ url_for('static', filename='icon/openCulf.png') }}" class="visual-img">
+                {% elif customer.style_cuff == 'Open' %} <img src="{{ url_for('static', filename='icon/NoCulf.png') }}" class="visual-img">
+                {% else %} <img src="{{ url_for('static', filename='icon/culf.png') }}" class="visual-img"> {% endif %}
+                <div class="visual-name">Cuff: {{ customer.style_cuff }}</div>
+                {% if customer.size_cuff %}<span class="visual-size">{{ customer.size_cuff }}"</span>{% endif %}
+            </div>
+
+            <div class="visual-box">
+                {% if 'Both' in customer.style_pocket %} <img src="{{ url_for('static', filename='icon/shirtPocket.png') }}" class="visual-img">
+                {% elif 'None' in customer.style_pocket %} <div style="font-size:40px; line-height:50px;">🚫</div>
+                {% else %} <img src="{{ url_for('static', filename='icon/pocket.png') }}" class="visual-img"> {% endif %}
+                <div class="visual-name">Pocket: {{ customer.style_pocket }}</div>
+                {% if customer.pocket_size %}<span class="visual-size">{{ customer.pocket_size }}</span>{% endif %}
+            </div>
+
+            <div class="visual-box">
+                {% if customer.style_daman == 'Round' %} <img src="{{ url_for('static', filename='icon/roundDaman.png') }}" class="visual-img">
+                {% else %} <img src="{{ url_for('static', filename='icon/straightDaman.png') }}" class="visual-img"> {% endif %}
+                <div class="visual-name">Daman: {{ customer.style_daman }}</div>
+            </div>
+
+            <div class="visual-box">
+                {% if customer.style_shalwar_pocket == 'Side' %} <img src="{{ url_for('static', filename='icon/pantPocket.png') }}" class="visual-img">
+                {% else %} <div style="font-size:40px; line-height:50px;">🚫</div> {% endif %}
+                <div class="visual-name">Shalwar Pkt: {{ customer.style_shalwar_pocket or 'None' }}</div>
+            </div>
         </div>
-        {% endif %}
+
+        <div class="detail-box" style="margin-top:20px;">
+            <span class="detail-label">Special Notes</span>
+            <span class="detail-value">{{ customer.special_notes }}</span>
+        </div>
 
         <div class="action-bar">
-            <a href="/user" class="btn btn-back">← Back</a>
+            <a href="/print/{{ customer.userId }}" class="btn btn-print">🖨️ Print Receipt</a>
             
             <a href="/update/{{ customer.userId }}" class="btn btn-edit">✏️ Edit</a>
             
-            <a href="/print/{{ customer.userId }}" class="btn btn-print">🖨️ Print</a>
+            <button onclick="openModal()" class="btn btn-delete">🗑️ Delete</button>
         </div>
 
     </div>
+
+    <div id="deleteModal" class="modal-overlay">
+        <div class="modal-box">
+            <div class="modal-icon">⚠️</div>
+            <div class="modal-title">Delete Customer?</div>
+            <div class="modal-text">
+                Are you sure you want to delete <strong>{{ customer.userName }}</strong>?<br>
+                This action cannot be undone.
+            </div>
+
+            <div class="modal-buttons">
+                <button onclick="closeModal()" class="btn btn-modal-cancel">Cancel</button>
+                
+                <form action="/delete/{{ customer.userId }}" method="POST" style="flex:1;">
+                    <button type="submit" class="btn btn-modal-delete">Yes, Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openModal() {
+            document.getElementById('deleteModal').style.display = 'flex';
+        }
+        function closeModal() {
+            document.getElementById('deleteModal').style.display = 'none';
+        }
+        window.onclick = function(event) {
+            var modal = document.getElementById('deleteModal');
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
 
 </body>
 </html>

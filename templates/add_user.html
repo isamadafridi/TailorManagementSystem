@@ -11,14 +11,14 @@
         body {
             background-color: #f0f2f5;
             font-family: 'Segoe UI', sans-serif;
-            padding-bottom: 40px; /* Space for footer */
+            padding-bottom: 40px; 
         }
 
         /* 1. COMPACT HERO HEADER */
         .page-header {
             background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
             color: white;
-            padding: 20px 20px 50px 20px; /* Short padding to pull content up */
+            padding: 20px 20px 50px 20px; 
             text-align: center;
             border-bottom-left-radius: 20px;
             border-bottom-right-radius: 20px;
@@ -30,9 +30,9 @@
         /* 2. MAIN CARD MOVED UP */
         .container {
             max-width: 1000px;
-            margin: -40px auto 0 auto; /* Negative margin pulls it UP into the blue header */
+            margin: -40px auto 0 auto; 
             background: #fff;
-            padding: 25px; /* Reduced from 40px */
+            padding: 25px; 
             border-radius: 12px;
             box-shadow: 0 8px 20px rgba(0,0,0,0.1);
             position: relative;
@@ -40,7 +40,7 @@
 
         /* 3. TIGHTER SECTIONS */
         h3 {
-            margin-top: 20px; /* Reduced space above titles */
+            margin-top: 20px; 
             margin-bottom: 15px;
             font-size: 16px;
             border-bottom: 1px solid #eee;
@@ -52,7 +52,7 @@
         .form-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 15px; /* Reduced from 30px */
+            gap: 15px; 
         }
         
         .full-width { grid-column: span 2; }
@@ -61,7 +61,7 @@
         .input-row {
             display: flex;
             align-items: center;
-            margin-bottom: 8px; /* Reduced from 15px */
+            margin-bottom: 8px; 
         }
         
         .input-row label {
@@ -74,7 +74,7 @@
         
         .input-row input, .input-row textarea {
             flex: 1;
-            padding: 8px; /* Slimmer inputs */
+            padding: 8px; 
             border: 1px solid #ccc;
             border-radius: 4px;
             font-size: 14px;
@@ -82,26 +82,63 @@
 
         /* 6. COMPACT ICONS & SIZES */
         .image-selector-group {
+            display: flex;
             gap: 8px;
             margin-bottom: 10px;
+            overflow-x: auto;
         }
         
+        /* Hide Radio Circle */
+        .image-radio-item input[type="radio"] { display: none; }
+
         .icon-box {
             padding: 5px;
-            min-height: 90px; /* Shorter boxes */
+            min-height: 90px;
+            border: 2px solid #eee;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            width: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
         
         .icon-box img {
-            width: 45px; /* Smaller icons */
+            width: 45px;
             height: 45px;
             margin-bottom: 5px;
+            object-fit: contain;
         }
 
-        /* SIZE BAR */
+        /* Selected State */
+        .image-radio-item input[type="radio"]:checked + .icon-box {
+            border-color: #3498db;
+            background-color: #eaf6ff;
+        }
+
+        /* SIZE BAR (Modified for Input) */
         .size-selection-row {
-            padding: 4px;
-            margin-bottom: 15px;
+            padding: 8px;
+            margin-bottom: 10px; /* Reduced margin so inputs stack nicely */
             background: #f8f9fa;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+        }
+        .size-label-text {
+            font-weight: bold;
+            font-size: 14px;
+            color: #555;
+            width: 130px; /* Match label width */
+        }
+        .size-input-field {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
         }
 
         /* Buttons */
@@ -110,8 +147,15 @@
             padding: 15px;
             background: #27ae60;
             font-size: 18px;
+            width: 100%;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
         }
-        .back-link { font-size: 14px; margin-top: 15px; }
+        .back-link { font-size: 14px; margin-top: 15px; display: block; text-align: center; color: #666; text-decoration: none; }
+        .btn-top-left { position: absolute; top: 20px; left: 20px; color: white; border:1px solid white; padding:5px 15px; border-radius:20px; text-decoration:none; }
 
         /* Measurement Box Styling */
         .measure-box-bg {
@@ -134,7 +178,6 @@
     <div class="page-header">
         <h1>Add New Customer</h1>
         <p>Enter measurements and style details below.</p>
-
         <a href="/" class="btn-top-left">Back</a>
     </div>
 
@@ -182,7 +225,7 @@
 
             <h3>✂️ Stitching Styles</h3>
             
-            <label class="style-section-label">1. Collar Style</label>
+            <label class="style-section-label" style="font-weight:bold; margin-top:10px; display:block;">1. Collar Style</label>
             <div class="image-selector-group">
                 <label class="image-radio-item"><input type="radio" name="style_collar" value="Normal" checked>
                     <div class="icon-box"><img src="{{ url_for('static', filename='icon/collar.png') }}"><span>Collar</span></div></label>
@@ -191,22 +234,17 @@
                 <label class="image-radio-item"><input type="radio" name="style_collar" value="Spread">
                     <div class="icon-box"><img src="{{ url_for('static', filename='icon/ScoopNeck.png') }}"><span>Scoop</span></div></label>
                 <label class="image-radio-item"><input type="radio" name="style_collar" value="Maghzi">
-                    <div class="icon-box"><div style="font-size:20px; font-weight:bold; margin-bottom:5px;">M</div><span>Maghzi</span></div></label>
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/halfBan.png') }}"><span>Half Ban</span></div></label>
                 <label class="image-radio-item"><input type="radio" name="style_collar" value="Other">
                     <div class="icon-box"><div style="font-size:20px; font-weight:bold; margin-bottom:5px;">?</div><span>Other</span></div></label>
             </div>
+            
             <div class="size-selection-row">
-                <div class="size-label-text">Width:</div>
-                <div class="size-radio-group">
-                    <label class="size-radio-item" style="flex:1;"><input type="radio" name="size_collar" value="0.75"><span class="size-box">0.75"</span></label>
-                    <label class="size-radio-item" style="flex:1;"><input type="radio" name="size_collar" value="1.0" checked><span class="size-box">1.0"</span></label>
-                    <label class="size-radio-item" style="flex:1;"><input type="radio" name="size_collar" value="1.25"><span class="size-box">1.25"</span></label>
-                    <label class="size-radio-item" style="flex:1;"><input type="radio" name="size_collar" value="1.5"><span class="size-box">1.5"</span></label>
-                    <label class="size-radio-item" style="flex:1;"><input type="radio" name="size_collar" value="1.75"><span class="size-box">1.75"</span></label>
-                </div>
+                <div class="size-label-text">Collar Size:</div>
+                <input type="text" name="size_collar" class="size-input-field" placeholder='e.g. 15" or 1.5'>
             </div>
 
-            <label class="style-section-label">2. Patti Style</label>
+            <label class="style-section-label" style="font-weight:bold; margin-top:10px; display:block;">2. Patti Style</label>
             <div class="image-selector-group">
                 <label class="image-radio-item"><input type="radio" name="style_patti" value="Normal" checked>
                     <div class="icon-box"><img src="{{ url_for('static', filename='icon/patti.png') }}"><span>Normal</span></div></label>
@@ -219,21 +257,21 @@
                 <label class="image-radio-item"><input type="radio" name="style_patti" value="Zip">
                     <div class="icon-box"><div style="font-size:20px; font-weight:bold; margin-bottom:5px;">Z</div><span>Zip</span></div></label>
             </div>
+
             <div class="size-selection-row">
-                <div class="size-label-text">Width:</div>
-                <div class="size-radio-group">
-                    <label class="size-radio-item" style="flex:1;"><input type="radio" name="size_patti" value="0.75"><span class="size-box">0.75"</span></label>
-                    <label class="size-radio-item" style="flex:1;"><input type="radio" name="size_patti" value="1.0" checked><span class="size-box">1.0"</span></label>
-                    <label class="size-radio-item" style="flex:1;"><input type="radio" name="size_patti" value="1.25"><span class="size-box">1.25"</span></label>
-                    <label class="size-radio-item" style="flex:1;"><input type="radio" name="size_patti" value="1.5"><span class="size-box">1.5"</span></label>
-                    <label class="size-radio-item" style="flex:1;"><input type="radio" name="size_patti" value="1.75"><span class="size-box">1.75"</span></label>
-                </div>
+                <div class="size-label-text">Patti Width:</div>
+                <input type="text" name="size_patti" class="size-input-field" placeholder='e.g. 1.0" or 1.25"'>
             </div>
 
-            <label class="style-section-label">3. Cuff Style</label>
+            <div class="size-selection-row">
+                <div class="size-label-text">No. of Kaj:</div>
+                <input type="text" name="kaj_count" class="size-input-field" placeholder='e.g. 2 or 3'>
+            </div>
+
+            <label class="style-section-label" style="font-weight:bold; margin-top:10px; display:block;">3. Cuff Style</label>
             <div class="image-selector-group">
                 <label class="image-radio-item"><input type="radio" name="style_cuff" value="Button" checked>
-                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/culf.png') }}"><span>Button</span></div></label>
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/culf.png') }}"><span>پیلیٹ کلف</span></div></label>
                 <label class="image-radio-item"><input type="radio" name="style_cuff" value="French">
                     <div class="icon-box"><img src="{{ url_for('static', filename='icon/openCulf.png') }}"><span>French</span></div></label>
                 <label class="image-radio-item"><input type="radio" name="style_cuff" value="Open">
@@ -243,18 +281,13 @@
                 <label class="image-radio-item"><input type="radio" name="style_cuff" value="Design">
                     <div class="icon-box"><div style="font-size:20px; font-weight:bold; margin-bottom:5px;">★</div><span>Design</span></div></label>
             </div>
+
             <div class="size-selection-row">
-                <div class="size-label-text">Width:</div>
-                <div class="size-radio-group">
-                    <label class="size-radio-item" style="flex:1;"><input type="radio" name="size_cuff" value="2.0"><span class="size-box">2.0"</span></label>
-                    <label class="size-radio-item" style="flex:1;"><input type="radio" name="size_cuff" value="2.25"><span class="size-box">2.25"</span></label>
-                    <label class="size-radio-item" style="flex:1;"><input type="radio" name="size_cuff" value="2.5" checked><span class="size-box">2.5"</span></label>
-                    <label class="size-radio-item" style="flex:1;"><input type="radio" name="size_cuff" value="2.75"><span class="size-box">2.75"</span></label>
-                    <label class="size-radio-item" style="flex:1;"><input type="radio" name="size_cuff" value="3.0"><span class="size-box">3.0"</span></label>
-                </div>
+                <div class="size-label-text">Cuff Width:</div>
+                <input type="text" name="size_cuff" class="size-input-field" placeholder='e.g. 2.5"'>
             </div>
 
-            <label class="style-section-label">4. Shirt Pocket</label>
+            <label class="style-section-label" style="font-weight:bold; margin-top:10px; display:block;">4. Shirt Pocket</label>
             <div class="image-selector-group">
                 <label class="image-radio-item"><input type="radio" name="style_pocket" value="Front" checked>
                     <div class="icon-box"><img src="{{ url_for('static', filename='icon/pocket.png') }}"><span>Front</span></div></label>
@@ -264,7 +297,12 @@
                     <div class="icon-box"><div style="font-size:20px; font-weight:bold; margin-bottom:5px; color:#ccc;">X</div><span>None</span></div></label>
             </div>
 
-            <label class="style-section-label">5. Daman Style</label>
+            <div class="size-selection-row">
+                <div class="size-label-text">Pocket Size:</div>
+                <input type="text" name="pocket_size" class="size-input-field" placeholder='e.g. Standard or 5"'>
+            </div>
+
+            <label class="style-section-label" style="font-weight:bold; margin-top:10px; display:block;">5. Daman Style</label>
             <div class="image-selector-group">
                 <label class="image-radio-item"><input type="radio" name="style_daman" value="Straight" checked>
                     <div class="icon-box"><img src="{{ url_for('static', filename='icon/straightDaman.png') }}"><span>Straight</span></div></label>
@@ -272,7 +310,7 @@
                     <div class="icon-box"><img src="{{ url_for('static', filename='icon/roundDaman.png') }}"><span>Round</span></div></label>
             </div>
 
-            <label class="style-section-label">6. Shalwar Pocket</label>
+            <label class="style-section-label" style="font-weight:bold; margin-top:10px; display:block;">6. Shalwar Pocket</label>
             <div class="image-selector-group">
                 <label class="image-radio-item"><input type="radio" name="style_shalwar_pocket" value="Side">
                     <div class="icon-box"><img src="{{ url_for('static', filename='icon/pantPocket.png') }}"><span>Side</span></div></label>
@@ -280,11 +318,11 @@
                     <div class="icon-box"><div style="font-size:20px; font-weight:bold; margin-bottom:5px; color:#ccc;">X</div><span>None</span></div></label>
             </div>
 
-            <label class="style-section-label" style="margin-top:15px;">Special Tailor Notes:</label>
+            <label class="style-section-label" style="margin-top:15px; font-weight:bold; display:block;">Special Tailor Notes:</label>
             <textarea name="special_notes" rows="2" placeholder="Enter details..." style="width:100%; padding:8px; border:1px solid #ccc; border-radius:4px;"></textarea>
 
             <button type="submit" class="btn-submit">Save & Print Order</button>
-            <a href="/" class="back-link" style="display:block; text-align:center; color:#666; text-decoration:none;">Cancel & Go Back</a>
+            <a href="/" class="back-link">Cancel & Go Back</a>
         </form>
     </div>
 

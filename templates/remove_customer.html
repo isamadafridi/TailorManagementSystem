@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Remove Customer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    <style>
+        /* --- COPYING THE COMPACT STYLES --- */
+        body { background-color: #f0f2f5; font-family: 'Segoe UI', sans-serif; padding-bottom: 40px; }
+        
+        /* HEADER */
+        .page-header { background: linear-gradient(135deg, #c0392b 0%, #e74c3c 100%); /* RED GRADIENT FOR DANGER PAGE */ color: white; padding: 20px 20px 50px 20px; text-align: center; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .page-header h1 { margin: 0; font-size: 28px; }
+        .page-header p { margin: 5px 0 0; opacity: 0.9; font-size: 14px; }
+        
+        /* CONTAINER */
+        .container { max-width: 800px; margin: -40px auto 0 auto; background: #fff; padding: 25px; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); position: relative; }
+        
+        /* SEARCH BAR */
+        .search-box-styled {
+            display: flex; gap: 10px; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid #eee;
+        }
+        .search-box-styled input {
+            flex: 1; padding: 12px; border: 2px solid #eee; border-radius: 8px; font-size: 16px; transition: 0.3s;
+        }
+        .search-box-styled input:focus { border-color: #e74c3c; outline: none; }
+        .btn-search {
+            padding: 0 25px; background: #2c3e50; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;
+        }
+        
+        /* WARNING BOX */
+        .warning-card {
+            background-color: #fff5f5; border: 1px solid #fc8181; border-left: 5px solid #c0392b;
+            padding: 15px; border-radius: 6px; margin-bottom: 20px; color: #c0392b;
+        }
+        .warning-card h4 { margin: 0 0 5px 0; font-size: 18px; display: flex; align-items: center; gap: 10px; }
+        
+        /* DETAILS GRID */
+        .details-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 15px; background: #f9f9f9; padding: 20px; border-radius: 8px; margin-bottom: 25px;
+        }
+        .detail-item { display: flex; flex-direction: column; }
+        .detail-label { font-size: 12px; font-weight: bold; color: #7f8c8d; text-transform: uppercase; }
+        .detail-value { font-size: 16px; font-weight: 600; color: #2c3e50; }
+
+        /* BUTTONS */
+        .btn-delete {
+            width: 100%; padding: 15px; background: #c0392b; color: white; border: none; border-radius: 6px; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.2s;
+        }
+        .btn-delete:hover { background: #a93226; }
+        .btn-cancel {
+            display: block; text-align: center; margin-top: 15px; color: #7f8c8d; text-decoration: none; font-size: 14px;
+        }
+        .btn-top-left { position: absolute; top: 20px; left: 20px; color: white; border:1px solid white; padding:5px 15px; border-radius:20px; text-decoration:none; font-weight: bold;}
+        .btn-top-left:hover { background: white; color: #c0392b; }
+
+        /* ALERTS */
+        .alert { padding: 15px; border-radius: 8px; margin-bottom: 20px; font-weight: 500; }
+        .alert-error { background: #fde8e8; color: #c81e1e; border: 1px solid #f8b4b4; }
+        .alert-success { background: #def7ec; color: #03543f; border: 1px solid #84e1bc; }
+
+    </style>
+</head>
+<body>
+
+    <div class="page-header">
+        <h1>Remove Customer</h1>
+        <p>Search and permanently delete records.</p>
+        <a href="/" class="btn-top-left">Back</a>
+    </div>
+
+    <div class="container">
+        
+        {% if error %}
+        <div class="alert alert-error">⚠ {{ error }}</div>
+        {% endif %}
+
+        {% if success %}
+        <div class="alert alert-success">✔ {{ success }}</div>
+        {% endif %}
+
+        <form method="POST" action="/deleteCustomer" class="search-box-styled">
+            <input type="text" name="search_id" placeholder="Enter Customer ID (e.g., AB005)" required>
+            <button type="submit" class="btn-search">Search</button>
+        </form>
+
+        {% if customer %}
+        <div class="warning-card">
+            <h4>⚠ Warning: Irreversible Action</h4>
+            <p>You are about to delete <strong>{{ customer.userName }}</strong>. This cannot be undone.</p>
+        </div>
+
+        <div class="details-grid">
+            <div class="detail-item">
+                <span class="detail-label">Customer ID</span>
+                <span class="detail-value">{{ customer.userId }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Name</span>
+                <span class="detail-value">{{ customer.userName }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Phone</span>
+                <span class="detail-value">{{ customer.phone }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Suits</span>
+                <span class="detail-value">{{ customer.numberOfSuit }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Address</span>
+                <span class="detail-value">{{ customer.address }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Date Added</span>
+                <span class="detail-value">{{ customer.date }}</span>
+            </div>
+        </div>
+
+        <form method="POST" action="/deleteCustomer_submit">
+            <input type="hidden" name="customer_id" value="{{ customer.id }}">
+            <input type="hidden" name="customer_userId" value="{{ customer.userId }}">
+
+            <button type="submit" class="btn-delete">Yes, Delete Customer</button>
+            <a href="/deleteCustomer" class="btn-cancel">Cancel & Clear</a>
+        </form>
+        {% endif %}
+    </div>
+
+</body>
+</html>
