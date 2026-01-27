@@ -193,129 +193,193 @@
         {% endwith %}
 
         <form method="POST">
-            <h3>👤 Personal Details</h3>
+            <h2>👤 ذاتی تفصیلات</h2>
             <div class="form-grid">
-                <div class="input-row"><label>Name:</label><input type="text" name="userName" required></div>
-                <div class="input-row"><label>Phone:</label><input type="text" name="phone" required></div>
-                <div class="input-row"><label>Suits:</label><input type="number" name="numberOfSuit" value="1" required></div>
-                <div class="input-row"><label>Date:</label><input type="date" name="date" required></div>
-                <div class="input-row full-width"><label>Address:</label><input type="text" name="address" required></div>
+                <div class="input-row"><label>نام:</label><input type="text" name="userName" required></div>
+                <div class="input-row"><label>فون نمبر:</label><input type="text" name="phone" required></div>
+                <div class="input-row"><label>سوٹ کی تعداد:</label><input type="number" name="numberOfSuit" value="1" required></div>
+                <div class="input-row"><label>تاریخ:</label><input type="date" name="date" required></div>
+                <div class="input-row"><label>بقایا:</label><input type="number" name="price"  placeholder='e.g. 1400' ></div>
+                <div class="input-row full-width"><label>پتہ:</label><input type="text" name="address" required></div>
             </div>
 
-            <h3>📏 Measurements</h3>
+            <h2>📏 پیمائش</h2>
             <div class="form-grid">
-                <div class="measure-box-bg">
-                    <div class="measure-title">Shirt / Kameez</div>
-                    <div class="input-row"><label>Length:</label><input type="text" name="height"></div>
-                    <div class="input-row"><label>Width:</label><input type="text" name="width"></div>
-                    <div class="input-row"><label>Chest:</label><input type="text" name="chestWidth"></div>
-                    <div class="input-row"><label>Arm:</label><input type="text" name="arm"></div>
-                    <div class="input-row"><label>Teera:</label><input type="text" name="teera"></div>
-                    <div class="input-row"><label>Collar:</label><input type="text" name="collar"></div>
-                </div>
+                <div class="measure-box-bg" >
+                    <div class="measure-title">شلوار اور قمیص</div>
+                    <div class="input-row"><label>لمبائی:</label><input type="text" name="lambhai"></div>
+                    <div class="input-row"><label>تیرا:</label><input type="text" name="tera"></div>
+                    <div class="input-row"><label>بازو:</label><input type="text" name="bazo"></div>
+                    <div class="input-row"><label>کالر:</label><input type="text" name="collar"></div>
+                    <div class="input-row"><label>چھتائی:</label><input type="text" name="chati"></div>
+                    <div class="input-row"><label>کمر:</label><input type="text" name="kamar"></div>
+                <!-- </div>
                 
-                <div class="measure-box-bg">
-                    <div class="measure-title">Trouser / Shalwar</div>
-                    <div class="input-row"><label>Length:</label><input type="text" name="shalwarLength"></div>
-                    <div class="input-row"><label>Poncha:</label><input type="text" name="poncha"></div>
-                    <div class="input-row"><label>Ghair:</label><input type="text" name="shalwarWidth"></div>
-                    <div class="input-row"><label>Asan:</label><input type="text" name="asan"></div>
+                <div class="measure-box-bg"> -->
+                    <!-- <div class="measure-title">Trouser / Shalwar</div> -->
+                    <div class="input-row"><label>گیحر:</label><input type="text" name="ghaihr"></div>
+                    <div class="input-row"><label>شلوار:</label><input type="text" name="shalwar"></div>
+                    <div class="input-row"><label>پانچیہ:</label><input type="text" name="poncha"></div>
+                    <div class="input-row"><label>گیر:</label><input type="text" name="ghair"></div>
+                    <div class="input-row"><label>اسن:</label><input type="text" name="asan"></div>
+                    <div class="input-row">
+                    <label style="font-family: 'Noto Nastaliq Urdu', serif; font-size: 16px;">درز دار:</label>
+                    
+                    <div style="display: flex; gap: 20px; align-items: center; flex: 1;">
+                        <label style="display: flex; align-items: center; gap: 5px; cursor: pointer;">
+                            <input type="radio" name="drzdar" value="Yes"> 
+                            <span style="font-family: 'Noto Nastaliq Urdu', serif;">ہاں</span>
+                        </label>
+
+                        <label style="display: flex; align-items: center; gap: 5px; cursor: pointer;">
+                            <input type="radio" name="drzdar" value="No" checked> 
+                            <span style="font-family: 'Noto Nastaliq Urdu', serif;">نہیں</span>
+                        </label>
+                    </div>
+                </div>
+
                 </div>
             </div>
 
-            <h3>✂️ Stitching Styles</h3>
-            
-            <label class="style-section-label" style="font-weight:bold; margin-top:10px; display:block;">1. Collar Style</label>
+            <h2>✂️ سلائی کے انداز</h2>
+
+            <!-- Collar section -->
+            <label class="style-section-label" style="font-weight:bold; margin-top:10px; display:block;">1. کلر کی انداز</label>
             <div class="image-selector-group">
                 <label class="image-radio-item"><input type="radio" name="style_collar" value="Normal" checked>
-                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/collar.png') }}"><span>Collar</span></div></label>
-                <label class="image-radio-item"><input type="radio" name="style_collar" value="Ban">
-                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/ban.png') }}"><span>Ban</span></div></label>
-                <label class="image-radio-item"><input type="radio" name="style_collar" value="Spread">
-                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/ScoopNeck.png') }}"><span>Scoop</span></div></label>
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/collar.png') }}"><span>کالر</span></div></label>
                 <label class="image-radio-item"><input type="radio" name="style_collar" value="Maghzi">
-                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/halfBan.png') }}"><span>Half Ban</span></div></label>
-                <label class="image-radio-item"><input type="radio" name="style_collar" value="Other">
-                    <div class="icon-box"><div style="font-size:20px; font-weight:bold; margin-bottom:5px;">?</div><span>Other</span></div></label>
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/collarGoll.png') }}"><span>کالر گول</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_collar" value="Ban">
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/ban.png') }}"><span>بین</span></div></label>
+                 <label class="image-radio-item"><input type="radio" name="style_collar" value="Spread">
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/benGoll.png') }}"><span>بین گول</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_collar" value="Maghzi">
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/benChoras.png') }}"><span>بین چورس</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_collar" value="Spread">
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/ScoopNeck.png') }}"><span>ہندی گلہ</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_collar" value="Maghzi">
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/halfBan.png') }}"><span>سامنے ہندی بیگ بین</span></div></label>
+               
             </div>
             
             <div class="size-selection-row">
-                <div class="size-label-text">Collar Size:</div>
+                <div class="size-label-text">کلر کی پیمائش:</div>
                 <input type="text" name="size_collar" class="size-input-field" placeholder='e.g. 15" or 1.5'>
             </div>
 
-            <label class="style-section-label" style="font-weight:bold; margin-top:10px; display:block;">2. Patti Style</label>
+            <!-- Patti section -->
+            <label class="style-section-label" style="font-weight:bold; margin-top:10px; display:block;">2. پٹی کی انداز</label>
             <div class="image-selector-group">
                 <label class="image-radio-item"><input type="radio" name="style_patti" value="Normal" checked>
-                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/patti.png') }}"><span>Normal</span></div></label>
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/samplePatti.png') }}"><span>سادہ پٹی</span></div></label>
                 <label class="image-radio-item"><input type="radio" name="style_patti" value="Open">
-                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/linePatti.png') }}"><span>Open</span></div></label>
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/roundPatti.png') }}"><span>گول پٹی</span></div></label>
                 <label class="image-radio-item"><input type="radio" name="style_patti" value="Hidden">
-                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/hiddenPatti.png') }}"><span>Hidden</span></div></label>
-                <label class="image-radio-item"><input type="radio" name="style_patti" value="Double">
-                    <div class="icon-box"><div style="font-size:20px; font-weight:bold; margin-bottom:5px;">=</div><span>Double</span></div></label>
-                <label class="image-radio-item"><input type="radio" name="style_patti" value="Zip">
-                    <div class="icon-box"><div style="font-size:20px; font-weight:bold; margin-bottom:5px;">Z</div><span>Zip</span></div></label>
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/anglePatti.png') }}"><span>نکدار پٹی</span></div></label>
+                
             </div>
 
             <div class="size-selection-row">
-                <div class="size-label-text">Patti Width:</div>
+                <div class="size-label-text">پٹی کی چوڑائی:</div>
                 <input type="text" name="size_patti" class="size-input-field" placeholder='e.g. 1.0" or 1.25"'>
             </div>
-
             <div class="size-selection-row">
-                <div class="size-label-text">No. of Kaj:</div>
+                <div class="size-label-text">کاج کی تعداد:</div>
                 <input type="text" name="kaj_count" class="size-input-field" placeholder='e.g. 2 or 3'>
             </div>
 
-            <label class="style-section-label" style="font-weight:bold; margin-top:10px; display:block;">3. Cuff Style</label>
+            <!-- cuff portion -->
+            <label class="style-section-label" style="font-weight:bold; margin-top:10px; display:block;">3. کف کی انداز</label>
             <div class="image-selector-group">
                 <label class="image-radio-item"><input type="radio" name="style_cuff" value="Button" checked>
-                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/culf.png') }}"><span>پیلیٹ کلف</span></div></label>
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/fetCuff.png') }}"><span>کف</span></div></label>
                 <label class="image-radio-item"><input type="radio" name="style_cuff" value="French">
-                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/openCulf.png') }}"><span>French</span></div></label>
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/fetChuras.png') }}"><span>فٹ چورس کف</span></div></label>
                 <label class="image-radio-item"><input type="radio" name="style_cuff" value="Open">
-                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/NoCulf.png') }}"><span>No Cuff</span></div></label>
-                <label class="image-radio-item"><input type="radio" name="style_cuff" value="Half">
-                    <div class="icon-box"><div style="font-size:20px; font-weight:bold; margin-bottom:5px;">C</div><span>Half</span></div></label>
-                <label class="image-radio-item"><input type="radio" name="style_cuff" value="Design">
-                    <div class="icon-box"><div style="font-size:20px; font-weight:bold; margin-bottom:5px;">★</div><span>Design</span></div></label>
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/angleKajCuff.png') }}"><span>کٹ کف</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_cuff" value="Open">
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/singleKajCuff.png') }}"><span>فٹ گول کف</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_cuff" value="Open">
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/singleKajCuff.png') }}"><span>فٹ کف</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_cuff" value="Open">
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/studCuff.png') }}"><span>سٹڈ کف</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_cuff" value="French">
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/openCuff.png') }}"><span>گول بازو</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_cuff" value="Open">
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/NoCuff.png') }}"><span>کنی بازو</span></div></label>
+                
             </div>
 
             <div class="size-selection-row">
-                <div class="size-label-text">Cuff Width:</div>
+                <div class="size-label-text">کف کی چوڑائی :</div>
                 <input type="text" name="size_cuff" class="size-input-field" placeholder='e.g. 2.5"'>
             </div>
 
-            <label class="style-section-label" style="font-weight:bold; margin-top:10px; display:block;">4. Shirt Pocket</label>
+            <!-- Bazo portion -->
+             <label class="style-section-label" style="font-weight:bold; margin-top:10px; display:block;">3. بازو</label>
+            <div class="image-selector-group">
+                <label class="image-radio-item"><input type="radio" name="style_cuff" value="Button" checked>
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/bazo.png') }}"><span>بازو</span></div></label>
+            </div>
+             <div class="size-selection-row">
+                <div class="size-label-text">موڑا :</div>
+                <input type="text" name="size_cuff" class="size-input-field" placeholder='e.g. 2.5"'>
+            </div>
+             <div class="size-selection-row">
+                <div class="size-label-text">درمیان :</div>
+                <input type="text" name="size_cuff" class="size-input-field" placeholder='e.g. 2.5"'>
+            </div>
+
+            <!-- Front Pocket -->
+            <label class="style-section-label" style="font-weight:bold; margin-top:10px; display:block;">4. سامنے جیب</label>
             <div class="image-selector-group">
                 <label class="image-radio-item"><input type="radio" name="style_pocket" value="Front" checked>
-                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/pocket.png') }}"><span>Front</span></div></label>
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/samplePocket.png') }}"><span>سادہ جیب</span></div></label>
                 <label class="image-radio-item"><input type="radio" name="style_pocket" value="Both">
-                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/shirtPocket.png') }}"><span>Both</span></div></label>
-                <label class="image-radio-item"><input type="radio" name="style_pocket" value="None">
-                    <div class="icon-box"><div style="font-size:20px; font-weight:bold; margin-bottom:5px; color:#ccc;">X</div><span>None</span></div></label>
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/buttonPocket.png') }}"><span>فلپ جیب</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_pocket" value="Both">
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/nokdarPocket.png') }}"><span>نکدار جیب</span></div></label>
+                
+                    <label class="image-radio-item"><input type="radio" name="style_pocket" value="None">
+                    <div class="icon-box"><div style="font-size:20px; font-weight:bold; margin-bottom:5px; color:#ccc;">X</div><span>سامنے جیب نہیں</span></div></label>
             </div>
 
             <div class="size-selection-row">
-                <div class="size-label-text">Pocket Size:</div>
+                <div class="size-label-text">لمبائی:</div>
+                <input type="text" name="pocket_size" class="size-input-field" placeholder='e.g. Standard or 5"'>
+            </div>
+            <div class="size-selection-row">
+                <div class="size-label-text">چوڑائی:</div>
                 <input type="text" name="pocket_size" class="size-input-field" placeholder='e.g. Standard or 5"'>
             </div>
 
-            <label class="style-section-label" style="font-weight:bold; margin-top:10px; display:block;">5. Daman Style</label>
+            <!-- side Pocket -->
+            <label class="style-section-label" style="font-weight:bold; margin-top:10px; display:block;">5. سایڈ جیب</label>
             <div class="image-selector-group">
-                <label class="image-radio-item"><input type="radio" name="style_daman" value="Straight" checked>
-                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/straightDaman.png') }}"><span>Straight</span></div></label>
-                <label class="image-radio-item"><input type="radio" name="style_daman" value="Round">
-                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/roundDaman.png') }}"><span>Round</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_pocket" value="Both">
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/doubleSidePocket.png') }}"><span>ڈابل سایڈ جیب</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_pocket" value="Both">
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/ekSidePocket.png') }}"><span>ایک سایڈ جیب</span></div></label>
+                
+                   
             </div>
 
-            <label class="style-section-label" style="font-weight:bold; margin-top:10px; display:block;">6. Shalwar Pocket</label>
+            <!-- Daman Portion  -->
+            <label class="style-section-label" style="font-weight:bold; margin-top:10px; display:block;">6. دامن</label>
+            <div class="image-selector-group">
+                <label class="image-radio-item"><input type="radio" name="style_daman" value="Straight" checked>
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/straightDaman.png') }}"><span>چورس دامن</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_daman" value="Round">
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/roundDaman.png') }}"><span>گول دامن</span></div></label>
+            </div>
+
+            <label class="style-section-label" style="font-weight:bold; margin-top:10px; display:block;">7. شلوار جیب</label>
             <div class="image-selector-group">
                 <label class="image-radio-item"><input type="radio" name="style_shalwar_pocket" value="Side">
-                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/pantPocket.png') }}"><span>Side</span></div></label>
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/pantPocket.png') }}"><span>شلوار جیب</span></div></label>
                 <label class="image-radio-item"><input type="radio" name="style_shalwar_pocket" value="None" checked>
-                    <div class="icon-box"><div style="font-size:20px; font-weight:bold; margin-bottom:5px; color:#ccc;">X</div><span>None</span></div></label>
+                    <div class="icon-box"><div style="font-size:20px; font-weight:bold; margin-bottom:5px; color:#ccc;">X</div><span>شلوار جیب نہیں</span></div></label>
             </div>
 
             <label class="style-section-label" style="margin-top:15px; font-weight:bold; display:block;">Special Tailor Notes:</label>

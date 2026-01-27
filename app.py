@@ -298,7 +298,28 @@ def delete_customer(user_id):
     except Exception as e:
         return render_template('remove_customer.html', error=f"Error deleting: {str(e)}")
 
+# --- REPORT ROUTE ---
+@app.route('/report')
+def report():
+    # 1. Get all users
+    all_users = User.query.all()
+    
+    # 2. Calculate Totals using Python Math
+    # Sum of all 'total_amount' where it is not None
+    total_receivable = sum(u.total_amount for u in all_users if u.total_amount)
+    
+    # Sum of all 'advance_payment'
+    total_received = sum(u.advance_payment for u in all_users if u.advance_payment)
+    
+    # Sum of all 'remaining_balance'
+    total_pending = sum(u.remaining_balance for u in all_users if u.remaining_balance)
 
+    # 3. Send these numbers to the HTML page
+    return render_template('report.html', 
+                           users=all_users, 
+                           total_receivable=total_receivable, 
+                           total_received=total_received, 
+                           total_pending=total_pending)
 # --- MAIN EXECUTION ---
 if __name__ == '__main__':
     with app.app_context():

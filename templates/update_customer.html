@@ -92,6 +92,7 @@
 
             <h3>✂️ Stitching Styles</h3>
             
+            <!-- collor section -->
             <label class="style-section-label" style="font-weight:bold; margin-top:10px; display:block;">1. Collar Style</label>
             <div class="image-selector-group">
                 <label class="image-radio-item"><input type="radio" name="style_collar" value="Normal" {% if customer.style_collar == 'Normal' %}checked{% endif %}>
@@ -102,8 +103,8 @@
                     <div class="icon-box"><img src="{{ url_for('static', filename='icon/ScoopNeck.png') }}"><span>Scoop</span></div></label>
                 <label class="image-radio-item"><input type="radio" name="style_collar" value="Maghzi" {% if customer.style_collar == 'Maghzi' %}checked{% endif %}>
                     <div class="icon-box"><img src="{{ url_for('static', filename='icon/halfBan.png') }}"><span>Half Ban</span></div></label>
-                <label class="image-radio-item"><input type="radio" name="style_collar" value="Other" {% if customer.style_collar == 'Other' %}checked{% endif %}>
-                    <div class="icon-box"><div style="font-size:20px; font-weight:bold; margin-bottom:5px;">?</div><span>Other</span></div></label>
+                <!-- <label class="image-radio-item"><input type="radio" name="style_collar" value="Other" {% if customer.style_collar == 'Other' %}checked{% endif %}>
+                    <div class="icon-box"><div style="font-size:20px; font-weight:bold; margin-bottom:5px;">?</div><span>Other</span></div></label> -->
             </div>
             
             <div class="size-selection-row">
@@ -111,18 +112,16 @@
                 <input type="text" name="size_collar" class="size-input-field" value="{{ customer.size_collar }}">
             </div>
 
+            <!-- patti section -->
             <label class="style-section-label" style="font-weight:bold; margin-top:10px; display:block;">2. Patti Style</label>
             <div class="image-selector-group">
                 <label class="image-radio-item"><input type="radio" name="style_patti" value="Normal" {% if customer.style_patti == 'Normal' %}checked{% endif %}>
-                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/patti.png') }}"><span>Normal</span></div></label>
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/samplePatti.png') }}"><span>Normal</span></div></label>
                 <label class="image-radio-item"><input type="radio" name="style_patti" value="Open" {% if customer.style_patti == 'Open' %}checked{% endif %}>
-                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/linePatti.png') }}"><span>Open</span></div></label>
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/roundPatti.png') }}"><span>Open</span></div></label>
                 <label class="image-radio-item"><input type="radio" name="style_patti" value="Hidden" {% if customer.style_patti == 'Hidden' %}checked{% endif %}>
-                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/hiddenPatti.png') }}"><span>Hidden</span></div></label>
-                <label class="image-radio-item"><input type="radio" name="style_patti" value="Double" {% if customer.style_patti == 'Double' %}checked{% endif %}>
-                    <div class="icon-box"><div style="font-size:20px; font-weight:bold; margin-bottom:5px;">=</div><span>Double</span></div></label>
-                <label class="image-radio-item"><input type="radio" name="style_patti" value="Zip" {% if customer.style_patti == 'Zip' %}checked{% endif %}>
-                    <div class="icon-box"><div style="font-size:20px; font-weight:bold; margin-bottom:5px;">Z</div><span>Zip</span></div></label>
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/anglePatti.png') }}"><span>Hidden</span></div></label>
+                
             </div>
             
             <div class="size-selection-row">
@@ -135,18 +134,25 @@
                 <input type="text" name="kaj_count" class="size-input-field" value="{{ customer.kaj_count if customer.kaj_count else '' }}">
             </div>
 
+            <!-- cuff section -->
             <label class="style-section-label" style="font-weight:bold; margin-top:10px; display:block;">3. Cuff Style</label>
             <div class="image-selector-group">
                 <label class="image-radio-item"><input type="radio" name="style_cuff" value="Button" {% if customer.style_cuff == 'Button' %}checked{% endif %}>
-                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/culf.png') }}"><span>Button</span></div></label>
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/fetCuff.png') }}"><span>Button</span></div></label>
                 <label class="image-radio-item"><input type="radio" name="style_cuff" value="French" {% if customer.style_cuff == 'French' %}checked{% endif %}>
-                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/openCulf.png') }}"><span>French</span></div></label>
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/singleKajCuff.png') }}"><span>French</span></div></label>
                 <label class="image-radio-item"><input type="radio" name="style_cuff" value="Open" {% if customer.style_cuff == 'Open' %}checked{% endif %}>
-                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/NoCulf.png') }}"><span>No Cuff</span></div></label>
-                <label class="image-radio-item"><input type="radio" name="style_cuff" value="Half" {% if customer.style_cuff == 'Half' %}checked{% endif %}>
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/studCuff.png') }}"><span>No Cuff</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_cuff" value="Open" {% if customer.style_cuff == 'Open' %}checked{% endif %}>
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/doubleKajCuff.png') }}"><span>No Cuff</span></div></label>    
+                <label class="image-radio-item"><input type="radio" name="style_cuff" value="Open" {% if customer.style_cuff == 'Open' %}checked{% endif %}>
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/openCuff.png') }}"><span>No Cuff</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_cuff" value="Open" {% if customer.style_cuff == 'Open' %}checked{% endif %}>
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/noCuff.png') }}"><span>No Cuff</span></div></label>
+                    <!-- <label class="image-radio-item"><input type="radio" name="style_cuff" value="Half" {% if customer.style_cuff == 'Half' %}checked{% endif %}>
                     <div class="icon-box"><div style="font-size:20px; font-weight:bold; margin-bottom:5px;">C</div><span>Half</span></div></label>
                 <label class="image-radio-item"><input type="radio" name="style_cuff" value="Design" {% if customer.style_cuff == 'Design' %}checked{% endif %}>
-                    <div class="icon-box"><div style="font-size:20px; font-weight:bold; margin-bottom:5px;">★</div><span>Design</span></div></label>
+                    <div class="icon-box"><div style="font-size:20px; font-weight:bold; margin-bottom:5px;">★</div><span>Design</span></div></label> -->
             </div>
             
             <div class="size-selection-row">
@@ -154,12 +160,13 @@
                 <input type="text" name="size_cuff" class="size-input-field" value="{{ customer.size_cuff }}">
             </div>
 
+            <!-- Front Pocket -->
             <label class="style-section-label" style="font-weight:bold; margin-top:10px; display:block;">4. Shirt Pocket</label>
             <div class="image-selector-group">
                 <label class="image-radio-item"><input type="radio" name="style_pocket" value="Front" {% if 'Front' in customer.style_pocket %}checked{% endif %}>
-                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/pocket.png') }}"><span>Front</span></div></label>
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/samplePocket.png') }}"><span>Front</span></div></label>
                 <label class="image-radio-item"><input type="radio" name="style_pocket" value="Both" {% if 'Both' in customer.style_pocket %}checked{% endif %}>
-                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/shirtPocket.png') }}"><span>Both</span></div></label>
+                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/buttonPocket.png') }}"><span>Both</span></div></label>
                 <label class="image-radio-item"><input type="radio" name="style_pocket" value="None" {% if 'None' in customer.style_pocket %}checked{% endif %}>
                     <div class="icon-box"><div style="font-size:20px; font-weight:bold; margin-bottom:5px; color:#ccc;">X</div><span>None</span></div></label>
             </div>

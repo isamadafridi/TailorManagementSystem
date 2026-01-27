@@ -8,18 +8,10 @@
         /* --- STYLES MATCHING YOUR OTHER PAGES --- */
         body { background-color: #f0f2f5; font-family: 'Segoe UI', sans-serif; padding-bottom: 40px; }
         
-        /*COMPACT HERO HEADER */
-        .page-header {
-            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
-            color: white;
-            padding: 20px 20px 50px 20px; 
-            text-align: center;
-            border-bottom-left-radius: 20px;
-            border-bottom-right-radius: 20px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
+        /* HEADER */
+        .page-header { background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%); color: white; padding: 20px; text-align: center; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         .page-header h1 { margin: 0; font-size: 28px; }
-        .page-header p { margin: 5px 0 0; opacity: 0.9; font-size: 14px; }
+        .page-header p { opacity: 0.9; font-size: 14px; margin-top: 5px; }
 
         /* CONTAINER */
         .container { max-width: 900px; margin: -30px auto 0 auto; background: #fff; padding: 25px; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); position: relative; }
@@ -37,7 +29,7 @@
         .m-label { display: block; font-size: 11px; color: #888; margin-bottom: 2px; }
         .m-val { font-weight: bold; color: #333; font-size: 15px; }
 
-        /* VISUAL STYLE BOXES (NEW) */
+        /* VISUAL STYLE BOXES */
         .visual-style-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
         .visual-box {
             border: 2px solid #eee; border-radius: 10px; padding: 15px;
@@ -94,7 +86,7 @@
     <div class="page-header">
         <h1>{{ customer.userName }}</h1>
         <p>Customer ID: <strong>{{ customer.userId }}</strong></p>
-        <a href="/user" class="btn-back">Back</a>
+        <a href="/user" class="btn-back">Back to List</a>
     </div>
 
     <div class="container">
@@ -145,19 +137,29 @@
         <h3 style="margin-top:25px;">✂️ Style & Design</h3>
         
         <div class="visual-style-grid">
+            
             <div class="visual-box">
-                {% if customer.style_collar == 'Ban' %} <img src="{{ url_for('static', filename='icon/ban.png') }}" class="visual-img">
-                {% elif customer.style_collar == 'Spread' %} <img src="{{ url_for('static', filename='icon/ScoopNeck.png') }}" class="visual-img">
-                {% elif customer.style_collar == 'Maghzi' %} <img src="{{ url_for('static', filename='icon/halfBan.png') }}" class="visual-img">
-                {% else %} <img src="{{ url_for('static', filename='icon/collar.png') }}" class="visual-img"> {% endif %}
+                {% if customer.style_collar == 'Ban' %} 
+                    <img src="{{ url_for('static', filename='icon/ban.png') }}" class="visual-img">
+                {% elif customer.style_collar == 'Spread' %} 
+                    <img src="{{ url_for('static', filename='icon/ScoopNeck.png') }}" class="visual-img">
+                {% elif customer.style_collar == 'Maghzi' %} 
+                    <img src="{{ url_for('static', filename='icon/halfBan.png') }}" class="visual-img">
+                {% else %} 
+                    <img src="{{ url_for('static', filename='icon/collar.png') }}" class="visual-img"> 
+                {% endif %}
                 <div class="visual-name">Collar: {{ customer.style_collar }}</div>
                 {% if customer.size_collar %}<span class="visual-size">{{ customer.size_collar }}"</span>{% endif %}
             </div>
 
             <div class="visual-box">
-                {% if customer.style_patti == 'Open' %} <img src="{{ url_for('static', filename='icon/linePatti.png') }}" class="visual-img">
-                {% elif customer.style_patti == 'Hidden' %} <img src="{{ url_for('static', filename='icon/hiddenPatti.png') }}" class="visual-img">
-                {% else %} <img src="{{ url_for('static', filename='icon/patti.png') }}" class="visual-img"> {% endif %}
+                {% if customer.style_patti == 'Open' %} 
+                    <img src="{{ url_for('static', filename='icon/roundPatti.png') }}" class="visual-img">
+                {% elif customer.style_patti == 'Hidden' %} 
+                    <img src="{{ url_for('static', filename='icon/anglePatti.png') }}" class="visual-img">
+                {% else %} 
+                    <img src="{{ url_for('static', filename='icon/samplePatti.png') }}" class="visual-img"> 
+                {% endif %}
                 <div class="visual-name">Patti: {{ customer.style_patti }}</div>
                 {% if customer.size_patti %}<span class="visual-size">{{ customer.size_patti }}"</span>{% endif %}
                 {% if customer.kaj_count %}
@@ -166,30 +168,46 @@
             </div>
 
             <div class="visual-box">
-                {% if customer.style_cuff == 'French' %} <img src="{{ url_for('static', filename='icon/openCulf.png') }}" class="visual-img">
-                {% elif customer.style_cuff == 'Open' %} <img src="{{ url_for('static', filename='icon/NoCulf.png') }}" class="visual-img">
-                {% else %} <img src="{{ url_for('static', filename='icon/culf.png') }}" class="visual-img"> {% endif %}
+                {% if customer.style_cuff == 'French' %} 
+                    <img src="{{ url_for('static', filename='icon/singleKajCuff.png') }}" class="visual-img">
+                {% elif customer.style_cuff == 'Button' %} 
+                    <img src="{{ url_for('static', filename='icon/fetCuff.png') }}" class="visual-img">
+                {% elif customer.style_cuff == 'Open' %} 
+                    <img src="{{ url_for('static', filename='icon/studCuff.png') }}" class="visual-img">
+                {% else %} 
+                    <img src="{{ url_for('static', filename='icon/culf.png') }}" class="visual-img"> 
+                {% endif %}
                 <div class="visual-name">Cuff: {{ customer.style_cuff }}</div>
                 {% if customer.size_cuff %}<span class="visual-size">{{ customer.size_cuff }}"</span>{% endif %}
             </div>
 
             <div class="visual-box">
-                {% if 'Both' in customer.style_pocket %} <img src="{{ url_for('static', filename='icon/shirtPocket.png') }}" class="visual-img">
-                {% elif 'None' in customer.style_pocket %} <div style="font-size:40px; line-height:50px;">🚫</div>
-                {% else %} <img src="{{ url_for('static', filename='icon/pocket.png') }}" class="visual-img"> {% endif %}
+                {% if 'Both' in customer.style_pocket %} 
+                    <img src="{{ url_for('static', filename='icon/buttonPocket.png') }}" class="visual-img">
+                {% elif 'None' in customer.style_pocket %} 
+                    <div style="font-size:40px; line-height:50px;">🚫</div>
+                {% else %} 
+                    <img src="{{ url_for('static', filename='icon/samplePocket.png') }}" class="visual-img"> 
+                {% endif %}
                 <div class="visual-name">Pocket: {{ customer.style_pocket }}</div>
                 {% if customer.pocket_size %}<span class="visual-size">{{ customer.pocket_size }}</span>{% endif %}
             </div>
 
             <div class="visual-box">
-                {% if customer.style_daman == 'Round' %} <img src="{{ url_for('static', filename='icon/roundDaman.png') }}" class="visual-img">
-                {% else %} <img src="{{ url_for('static', filename='icon/straightDaman.png') }}" class="visual-img"> {% endif %}
+                {% if customer.style_daman == 'Round' %} 
+                    <img src="{{ url_for('static', filename='icon/roundDaman.png') }}" class="visual-img">
+                {% else %} 
+                    <img src="{{ url_for('static', filename='icon/straightDaman.png') }}" class="visual-img"> 
+                {% endif %}
                 <div class="visual-name">Daman: {{ customer.style_daman }}</div>
             </div>
 
             <div class="visual-box">
-                {% if customer.style_shalwar_pocket == 'Side' %} <img src="{{ url_for('static', filename='icon/pantPocket.png') }}" class="visual-img">
-                {% else %} <div style="font-size:40px; line-height:50px;">🚫</div> {% endif %}
+                {% if customer.style_shalwar_pocket == 'Side' %} 
+                    <img src="{{ url_for('static', filename='icon/pantPocket.png') }}" class="visual-img">
+                {% else %} 
+                    <div style="font-size:40px; line-height:50px;">🚫</div> 
+                {% endif %}
                 <div class="visual-name">Shalwar Pkt: {{ customer.style_shalwar_pocket or 'None' }}</div>
             </div>
         </div>
@@ -201,9 +219,7 @@
 
         <div class="action-bar">
             <a href="/print/{{ customer.userId }}" class="btn btn-print">🖨️ Print Receipt</a>
-            
             <a href="/update/{{ customer.userId }}" class="btn btn-edit">✏️ Edit</a>
-            
             <button onclick="openModal()" class="btn btn-delete">🗑️ Delete</button>
         </div>
 
@@ -220,7 +236,6 @@
 
             <div class="modal-buttons">
                 <button onclick="closeModal()" class="btn btn-modal-cancel">Cancel</button>
-                
                 <form action="/delete/{{ customer.userId }}" method="POST" style="flex:1;">
                     <button type="submit" class="btn btn-modal-delete">Yes, Delete</button>
                 </form>

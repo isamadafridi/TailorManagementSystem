@@ -5,10 +5,7 @@
     <title>Order #{{ customer.userId }}</title>
     <style>
         /* --- PRINTER SETTINGS FOR 4x6 LABEL --- */
-        page {
-            size: 114mm 162mm;
-            margin: 0;
-        }
+        page { size: 114mm 162mm; margin: 0; }
 
         body {
             font-family: 'Arial', sans-serif;
@@ -55,7 +52,7 @@
             font-size: 11px;
         }
 
-        /* --- SPLIT LAYOUT (THE NEW 35/65 CHANGE) --- */
+        /* --- SPLIT LAYOUT (35% Size | 65% Icons) --- */
         .split-layout {
             display: flex;
             flex: 1; /* Takes up remaining height */
@@ -90,23 +87,9 @@
             text-transform: uppercase;
         }
 
-        .measure-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 11px;
-        }
-        .measure-table th {
-            text-align: left;
-            font-weight: normal;
-            color: #444;
-            padding: 1px 0;
-        }
-        .measure-table td {
-            font-weight: bold;
-            text-align: right;
-            border-bottom: 1px solid #ddd;
-            padding: 1px 0;
-        }
+        .measure-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+        .measure-table th { text-align: left; font-weight: normal; color: #444; padding: 1px 0; }
+        .measure-table td { font-weight: bold; text-align: right; border-bottom: 1px solid #ddd; padding: 1px 0; }
 
         /* --- ICONS GRID --- */
         .style-grid {
@@ -138,36 +121,18 @@
         
         .style-name { font-size: 9px; font-weight: bold; line-height: 1; margin-top: 1px; }
         .style-size { 
-            /* background: rgb(255, 255, 255);  */
-            /* color: rgb(0, 0, 0);  */
-            font-weight: bold;
+            background: black; color: white; 
             font-size: 9px; padding: 1px 3px; 
             border-radius: 2px; display: inline-block;
             margin-top: 2px;
         }
 
-        /* --- EXTRA INFO BOX (Kaj, Pkt Size) --- */
-        .extras-row {
-            display: flex;
-            gap: 3px;
-            margin-top: 3px;
-        }
-        .extra-box {
-            border: 1px solid #333;
-            flex: 1;
-            text-align: center;
-            font-size: 10px;
-            background: #eee;
-            padding: 2px;
-        }
+        /* --- EXTRAS ROW --- */
+        .extras-row { display: flex; gap: 3px; margin-top: 3px; }
+        .extra-box { border: 1px solid #333; flex: 1; text-align: center; font-size: 10px; background: #eee; padding: 2px; }
 
         /* --- FOOTER / NOTES --- */
-        .notes {
-            margin-top: 2px;
-            padding: 3px;
-            font-size: 10px;
-            font-style: italic;
-        }
+        .notes { margin-top: 2px; padding: 3px; font-size: 10px; font-style: italic; }
 
         /* --- BUTTONS --- */
         .no-print { margin-top: 20px; display: flex; gap: 15px; }
@@ -225,49 +190,79 @@
                 <div class="style-grid">
                     
                     <div class="style-item">
-                        {% if customer.style_collar == 'Ban' %} <img src="{{ url_for('static', filename='icon/ban.png') }}">
-                        {% elif customer.style_collar == 'Spread' %} <img src="{{ url_for('static', filename='icon/ScoopNeck.png') }}">
-                        {% else %} <img src="{{ url_for('static', filename='icon/collar.png') }}"> {% endif %}
+                        {% if customer.style_collar == 'Ban' %} 
+                            <img src="{{ url_for('static', filename='icon/ban.png') }}">
+                        {% elif customer.style_collar == 'Spread' %} 
+                            <img src="{{ url_for('static', filename='icon/ScoopNeck.png') }}">
+                        {% elif customer.style_collar == 'Maghzi' %} 
+                            <img src="{{ url_for('static', filename='icon/halfBan.png') }}">
+                        {% else %} 
+                            <img src="{{ url_for('static', filename='icon/collar.png') }}"> 
+                        {% endif %}
                         <div class="style-name">{{ customer.style_collar }}</div>
                         {% if customer.size_collar %}<span class="style-size">{{ customer.size_collar }}"</span>{% endif %}
                     </div>
 
                     <div class="style-item">
-                        {% if customer.style_patti == 'Open' %} <img src="{{ url_for('static', filename='icon/linePatti.png') }}">
-                        {% elif customer.style_patti == 'Hidden' %} <img src="{{ url_for('static', filename='icon/hiddenPatti.png') }}">
-                        {% else %} <img src="{{ url_for('static', filename='icon/patti.png') }}"> {% endif %}
+                        {% if customer.style_patti == 'Open' %} 
+                            <img src="{{ url_for('static', filename='icon/roundPatti.png') }}">
+                        {% elif customer.style_patti == 'Hidden' %} 
+                            <img src="{{ url_for('static', filename='icon/anglePatti.png') }}">
+                        {% else %} 
+                            <img src="{{ url_for('static', filename='icon/samplePatti.png') }}"> 
+                        {% endif %}
                         <div class="style-name">{{ customer.style_patti }}</div>
                         {% if customer.size_patti %}<span class="style-size">{{ customer.size_patti }}"</span>{% endif %}
-                        {% if customer.kaj_count %}<span  class="style-size">Kaj: {{ customer.kaj_count }}</span>{% endif %}
                     </div>
 
                     <div class="style-item">
-                        {% if customer.style_cuff == 'French' %} <img src="{{ url_for('static', filename='icon/openCulf.png') }}">
-                        {% elif customer.style_cuff == 'Open' %} <img src="{{ url_for('static', filename='icon/NoCulf.png') }}">
-                        {% else %} <img src="{{ url_for('static', filename='icon/culf.png') }}"> {% endif %}
+                        {% if customer.style_cuff == 'French' %} 
+                            <img src="{{ url_for('static', filename='icon/singleKajCuff.png') }}">
+                        {% elif customer.style_cuff == 'Button' %} 
+                            <img src="{{ url_for('static', filename='icon/fetCuff.png') }}">
+                        {% elif customer.style_cuff == 'Open' %}
+                            <img src="{{ url_for('static', filename='icon/studCuff.png') }}">
+                        {% else %} 
+                            <img src="{{ url_for('static', filename='icon/culf.png') }}"> 
+                        {% endif %}
                         <div class="style-name">{{ customer.style_cuff }}</div>
                         {% if customer.size_cuff %}<span class="style-size">{{ customer.size_cuff }}"</span>{% endif %}
                     </div>
 
                     <div class="style-item">
-                        {% if 'Both' in customer.style_pocket %} <img src="{{ url_for('static', filename='icon/shirtPocket.png') }}"><div class="style-name">Both</div>
-                        {% elif 'None' in customer.style_pocket %} <div style="font-weight:bold; font-size:16px;">X</div><div class="style-name">None</div>
-                        {% else %} <img src="{{ url_for('static', filename='icon/pocket.png') }}"><div class="style-name">Front</div> {% endif %}
+                        {% if 'Both' in customer.style_pocket %} 
+                            <img src="{{ url_for('static', filename='icon/buttonPocket.png') }}"><div class="style-name">Both</div>
+                        {% elif 'None' in customer.style_pocket %} 
+                            <div style="font-weight:bold; font-size:16px;">X</div><div class="style-name">None</div>
+                        {% else %} 
+                            <img src="{{ url_for('static', filename='icon/samplePocket.png') }}"><div class="style-name">Front</div> 
+                        {% endif %}
                         {% if customer.pocket_size %}<span class="style-size">Sz: {{ customer.pocket_size }}</span>{% endif %}
                     </div>
 
                     <div class="style-item">
-                        {% if customer.style_daman == 'Round' %} <img src="{{ url_for('static', filename='icon/roundDaman.png') }}"><div class="style-name">Round</div>
-                        {% else %} <img src="{{ url_for('static', filename='icon/straightDaman.png') }}"><div class="style-name">Straight</div> {% endif %}
+                        {% if customer.style_daman == 'Round' %} 
+                            <img src="{{ url_for('static', filename='icon/roundDaman.png') }}"><div class="style-name">Round</div>
+                        {% else %} 
+                            <img src="{{ url_for('static', filename='icon/straightDaman.png') }}"><div class="style-name">Straight</div> 
+                        {% endif %}
                     </div>
 
                     <div class="style-item">
-                        {% if customer.style_shalwar_pocket == 'Side' %} <img src="{{ url_for('static', filename='icon/pantPocket.png') }}"><div class="style-name">Side</div>
-                        {% else %} <div style="font-weight:bold; font-size:16px;">X</div><div class="style-name">No Pkt</div> {% endif %}
+                        {% if customer.style_shalwar_pocket == 'Side' %} 
+                            <img src="{{ url_for('static', filename='icon/pantPocket.png') }}"><div class="style-name">Side</div>
+                        {% else %} 
+                            <div style="font-weight:bold; font-size:16px;">X</div><div class="style-name">No Pkt</div> 
+                        {% endif %}
                     </div>
                 </div>
 
                 <div class="extras-row">
+                    {% if customer.kaj_count %}
+                    <div class="extra-box" style="flex:0.5; background:#ddd;">
+                        <strong>Kaj:</strong> {{ customer.kaj_count }}
+                    </div>
+                    {% endif %}
                     <div class="extra-box" style="flex:1; text-align:left; padding-left:5px;">
                         <strong>Note:</strong> {{ customer.special_notes }}
                     </div>

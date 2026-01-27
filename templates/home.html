@@ -22,34 +22,24 @@
         .hero-section {
             background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
             color: white;
-            padding: 30px 20px 60px 20px; /* Extra padding bottom for search bar overlap */
+            padding: 30px 20px 60px 20px;
             text-align: center;
             border-bottom-left-radius: 20px;
             border-bottom-right-radius: 20px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
-        .hero-section h1 {
-            margin: 0;
-            font-size: 32px;
-            font-weight: 700;
-            letter-spacing: 1px;
-        }
-
-        .hero-section p {
-            font-size: 15px;
-            opacity: 0.9;
-            margin-top: 5px;
-        }
+        .hero-section h1 { margin: 0; font-size: 32px; font-weight: 700; letter-spacing: 1px; }
+        .hero-section p { font-size: 15px; opacity: 0.9; margin-top: 5px; }
 
         /* 2. SEARCH BAR CONTAINER */
         .search-wrapper {
-            margin-top: -30px; /* Pulls UP into the blue header */
+            margin-top: -30px;
             display: flex;
             justify-content: center;
             padding: 0 20px;
             position: relative; 
-            z-index: 10; /* Ensures it stays on top */
+            z-index: 10;
         }
 
         .search-box {
@@ -64,43 +54,17 @@
         }
 
         .search-box input {
-            border: none;
-            outline: none;
-            padding: 12px 20px;
-            flex: 1;
-            font-size: 16px;
-            border-radius: 50px;
+            border: none; outline: none; padding: 12px 20px; flex: 1; font-size: 16px; border-radius: 50px;
         }
 
         .search-box button {
-            background: #27ae60;
-            color: white;
-            border: none;
-            padding: 10px 25px;
-            border-radius: 40px;
-            font-size: 16px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: background 0.3s;
+            background: #27ae60; color: white; border: none; padding: 10px 25px; border-radius: 40px; font-size: 16px; cursor: pointer; font-weight: bold; transition: background 0.3s;
         }
+        .search-box button:hover { background: #219150; }
 
-        .search-box button:hover {
-            background: #219150;
-        }
-
-        /* 3. ALERTS (Moved BELOW search bar) */
-        .alert-container {
-            max-width: 550px;
-            margin: 20px auto 0 auto; /* Spacing from search bar */
-            text-align: center;
-            padding: 0 20px;
-        }
-        .alert { 
-            padding: 12px; 
-            border-radius: 8px; 
-            font-size: 14px; 
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
+        /* 3. ALERTS */
+        .alert-container { max-width: 550px; margin: 20px auto 0 auto; text-align: center; padding: 0 20px; }
+        .alert { padding: 12px; border-radius: 8px; font-size: 14px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .alert-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
         .alert-danger { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
 
@@ -124,6 +88,7 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.05);
             transition: transform 0.3s, box-shadow 0.3s;
             border: 1px solid #eee;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
         }
 
         .action-card:hover {
@@ -132,33 +97,12 @@
             border-color: #3498db;
         }
 
-        .card-icon {
-            font-size: 40px;
-            margin-bottom: 10px;
-            display: block;
-        }
-
-        .action-card h3 {
-            margin: 5px 0;
-            font-size: 20px;
-            color: #2c3e50;
-        }
-
-        .action-card p {
-            color: #777;
-            font-size: 13px;
-        }
+        .card-icon { font-size: 40px; margin-bottom: 10px; display: block; }
+        .action-card h3 { margin: 5px 0; font-size: 20px; color: #2c3e50; }
+        .action-card p { color: #777; font-size: 13px; }
 
         /* FOOTER */
-        footer {
-            margin-top: auto;
-            background: #fff;
-            padding: 15px;
-            text-align: center;
-            border-top: 1px solid #eee;
-            color: #888;
-            font-size: 13px;
-        }
+        footer { margin-top: auto; background: #fff; padding: 15px; text-align: center; border-top: 1px solid #eee; color: #888; font-size: 13px; }
     </style>
 </head>
 <body>
@@ -200,15 +144,21 @@
             <p>See all orders, print receipts, or update details.</p>
         </a>
 
-        <a href="#" class="action-card" style="opacity: 0.6; cursor: default;">
-            <span class="card-icon">📈</span>
-            <h3>Reports</h3>
-            <p>View earnings and monthly stats.</p>
+        <a href="/report" class="action-card">
+            <span class="card-icon">📊</span>
+            <h3>Financial Report</h3>
+            <p>Track earnings, pending balances, and revenue.</p>
         </a>
+
+        <!-- <a href="/deleteCustomer" class="action-card">
+            <span class="card-icon">🗑️</span>
+            <h3>Remove Customer</h3>
+            <p>Search and permanently delete old records.</p>
+        </a> -->
     </div>
 
     <footer>
-        <p>© 2026 AS Tailor Management System </p>
+        <p>© 2026 AS Tailor Management System</p>
     </footer>
 
 </body>

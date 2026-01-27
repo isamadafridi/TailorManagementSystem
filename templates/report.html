@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Financial Report</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        /* --- COPYING THE DASHBOARD STYLE --- */
+        body { background-color: #f0f2f5; font-family: 'Segoe UI', sans-serif; padding-bottom: 40px; }
+        
+        /* HEADER */
+        .page-header { background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%); color: white; padding: 20px 20px 50px 20px; text-align: center; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .page-header h1 { margin: 0; font-size: 28px; }
+        .page-header p { margin: 5px 0 0; opacity: 0.9; font-size: 14px; }
+        
+        /* CONTAINER */
+        .container { max-width: 1100px; margin: -40px auto 0 auto; background: #fff; padding: 25px; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); position: relative; }
+
+        /* SUMMARY CARDS */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            padding: 20px;
+            border-radius: 10px;
+            color: white;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .bg-blue { background: linear-gradient(135deg, #3498db, #2980b9); }
+        .bg-green { background: linear-gradient(135deg, #2ecc71, #27ae60); }
+        .bg-red { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+
+        .stat-card h3 { margin: 0; font-size: 14px; text-transform: uppercase; opacity: 0.9; letter-spacing: 1px; }
+        .stat-card .amount { font-size: 28px; font-weight: bold; margin-top: 5px; }
+
+        /* DATA TABLE */
+        .report-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        .report-table th {
+            text-align: left;
+            padding: 15px;
+            background-color: #f8f9fa;
+            color: #2c3e50;
+            border-bottom: 2px solid #eee;
+            font-size: 14px;
+        }
+
+        .report-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+            color: #555;
+            font-size: 14px;
+        }
+
+        .report-table tr:hover { background-color: #f9f9f9; }
+
+        /* STATUS BADGES */
+        .badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+            display: inline-block;
+        }
+        .badge-paid { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .badge-pending { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+
+        .btn-back { position: absolute; top: 20px; left: 20px; color: white; border:1px solid white; padding:5px 15px; border-radius:20px; text-decoration:none; font-weight: bold;}
+        .btn-back:hover { background: white; color: #27ae60; }
+
+        /* LINK STYLING */
+        .user-link { text-decoration: none; color: #3498db; font-weight: bold; }
+        .user-link:hover { text-decoration: underline; }
+
+        .print-btn-container { text-align: right; margin-bottom: 15px; }
+        .btn-print-report { background: #34495e; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <div class="page-header">
+        <h1>Financial Report</h1>
+        <p>Track your business earnings and pending payments.</p>
+        <a href="/" class="btn-back">Back Home</a>
+    </div>
+
+    <div class="container">
+        
+        <div class="summary-grid">
+            <div class="stat-card bg-blue">
+                <h3>Total Business</h3>
+                <div class="amount">Rs. {{ total_receivable }}</div>
+            </div>
+            <div class="stat-card bg-green">
+                <h3>Cash Received</h3>
+                <div class="amount">Rs. {{ total_received }}</div>
+            </div>
+            <div class="stat-card bg-red">
+                <h3>Pending Balance</h3>
+                <div class="amount">Rs. {{ total_pending }}</div>
+            </div>
+        </div>
+
+        <div class="print-btn-container">
+            <button onclick="window.print()" class="btn-print-report">🖨️ Print Report</button>
+        </div>
+
+        <table class="report-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Customer Name</th>
+                    <th>Suits</th>
+                    <th>Total Bill</th>
+                    <th>Paid</th>
+                    <th>Remaining</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td style="font-weight:bold;">{{ user.userId }}</td>
+                    <td>
+                        <a href="/view/{{ user.userId }}" class="user-link">{{ user.userName }}</a>
+                    </td>
+                    <td>{{ user.numberOfSuit }}</td>
+                    <td>Rs. {{ user.total_amount or 0 }}</td>
+                    <td style="color:#27ae60;">Rs. {{ user.advance_payment or 0 }}</td>
+                    
+                    <td style="font-weight:bold; {% if user.remaining_balance > 0 %}color:#e74c3c;{% endif %}">
+                        Rs. {{ user.remaining_balance or 0 }}
+                    </td>
+
+                    <td>
+                        {% if user.remaining_balance <= 0 %}
+                            <span class="badge badge-paid">✅ FULL PAID</span>
+                        {% else %}
+                            <span class="badge badge-pending">⚠️ PENDING</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        {% if not users %}
+        <div style="text-align:center; padding:40px; color:#999;">
+            <h3>No data available yet.</h3>
+            <p>Add customers to see financial stats here.</p>
+        </div>
+        {% endif %}
+
+    </div>
+
+</body>
+</html>
