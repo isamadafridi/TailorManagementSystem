@@ -248,7 +248,7 @@ def update_customer(user_id):
             except: customer.price = 0
 
             customer.address = request.form['address']
-            customer.date = datetime.strptime(request.form['date'], '%d-%m-%y').date()
+            customer.date = datetime.strptime(request.form['date'], '%Y-%m-%d').date()
             
             # Update Urdu Fields
             customer.lambhai = request.form.get('lambhai')
