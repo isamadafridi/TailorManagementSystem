@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Shop Ledger (Khata)</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        body { background-color: #f4f6f9; font-family: 'Segoe UI', 'Noto Nastaliq Urdu', sans-serif; }
+        
+        /* --- HEADER --- */
+        .page-header { 
+            background: #2c3e50; 
+            color: white; 
+            padding: 40px; 
+            position: relative; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header-title h1 { 
+            margin: 0; 
+            font-size: 24px; 
+            text-transform: uppercase; 
+            letter-spacing: 1px;
+        }
+
+        .btn-home { 
+            position: absolute;
+            left: 20px;
+            background: rgb(117, 144, 161); 
+            color: white; 
+            padding: 8px 20px; 
+            text-decoration: none; 
+            border-radius: 50px; 
+            font-weight: bold; 
+            font-size: 14px; 
+            transition: 0.3s;
+        }
+        .btn-home:hover { background: rgba(255,255,255,0.4); }
+
+        .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
+
+        /* --- STATS CARDS (MOVED TO RIGHT) --- */
+        .stats-grid { 
+            display: flex; 
+            justify-content: flex-end; /* CHANGED: Moves content to the Right */
+            margin-bottom: 10px; 
+        }
+        .card { 
+            padding: 00px; 
+            border-radius: 8px; 
+            color: white; 
+            text-align: center; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
+            width: 300px; 
+        }
+        .card h2 { margin: 5px 0 0; font-size: 28px; }
+        .card span { font-size: 14px; opacity: 0.9; text-transform: uppercase; }
+        
+        /* .bg-blue { background: linear-gradient(135deg, #3498db, #2980b9); }
+        .bg-green { background: linear-gradient(135deg, #2ecc71, #27ae60); } */
+        .bg-red { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+
+        /* --- SEARCH BAR --- */
+        .search-container { 
+            background: white; padding: 20px; border-radius: 8px; 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-bottom: 20px; 
+            display: flex; gap: 10px; align-items: center; justify-content: center;
+        }
+        .search-input { 
+            width: 400px; padding: 12px 20px; border: 2px solid #eee; 
+            border-radius: 50px; font-size: 16px; outline: none; transition: 0.3s;
+        }
+        .search-input:focus { border-color: #3498db; }
+        
+        .btn-search { 
+            background: #2c3e50; color: white; border: none; padding: 12px 30px; 
+            border-radius: 50px; font-weight: bold; cursor: pointer; transition: 0.3s;
+            display: flex; align-items: center; gap: 5px;
+        }
+        .btn-search:hover { background: #0084ff; }
+
+        /* REFRESH BUTTON STYLE */
+        .btn-refresh {
+            background: #2c3e50; color: white; text-decoration: none; padding: 12px 25px; 
+            border-radius: 50px; font-weight: bold; cursor: pointer; transition: 0.3s;
+            display: flex; align-items: center; gap: 5px;
+        }
+        .btn-refresh:hover { background: #0084ff; }
+
+        /* --- TABLE --- */
+        .table-box { background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #f8f9fa; text-align: left; padding: 15px; color: #555; border-bottom: 2px solid #eee; font-size: 13px; }
+        td { padding: 12px 15px; border-bottom: 1px solid #eee; color: #333; vertical-align: middle; }
+        tr:hover { background: #fcfcfc; }
+
+        /* MONEY COLUMNS */
+        /* .col-total { font-weight: bold; color: #2980b9; }
+        .col-wosool { font-weight: bold; color: #27ae60; } */
+        .col-baqaya { font-weight: bold; color: #e74c3c; font-size: 15px; }
+
+        /* ACTION BUTTONS */
+        .btn-mini { padding: 8px 12px; border: none; border-radius: 4px; color: white; cursor: pointer; font-size: 12px; margin-left: 5px; font-weight: bold; }
+        .btn-add { background: #e74c3c; } 
+        .btn-pay { background: #27ae60; } 
+
+        /* --- MODAL --- */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999; justify-content: center; align-items: center; }
+        .modal-box { background: white; width: 350px; padding: 25px; border-radius: 8px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+        .modal-input { width: 90%; padding: 10px; margin: 15px 0; border: 1px solid #ccc; border-radius: 4px; font-size: 18px; text-align: center; }
+    </style>
+</head>
+<body>
+
+    <div class="page-header">
+        <a href="/" class="btn-home">🏠 Home</a>
+        
+        <div class="header-title">
+            <h1>Shop Ledger</h1>
+        </div>
+    </div>
+
+    <div class="container">
+        
+        <div class="stats-grid">
+            <div class="card bg-red">
+                <span>ٹوٹل بقایا</span>
+                <h2>{{ total_pending }}</h2>
+            </div>
+        </div>
+
+        <form method="POST" class="search-container">
+            <a href="/ledger" class="btn-refresh">🔄 Refresh</a>
+
+            <input type="text" name="search_query" class="search-input" placeholder="Enter ID, Name, or Phone..." value="{{ search_query }}" autofocus required>
+            <button type="submit" class="btn-search">🔍 Search</button>
+        </form>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div style="padding:15px; margin-bottom:20px; background: white; border-left: 5px solid {{ '#27ae60' if category=='success' else '#e74c3c' }}; color: #333;">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% if users %}
+        <div class="table-box">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>نام</th>
+                        <th>فون نمبر</th>
+                        <th>تاریخ</th>
+                        <th>وصول</th>
+                        <th>بقایا</th>
+                        <th style="text-align:right;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td><strong>{{ user.userId }}</strong></td>
+                        <td>{{ user.userName }}</td>
+                        <td>{{ user.phone }}</td>
+                        
+                        <td>{{ user.date.strftime('%d-%m-%Y') }}</td>
+                        
+                        <td class="col-wosool">{{ user.advance_payment or 0 }}</td>
+                        <td class="col-baqaya">{{ user.price or 0 }}</td>
+                        
+                        <td style="text-align:right;">
+                            <button onclick="openModal('{{ user.userId }}', '{{ user.userName }}', 'add_debt')" class="btn-mini btn-add"> بقا یا</button>
+                            
+                            <button onclick="openModal('{{ user.userId }}', '{{ user.userName }}', 'payment')" class="btn-mini btn-pay"> وصول</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% elif search_query %}
+            <div style="text-align:center; padding:40px; color:#999; background:white; border-radius:8px;">
+                No customer found. Try checking the Phone Number or ID.
+            </div>
+        {% else %}
+            <div style="text-align:center; padding:40px; color:#aaa;">
+                Search for a customer to view or update their ledger.
+            </div>
+        {% endif %}
+
+    </div>
+
+    <div id="transModal" class="modal-overlay">
+        <div class="modal-box">
+            <h2 id="modalTitle" style="margin-top:0;"></h2>
+            <p>Customer: <strong id="modalName"></strong></p>
+            
+            <form action="/process_transaction" method="POST">
+                <input type="hidden" name="user_id" id="modalUserId">
+                <input type="hidden" name="type" id="modalType">
+                
+                <input type="number" name="amount" class="modal-input" placeholder="Enter Amount" required>
+                
+                <div style="display:flex; gap:10px; margin-top:10px;">
+                    <button type="button" onclick="closeModal()" style="flex:1; padding:10px; border:1px solid #ddd; background:white; cursor:pointer; border-radius:4px;">Cancel</button>
+                    <button type="submit" id="modalSubmitBtn" style="flex:1; padding:10px; border:none; color:white; font-weight:bold; cursor:pointer; border-radius:4px;">Confirm</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function openModal(id, name, type) {
+            document.getElementById('modalUserId').value = id;
+            document.getElementById('modalName').innerText = name;
+            document.getElementById('modalType').value = type;
+            
+            const title = document.getElementById('modalTitle');
+            const btn = document.getElementById('modalSubmitBtn');
+
+            if (type === 'add_debt') {
+                title.innerText = "بقایا شامل کریں";
+                title.style.color = "#e74c3c";
+                btn.innerText = "Add Remaining";
+                btn.style.backgroundColor = "#e74c3c";
+            } else {
+                title.innerText = "رقم وصول";
+                title.style.color = "#27ae60";
+                btn.innerText = "Receive Payment";
+                btn.style.backgroundColor = "#27ae60";
+            }
+            
+            document.getElementById('transModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('transModal').style.display = 'none';
+        }
+
+        window.onclick = function(e) {
+            if (e.target == document.getElementById('transModal')) closeModal();
+        }
+    </script>
+
+</body>
+</html>

@@ -3,6 +3,7 @@ from sqlalchemy import text
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from sqlalchemy import or_
+from sqlalchemy import func
 import sys
 import os
 
@@ -247,7 +248,7 @@ def update_customer(user_id):
             except: customer.price = 0
 
             customer.address = request.form['address']
-            customer.date = datetime.strptime(request.form['date'], '%Y-%m-%d').date()
+            customer.date = datetime.strptime(request.form['date'], '%d-%m-%y').date()
             
             # Update Urdu Fields
             customer.lambhai = request.form.get('lambhai')
@@ -298,7 +299,8 @@ def update_customer(user_id):
 
             db.session.commit()
             flash('Customer Updated Successfully!', 'success')
-            return redirect('/user')
+            # Redirect to View 
+            return redirect(url_for('view_customer', user_id=user_id))
             
         except Exception as e:
             flash(f"Update Error: {str(e)}", 'danger')
@@ -357,17 +359,93 @@ def remove_customer_submit():
     except Exception as e:
         return render_template('remove_customer.html', error=f"Error deleting: {str(e)}")
 
-# --- REPORT ROUTE ---
-@app.route('/report')
-def report():
-    all_users = User.query.all()
-    # Simple calculation
-    total_receivable = sum(u.total_amount for u in all_users if u.total_amount)
-    total_received = sum(u.advance_payment for u in all_users if u.advance_payment)
-    total_pending = sum(u.price for u in all_users if u.price) 
+# --- LEDGER (KHATA) ROUTES ---
 
-    return render_template('report.html', users=all_users, total_receivable=total_receivable, total_received=total_received, total_pending=total_pending)
+@app.route('/ledger', methods=['GET', 'POST'])
+def ledger():
+    search_query = ""
+    
+    # --- 1. Global Stats Calculation ---
+    # Using specific entities makes it faster than fetching whole objects
+    all_data = User.query.with_entities(User.total_amount, User.advance_payment, User.price).all()
+    
+    total_receivable = sum((u.total_amount or 0) for u in all_data)
+    total_received = sum((u.advance_payment or 0) for u in all_data)
+    total_pending = sum((u.price or 0) for u in all_data)
 
+    # --- 2. List Fetching Logic ---
+    if request.method == 'POST':
+        search_query = request.form.get('search_query')
+        if search_query:
+            # Filtered List (Search)
+            users = User.query.filter(
+                or_(
+                    User.userId == search_query,
+                    User.phone == search_query,
+                    User.userName.ilike(f"%{search_query}%")
+                )
+            ).all()
+            if not users:
+                flash("No customer found with those details.", "danger")
+        else:
+            # If search is empty, show all
+            users = User.query.order_by(User.date.desc()).all()
+    else:
+        # Default View: Show ALL users (Newest First)
+        users = User.query.order_by(User.date.desc()).all()
+
+    return render_template('ledger.html', 
+                           users=users, 
+                           search_query=search_query,
+                           total_receivable=total_receivable,
+                           total_received=total_received,
+                           total_pending=total_pending)
+
+@app.route('/process_transaction', methods=['POST'])
+def process_transaction():
+    user_id = request.form.get('user_id')
+    try:
+        amount = int(request.form.get('amount', 0))
+    except ValueError:
+        amount = 0
+
+    transaction_type = request.form.get('type') # 'add_debt' or 'payment'
+    
+    customer = User.query.filter_by(userId=user_id).first_or_404()
+    
+    try:
+        # Initialize values if they are None (null in database)
+        if customer.price is None: customer.price = 0
+        if customer.total_amount is None: customer.total_amount = 0
+        if customer.advance_payment is None: customer.advance_payment = 0
+
+        if transaction_type == 'add_debt':
+            # Logic: Add Remaining -> Increases Total Bill & Increases Pending Balance
+            customer.price += amount
+            customer.total_amount += amount
+            flash(f"Added {amount} to remaining. New Balance: {customer.price}", "warning")
+            
+            # Updates the date to RIGHT NOW whenever add remaining
+            customer.date = datetime.now()
+
+        elif transaction_type == 'payment':
+            # Logic: Payment -> Increases Received & Decreases Pending Balance
+            customer.price -= amount
+            customer.advance_payment += amount
+            flash(f"Payment of {amount} received. Remaining Balance: {customer.price}", "success")
+
+        db.session.commit()
+        
+    except Exception as e:
+        flash(f"Error processing transaction: {str(e)}", "danger")
+        
+    # Reload ledger to show updated values
+    return render_template('ledger.html', 
+                           users=[customer], # Show the updated user immediately
+                           search_query=customer.phone, # Keep the search active
+                           total_receivable=User.query.with_entities(func.sum(User.total_amount)).scalar() or 0,
+                           total_received=User.query.with_entities(func.sum(User.advance_payment)).scalar() or 0,
+                           total_pending=User.query.with_entities(func.sum(User.price)).scalar() or 0)
 
 if __name__ == '__main__':
     with app.app_context():

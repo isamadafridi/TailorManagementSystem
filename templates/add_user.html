@@ -2,54 +2,46 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add New Customer</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    
     <style>
-        /* --- COMPACT STYLES --- */
-        body { background-color: #f0f2f5; font-family: 'Segoe UI', 'Noto Nastaliq Urdu', sans-serif; padding-bottom: 40px; }
-        .page-header { 
-        background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%); 
-        color: white; 
-        padding: 20px 20px 100px 20px; /* CHANGED 50px TO 100px */
-        text-align: center; 
-        border-bottom-left-radius: 20px; 
-        border-bottom-right-radius: 20px; 
-        box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
-}       .container { max-width: 1000px; margin: -40px auto 0; background: #fff; padding: 25px; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); position: relative; }
+        /* --- STYLES --- */
+        body { background-color: #f0f2f5; font-family: 'Noto Nastaliq Urdu', sans-serif; padding-bottom: 40px; }
+        .page-header { background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%); color: white; padding: 20px 20px 100px 20px; text-align: center; border-radius: 0 0 20px 20px; }
+        .container { max-width: 1000px; margin: -40px auto 0; background: #fff; padding: 25px; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); position: relative; }
         h3 { margin-top: 20px; border-bottom: 1px solid #eee; padding-bottom: 5px; color: #2c3e50; }
+        
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .full-width { grid-column: span 2; }
+        
         .input-row { display: flex; align-items: center; margin-bottom: 8px; }
-        .input-row label { width: 130px; font-weight: bold; color: #555; }
-        .input-row input { flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
-        .measure-box-bg { background: #f9f9f9; padding: 15px; border-radius: 8px; border: 1px solid #eee; }
-        .measure-title { font-weight: bold; margin-bottom: 10px; color: #2c3e50; }
+        .input-row label { width: 130px; min-width: 130px; font-size: 14px; color: #555; font-weight: 600; }
+        .input-row input, .input-row textarea { flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; }
         
         /* ICONS */
-        .image-selector-group { display: flex; gap: 8px; overflow-x: auto; margin-bottom: 10px; padding-bottom: 5px; }
+        .image-selector-group { display: flex; gap: 8px; overflow-x: auto; margin-bottom: 10px; padding-bottom: 10px; }
         .image-radio-item input { display: none; }
         .icon-box { border: 2px solid #eee; padding: 5px; border-radius: 8px; width: 80px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 90px; }
         .icon-box img { width: 45px; height: 45px; object-fit: contain; margin-bottom: 5px; }
         .image-radio-item input:checked + .icon-box { border-color: #3498db; background-color: #eaf6ff; }
         
-        /* SIZE INPUTS */
+        /* SIZES */
         .size-selection-row { display: flex; align-items: center; background: #f8f9fa; padding: 8px; border-radius: 5px; margin-bottom: 10px; }
-        .size-label-text { font-weight: bold; width: 130px; color: #555; }
+        .size-label-text { font-weight: bold; width: 130px; color: #555; font-size: 14px; }
         .size-input-field { flex: 1; border: 1px solid #ccc; padding: 8px; border-radius: 4px; }
         
         .btn-submit { background: #27ae60; color: white; border: none; padding: 15px; width: 100%; font-size: 18px; border-radius: 5px; cursor: pointer; margin-top: 20px; }
         .back-link { display: block; text-align: center; margin-top: 15px; color: #666; text-decoration: none; }
         .btn-top-left { position: absolute; top: 20px; left: 20px; color: white; border: 1px solid white; padding: 5px 15px; border-radius: 20px; text-decoration: none; }
+        .measure-box-bg { background: #f9f9f9; padding: 15px; border-radius: 8px; border: 1px solid #eee; }
     </style>
 </head>
 <body>
 
     <div class="page-header">
         <h1>Add New Customer</h1>
-        <p>Enter measurements and style details below.</p>
-        <a href="/" class="btn-top-left">Back</a>
+        <p>Enter details below</p>
+        <a href="javascript:history.back()" class="btn-top-left">Back</a>
     </div>
 
     <div class="container">
@@ -65,35 +57,33 @@
             <h3>👤 ذاتی تفصیلات</h3>
             <div class="form-grid">
                 <div class="input-row"><label>نام:</label><input type="text" name="userName" required></div>
-                <div class="input-row"><label>فون نمبر:</label><input type="number" name="phone" required></div>
+                <div class="input-row"><label>فون نمبر:</label><input type="text" name="phone" required></div>
                 <div class="input-row"><label>سوٹ کی تعداد:</label><input type="number" name="numberOfSuit" value="1" required></div>
                 <div class="input-row"><label>تاریخ:</label><input type="date" name="date" required></div>
-                <div class="input-row"><label>بقایا:</label><input type="number" name="price" placeholder="e.g. 1500"></div>
+                <div class="input-row"><label>بقایا (Advance):</label><input type="number" name="price" value="0"></div>
                 <div class="input-row full-width"><label>پتہ:</label><input type="text" name="address"></div>
             </div>
 
             <h3>📏 پیمائش</h3>
             <div class="form-grid">
                 <div class="measure-box-bg">
-                    <div class="measure-title">شلوار اور قمیص</div>
-                    <div class="input-row"><label>لمبائی :</label><input type="number" name="lambhai"></div>
-                    <div class="input-row"><label>تیرا :</label><input type="number" name="tera"></div>
-                    <div class="input-row"><label>بازو :</label><input type="number" name="bazo"></div>
+                    <div class="input-row"><label>لمبائی :</label><input type="text" name="lambhai"></div>
+                    <div class="input-row"><label>تیرا :</label><input type="text" name="tera"></div>
+                    <div class="input-row"><label>بازو :</label><input type="text" name="bazo"></div>
                     <div class="input-row"><label>کالر :</label><input type="text" name="collar"></div>
-                    <div class="input-row"><label>چھاتی :</label><input type="number" name="chati"></div>
-                    <div class="input-row"><label>کمر :</label><input type="number" name="kamar"></div>
+                    <div class="input-row"><label>چھاتی :</label><input type="text" name="chati"></div>
+                    <div class="input-row"><label>کمر :</label><input type="text" name="kamar"></div>
                 <!-- </div>
                 
-                <div class="measure-box-bg">
-                    <div class="measure-title">شلوار</div> -->
-                    <div class="input-row"><label>گیحر :</label><input type="number" name="ghaihr"></div>
-                    <div class="input-row"><label>شلوار :</label><input type="number" name="shalwar"></div>
+                <div class="measure-box-bg"> -->
+                    <div class="input-row"><label>گیحر :</label><input type="text" name="ghaihr"></div>
+                    <div class="input-row"><label>شلوار :</label><input type="text" name="shalwar"></div>
                     <div class="input-row"><label>پانچیہ :</label><input type="text" name="poncha"></div>
-                    <div class="input-row"><label>گیر :</label><input type="number" name="ghair"></div>
-                    <div class="input-row"><label>اسن :</label><input type="number" name="asan"></div>
+                    <div class="input-row"><label>گیر :</label><input type="text" name="ghair"></div>
+                    <div class="input-row"><label>اسن :</label><input type="text" name="asan"></div>
                     <div class="input-row">
                         <label>درز دار :</label>
-                        <div style="display: flex; gap: 20px; align-items: center; flex: 1;">
+                        <div style="display:flex; gap:20px; align-items:center;">
                             <label><input type="radio" name="drzdar" value="Yes"> ہاں</label>
                             <label><input type="radio" name="drzdar" value="No" checked> نہیں</label>
                         </div>
@@ -103,11 +93,11 @@
 
             <h3>✂️ سلائی کے انداز</h3>
 
-            <label class="style-section-label" style="font-weight:bold; margin-top:10px; display:block;">1. کلر کی انداز</label>
+            <label style="font-weight:bold; display:block; margin-top:10px;">1. کلر کی انداز</label>
             <div class="image-selector-group">
-                <label class="image-radio-item"><input type="radio" name="style_collar" value="collar" checked><div class="icon-box"><img src="{{ url_for('static', filename='icon/collar.png') }}"><span>کالر</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_collar" value="collar"><div class="icon-box"><img src="{{ url_for('static', filename='icon/collar.png') }}"><span>کالر</span></div></label>
                 <label class="image-radio-item"><input type="radio" name="style_collar" value="collarGoll"><div class="icon-box"><img src="{{ url_for('static', filename='icon/collarGoll.png') }}"><span>کالر گول</span></div></label>
-                <label class="image-radio-item"><input type="radio" name="style_collar" value="ban"><div class="icon-box"><img src="{{ url_for('static', filename='icon/ban.png') }}"><span>بین</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_collar" value="ban" checked><div class="icon-box"><img src="{{ url_for('static', filename='icon/ban.png') }}"><span>بین</span></div></label>
                 <label class="image-radio-item"><input type="radio" name="style_collar" value="benGoll"><div class="icon-box"><img src="{{ url_for('static', filename='icon/benGoll.png') }}"><span>بین گول</span></div></label>
                 <label class="image-radio-item"><input type="radio" name="style_collar" value="benChoras"><div class="icon-box"><img src="{{ url_for('static', filename='icon/benChoras.png') }}"><span>بین چورس</span></div></label>
                 <label class="image-radio-item"><input type="radio" name="style_collar" value="hindiGalla"><div class="icon-box"><img src="{{ url_for('static', filename='icon/hindiGalla.png') }}"><span>ہندی گلہ</span></div></label>
@@ -115,7 +105,7 @@
             </div>
             <div class="size-selection-row"><div class="size-label-text">کلر کی پیمائش:</div><input type="text" name="size_collar" class="size-input-field"></div>
 
-            <label class="style-section-label" style="font-weight:bold; margin-top:10px; display:block;">2. پٹی کی انداز</label>
+            <label style="font-weight:bold; display:block; margin-top:10px;">2. پٹی کی انداز</label>
             <div class="image-selector-group">
                 <label class="image-radio-item"><input type="radio" name="style_patti" value="samplePatti" checked><div class="icon-box"><img src="{{ url_for('static', filename='icon/samplePatti.png') }}"><span>سادہ پٹی</span></div></label>
                 <label class="image-radio-item"><input type="radio" name="style_patti" value="roundPatti"><div class="icon-box"><img src="{{ url_for('static', filename='icon/roundPatti.png') }}"><span>گول پٹی</span></div></label>
@@ -124,60 +114,65 @@
             <div class="size-selection-row"><div class="size-label-text">پٹی کی چوڑائی:</div><input type="text" name="size_patti" class="size-input-field"></div>
             <div class="size-selection-row"><div class="size-label-text">کاج کی تعداد:</div><input type="text" name="kaj_count" class="size-input-field"></div>
 
-            <label class="style-section-label" style="font-weight:bold; margin-top:10px; display:block;">3. کف کی انداز</label>
+            <label style="font-weight:bold; display:block; margin-top:10px;">3. کف کی انداز</label>
             <div class="image-selector-group">
                 <label class="image-radio-item"><input type="radio" name="style_cuff" value="fetCuff" checked><div class="icon-box"><img src="{{ url_for('static', filename='icon/fetCuff.png') }}"><span>کف</span></div></label>
-                <label class="image-radio-item"><input type="radio" name="style_cuff" value="fetChuras"><div class="icon-box"><img src="{{ url_for('static', filename='icon/fetChuras.png') }}"><span>فٹ چورس کف</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_cuff" value="fetChuras"><div class="icon-box"><img src="{{ url_for('static', filename='icon/fetChuras.png') }}"><span>فٹ چورس</span></div></label>
                 <label class="image-radio-item"><input type="radio" name="style_cuff" value="cutCuff"><div class="icon-box"><img src="{{ url_for('static', filename='icon/cutCuff.png') }}"><span>کٹ کف</span></div></label>
-                <label class="image-radio-item"><input type="radio" name="style_cuff" value="fitGollCuff"><div class="icon-box"><img src="{{ url_for('static', filename='icon/fitGollCuff.png') }}"><span>فٹ گول کف</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_cuff" value="fitGollCuff"><div class="icon-box"><img src="{{ url_for('static', filename='icon/fitGollCuff.png') }}"><span>فٹ گول</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_cuff" value="fitCuff"><div class="icon-box"><img src="{{ url_for('static', filename='icon/fitGollCuff.png') }}"><span>فٹ کف</span></div></label>
                 <label class="image-radio-item"><input type="radio" name="style_cuff" value="studCuff"><div class="icon-box"><img src="{{ url_for('static', filename='icon/studCuff.png') }}"><span>سٹڈ کف</span></div></label>
                 <label class="image-radio-item"><input type="radio" name="style_cuff" value="gollBazo"><div class="icon-box"><img src="{{ url_for('static', filename='icon/gollBazo.png') }}"><span>گول بازو</span></div></label>
                 <label class="image-radio-item"><input type="radio" name="style_cuff" value="kaniBazo"><div class="icon-box"><img src="{{ url_for('static', filename='icon/KaniBazo.png') }}"><span>کنی بازو</span></div></label>
             </div>
             <div class="size-selection-row"><div class="size-label-text">کف کی چوڑائی :</div><input type="text" name="size_cuff" class="size-input-field"></div>
 
-            <label class="style-section-label" style="font-weight:bold; margin-top:10px; display:block;">4. شولڈر</label>
+            <label style="font-weight:bold; display:block; margin-top:10px;">4. شولڈر</label>
             <div class="image-selector-group">
                 <label class="image-radio-item"><input type="radio" name="style_bazo" value="sholder" checked><div class="icon-box"><img src="{{ url_for('static', filename='icon/sholder.png') }}"><span>شولڈر</span></div></label>
-                </div>
-            <div class="size-selection-row"><div class="size-label-text">موڑا :</div><input type="text" name="mora_size" class="size-input-field"></div>
-            <div class="size-selection-row"><div class="size-label-text">درمیان :</div><input type="text" name="darmyan_size" class="size-input-field"></div>
+            </div>
+            <div class="size-selection-row"><div class="size-label-text">موڑا :</div><input type="text" name="mora" class="size-input-field"></div>
+            <div class="size-selection-row"><div class="size-label-text">درمیان :</div><input type="text" name="darmyan" class="size-input-field"></div>
 
-            <label class="style-section-label" style="font-weight:bold; margin-top:10px; display:block;">5. سامنے جیب</label>
+            <label style="font-weight:bold; display:block; margin-top:10px;">5. سامنے جیب</label>
             <div class="image-selector-group">
-                <label class="image-radio-item"><input type="radio" name="style_pocket" value="samplePocket" checked><div class="icon-box"><img src="{{ url_for('static', filename='icon/samplePocket.png') }}"><span>سادہ جیب</span></div></label>
-                <label class="image-radio-item"><input type="radio" name="style_pocket" value="flapPocket"><div class="icon-box"><img src="{{ url_for('static', filename='icon/flapPocket.png') }}"><span>فلپ جیب</span></div></label>
-                <label class="image-radio-item"><input type="radio" name="style_pocket" value="nokdarPocket"><div class="icon-box"><img src="{{ url_for('static', filename='icon/nokdarPocket.png') }}"><span>نکدار جیب</span></div></label>
-                <label class="image-radio-item"><input type="radio" name="style_pocket" value="None"><div class="icon-box"><div style="font-size:20px; font-weight:bold; margin-bottom:5px;">❌</div><span>سامنے جیب نہیں</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_pocket" value="samplePocket" checked><div class="icon-box"><img src="{{ url_for('static', filename='icon/samplePocket.png') }}"><span>سادہ</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_pocket" value="flapPocket"><div class="icon-box"><img src="{{ url_for('static', filename='icon/flapPocket.png') }}"><span>فلپ</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_pocket" value="nokdarPocket"><div class="icon-box"><img src="{{ url_for('static', filename='icon/nokdarPocket.png') }}"><span>نکدار</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_pocket" value="None"><div class="icon-box"><div style="font-size:20px;">❌</div><span>نہیں</span></div></label>
             </div>
             <div class="size-selection-row"><div class="size-label-text">لمبائی:</div><input type="text" name="pocket_size" class="size-input-field"></div>
             <div class="size-selection-row"><div class="size-label-text">چوڑائی:</div><input type="text" name="pocket_width" class="size-input-field"></div>
 
-            <label class="style-section-label" style="font-weight:bold; margin-top:10px; display:block;">6. سایڈ جیب</label>
+            <label style="font-weight:bold; display:block; margin-top:10px;">6. سایڈ جیب</label>
             <div class="image-selector-group">
-                <label class="image-radio-item"><input type="radio" name="side_pocket" value="doubleSidePocket"><div class="icon-box"><img src="{{ url_for('static', filename='icon/doubleSidePocket.png') }}"><span>ڈبل سایڈ جیب</span></div></label>
-                <label class="image-radio-item"><input type="radio" name="side_pocket" value="ekSidePocket"><div class="icon-box"><img src="{{ url_for('static', filename='icon/ekSidePocket.png') }}"><span>ایک سایڈ جیب</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="side_pocket" value="doubleSidePocket" checked><div class="icon-box"><img src="{{ url_for('static', filename='icon/doubleSidePocket.png') }}"><span>ڈبل</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="side_pocket" value="ekSidePocket"><div class="icon-box"><img src="{{ url_for('static', filename='icon/ekSidePocket.png') }}"><span>ایک</span></div></label>
             </div>
 
-            <label class="style-section-label" style="font-weight:bold; margin-top:10px; display:block;">7. دامن</label>
+            <label style="font-weight:bold; display:block; margin-top:10px;">7. دامن</label>
             <div class="image-selector-group">
-                <label class="image-radio-item"><input type="radio" name="style_daman" value="chorasDaman" checked><div class="icon-box"><img src="{{ url_for('static', filename='icon/chorasDaman.png') }}"><span>چورس دامن</span></div></label>
-                <label class="image-radio-item"><input type="radio" name="style_daman" value="gollDaman"><div class="icon-box"><img src="{{ url_for('static', filename='icon/gollDaman.png') }}"><span>گول دامن</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_daman" value="chorasDaman" checked><div class="icon-box"><img src="{{ url_for('static', filename='icon/chorasDaman.png') }}"><span>چورس</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_daman" value="gollDaman"><div class="icon-box"><img src="{{ url_for('static', filename='icon/gollDaman.png') }}"><span>گول</span></div></label>
             </div>
 
-            <label class="style-section-label" style="font-weight:bold; margin-top:10px; display:block;">8. شلوار جیب</label>
+            <label style="font-weight:bold; display:block; margin-top:10px;">8. شلوار جیب</label>
             <div class="image-selector-group">
-                <label class="image-radio-item"><input type="radio" name="style_shalwar_pocket" value="Side"><div class="icon-box"><img src="{{ url_for('static', filename='icon/pantPocket.png') }}"><span>شلوار جیب</span></div></label>
-                <label class="image-radio-item"><input type="radio" name="style_shalwar_pocket" value="None" checked><div class="icon-box"><div style="font-size:20px; font-weight:bold; margin-bottom:5px;">❌</div><span>شلوار جیب نہیں</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_shalwar_pocket" value="Side"><div class="icon-box"><img src="{{ url_for('static', filename='icon/pantPocket.png') }}"><span>ہاں</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_shalwar_pocket" value="None" checked><div class="icon-box"><div style="font-size:20px;">❌</div><span>نہیں</span></div></label>
             </div>
 
-            <label class="style-section-label" style="margin-top:15px; font-weight:bold; display:block;">Special Tailor Notes:</label>
-            <textarea name="special_notes" rows="2" style="width:100%; padding:8px; border:1px solid #ccc; border-radius:4px;"></textarea>
+            <label style="font-weight:bold; display:block; margin-top:15px;">Special Tailor Notes:</label>
+            <textarea name="special_notes" rows="2" style="width:100%; padding:8px; border:1px solid #ccc;"></textarea>
 
-            <button type="submit" class="btn-submit">Save & Print Order</button>
-            <a href="/" class="back-link">Cancel & Go Back</a>
+            <button type="submit" class="btn-submit">Save & View Profile</button>
+            <a href="/user" class="back-link">Cancel</a>
         </form>
     </div>
+
+    <script>
+        document.querySelector('input[name="date"]').valueAsDate = new Date();
+    </script>
 
 </body>
 </html>

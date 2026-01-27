@@ -8,7 +8,7 @@
         page { size: 114mm 162mm; margin: 0; }
 
         body {
-            font-family: 'Segoe UI', 'Noto Nastaliq Urdu', sans-serif;
+            font-family:  'Noto Nastaliq Urdu', sans-serif;
             background: #555;
             color: black;
             margin: 0;
@@ -33,6 +33,7 @@
 
         /* --- HEADER --- */
         .header {
+            font-family:  'Noto Nastaliq Urdu', sans-serif;
             border-bottom: 2px solid black;
             padding-bottom: 4px;
             margin-bottom: 4px;
@@ -50,7 +51,14 @@
             padding-bottom: 4px;
             margin-bottom: 4px;
             font-size: 11px;
-            text-align: right;
+            /* CHANGED FROM right TO left AS REQUESTED */
+            text-align: left; 
+        }
+        /* THIS MAKES LABEL LEFT & DATA RIGHT */
+        .info-grid div {
+            display: flex;
+            padding: 1px;
+            align-items: center;
         }
 
         /* --- SPLIT LAYOUT (35% Measure | 65% Icons) --- */
@@ -63,7 +71,7 @@
 
         /* LEFT SIDE: MEASUREMENTS */
         .left-col-measure {
-            width: 35%;
+            width: 20%;
             border-right: 1px solid #000; 
             padding-right: 3px;
             display: flex;
@@ -73,7 +81,7 @@
 
         /* RIGHT SIDE: ICONS */
         .right-col-icons {
-            width: 65%;
+            width: 80%;
             padding-left: 3px;
         }
 
@@ -133,8 +141,8 @@
         }
 
         /* --- EXTRAS --- */
-        .extras-row { display: flex; gap: 3px; margin-top: 3px; }
-        .extra-box { border: 1px solid #333; flex: 1; text-align: right; font-size: 10px; background: #eee; padding: 2px; }
+        /* .extras-row { display: flex; gap: 3px; margin-top: 3px; }
+        .extra-box { border: 1px solid #333; flex: 1; text-align: right; font-size: 10px; background: #eee; padding: 2px; } */
 
         /* --- BUTTONS --- */
         .no-print { margin-top: 20px; display: flex; gap: 15px; }
@@ -142,10 +150,42 @@
         .btn-print { background: #27ae60; }
         .btn-back { background: #e74c3c; }
 
+        
         @media print {
-            body { background: white; padding: 0; }
-            .sticker-container { box-shadow: none; width: 100%; height: 100%; margin: 0; }
+            @page {
+                size: 114mm 200mm;
+                margin: 0; /* This Removes Headers & Footers */
+            }
+            body { 
+                background: white; 
+                padding: 0; 
+                margin: 0;
+            }
+            .sticker-container { 
+                box-shadow: none; 
+                width: 100%; 
+                height: 100%; 
+                margin: 0; 
+            }
             .no-print { display: none !important; }
+        }
+        /* --- NEW: MANUAL WRITING AREA --- */
+        .manual-write-area {
+            border: 1px dashed #aaa; /* Dashed line to show it's for writing */
+            margin-top: 5px;
+            flex: 1; /* This is the magic: It fills ALL remaining empty space on the paper */
+            min-height: 80px; /* Ensures there is always at least this much space */
+            border-radius: 4px;
+            position: relative;
+        }
+        
+        /* Optional: Add a small label inside */
+        .manual-write-area::after {
+            position: absolute;
+            bottom: 2px;
+            right: 5px;
+            font-size: 8px;
+            color: #999;
         }
     </style>
 </head>
@@ -153,15 +193,16 @@
 
     <div class="sticker-container">
         <div class="header">
-            <h2>Tailor Shop</h2>
-            <p>ID: <strong>{{ customer.userId }}</strong></p>
+            <h2>AS Tailor</h2>
         </div>
 
         <div class="info-grid">
-            <div>نام: <strong>{{ customer.userName }}</strong></div>
-            <div>فون: <strong>{{ customer.phone }}</strong></div>
-            <div>سوٹ: <strong>{{ customer.numberOfSuit }}</strong></div>
-            <div>تاریخ: <strong id="printDate"></strong></div>
+            <div>آئی ڈی : <strong>{{ customer.userId}}</strong></div>
+            <div>نام : <strong>{{ customer.userName }}</strong></div>
+            <div>فون : <strong>{{ customer.phone }}</strong></div>
+            <div>سوٹ : <strong>{{ customer.numberOfSuit }}</strong></div>
+            <div>تاریخ : <strong id="printDate"></strong></div>
+            <div>بقایا : <strong>{{ customer.price }}</strong></div>
         </div>
 
         <div class="split-layout">
@@ -176,17 +217,12 @@
                         <tr><th>کالر</th><td>{{ customer.collar }}</td></tr>
                         <tr><th>چھاتی</th><td>{{ customer.chati }}</td></tr>
                         <tr><th>کمر</th><td>{{ customer.kamar }}</td></tr>
-                    <!-- </table>
-                </div>
-                <div class="measure-box">
-                    <h3>شلوار</h3>
-                    <table class="measure-table"> -->
-                        <tr><th>گیحر</th><td>{{ customer.ghaihr }}</td></tr>
+                    <tr><th>گیحر</th><td>{{ customer.ghaihr }}</td></tr>
                         <tr><th>شلوار</th><td>{{ customer.shalwar }}</td></tr>
                         <tr><th>پانچیہ</th><td>{{ customer.poncha }}</td></tr>
                         <tr><th>گیر</th><td>{{ customer.ghair }}</td></tr>
                         <tr><th>اسن</th><td>{{ customer.asan }}</td></tr>
-                        <tr><th>درز دار</th><td>{{ customer.drzdar }}</td></tr>
+                        <tr><th>درز دار</th><td>{% if customer.drzdar == 'Yes' %}ہاں{% else %}نہیں{% endif %}</td></tr>
                     </table>
                 </div>
             </div>
@@ -210,7 +246,7 @@
                         {% else %} 
                             <img src="{{ url_for('static', filename='icon/collar.png') }}"><div class="style-name">کالر</div> 
                         {% endif %}
-                        {% if customer.size_collar %}<span class="style-size">{{ customer.size_collar }}</span>{% endif %}
+                        {% if customer.size_collar %}<span class="style-extra">سائز : {{ customer.size_collar }}</span>{% endif %}
                     </div>
 
                     <div class="style-item">
@@ -221,8 +257,8 @@
                         {% else %} 
                             <img src="{{ url_for('static', filename='icon/samplePatti.png') }}"><div class="style-name">سادہ پٹی</div> 
                         {% endif %}
-                        {% if customer.size_patti %}<span class="style-size">{{ customer.size_patti }}</span>{% endif %}
-                        {% if customer.kaj_count %}<div class="style-extra">کاج: {{ customer.kaj_count }}</div>{% endif %}
+                        {% if customer.size_patti %}<span class="style-extra">سائز : {{ customer.size_patti }}</span>{% endif %}
+                        {% if customer.kaj_count %}<div class="style-extra">کاج : {{ customer.kaj_count }}</div>{% endif %}
                     </div>
 
                     <div class="style-item">
@@ -243,7 +279,7 @@
                         {% else %} 
                             <img src="{{ url_for('static', filename='icon/fetCuff.png') }}"><div class="style-name">کف</div> 
                         {% endif %}
-                        {% if customer.size_cuff %}<span class="style-size">{{ customer.size_cuff }}</span>{% endif %}
+                        {% if customer.size_cuff %}<span class="style-extra">سائز : {{ customer.size_cuff }}</span>{% endif %}
                     </div>
 
                     <div class="style-item">
@@ -252,12 +288,9 @@
                         {% endif %}
                         <img src="{{ url_for('static', filename='icon/sholder.png') }}">
                         {% if customer.darmyan %}
-                            <div class="style-extra">درمیان: {{ customer.darmyan }}</div>
+                            <div class="style-extra">درمیان : {{ customer.darmyan }}</div>
                         {% endif %}
-                        <!-- <div class="style-name">شولڈر</div> -->
-                        
-                        
-                    </div>
+                        </div>
 
                     <div class="style-item">
                         {% if customer.style_pocket == 'flapPocket' %} 
@@ -271,10 +304,10 @@
                         {% endif %}
                         
                         {% if customer.pocket_size %}
-                            <div class="style-extra">L: {{ customer.pocket_size }}</div>
+                            <div class="style-extra">لمبائی : {{ customer.pocket_size }}</div>
                         {% endif %}
                         {% if customer.pocket_width %}
-                            <div class="style-extra">W: {{ customer.pocket_width }}</div>
+                            <div class="style-extra">چوڑائی  : {{ customer.pocket_width }}</div>
                         {% endif %}
                     </div>
 
@@ -300,17 +333,18 @@
                         {% if customer.style_shalwar_pocket == 'Side' %} 
                             <img src="{{ url_for('static', filename='icon/pantPocket.png') }}"><div class="style-name">شلوار جیب</div>
                         {% else %} 
-                            <div style="font-size:20px;">❌</div><div class="style-name">نہیں</div> 
+                            <div style="font-size:20px;">❌</div><div class="style-name">شلوار جیب نہیں</div> 
                         {% endif %}
                     </div>
 
                 </div>
 
-                <div class="extras-row">
+                <div class="manual-write-area">
                     <div class="extra-box" style="width:100%; text-align:right;">
                         <strong>نوٹ:</strong> {{ customer.special_notes }}
                     </div>
                 </div>
+                
 
             </div>
         </div>
@@ -319,7 +353,6 @@
 
     <div class="no-print">
         <button onclick="window.print()" class="btn btn-print">🖨️ Print Label</button>
-        <!-- <a href="/" class="btn btn-back">← Back</a> -->
         <a href="javascript:history.back()" class="btn btn-back">← Back</a>
     </div>
 

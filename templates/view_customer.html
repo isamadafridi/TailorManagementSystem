@@ -6,11 +6,11 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <style>
         /* --- STYLES MATCHING YOUR ADD/UPDATE PAGES --- */
-        body { background-color: #f0f2f5; font-family: 'Segoe UI', 'Noto Nastaliq Urdu', sans-serif; padding-bottom: 40px; }
+        body { background-color: #f0f2f5; font-family: 'Noto Nastaliq Urdu', sans-serif; padding-bottom: 40px; }
         
         /* HEADER */
         .page-header { 
-    background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%); 
+    background: linear-gradient(135deg,  #3498db 20%, #2c3e50 80%); 
     color: white; 
     padding: 20px 20px 100px 20px; /* CHANGED 50px TO 100px */
     text-align: center; 
@@ -114,7 +114,7 @@
                         <tr><td>پانچیہ</td><td>{{ customer.poncha }}</td></tr>
                         <tr><td>گیر</td><td>{{ customer.ghair }}</td></tr>
                         <tr><td>اسن</td><td>{{ customer.asan }}</td></tr>
-                        <tr><td>درز دار</td><td>{{ customer.drzdar }}</td></tr>
+                        <tr><th>درز دار</th><td>{% if customer.drzdar == 'Yes' %}ہاں{% else %}نہیں{% endif %}</td></tr>
                     </table>
                 </div>
             </div>
@@ -145,7 +145,7 @@
                             <img src="{{ url_for('static', filename='icon/collar.png') }}" class="visual-img"> 
                             <div class="visual-name">کالر</div>
                         {% endif %}
-                        {% if customer.size_collar %}<span class="visual-size">{{ customer.size_collar }}</span>{% endif %}
+                        {% if customer.size_collar %}<span class="visual-extra">سائز : {{ customer.size_collar }}</span>{% endif %}
                     </div>
 
                     <div class="visual-box">
@@ -159,9 +159,9 @@
                             <img src="{{ url_for('static', filename='icon/samplePatti.png') }}" class="visual-img"> 
                             <div class="visual-name">سادہ پٹی</div>
                         {% endif %}
-                        {% if customer.size_patti %}<span class="visual-size">{{ customer.size_patti }}</span>{% endif %}
+                        {% if customer.size_patti %}<span class="visual-extra">سائز : {{ customer.size_patti }}</span>{% endif %}
                         {% if customer.kaj_count %}
-                            <div class="visual-extra">کاج: {{ customer.kaj_count }}</div>
+                            <div class="visual-extra">کاج :{{ customer.kaj_count }}</div>
                         {% endif %}
                     </div>
 
@@ -188,18 +188,20 @@
                             <img src="{{ url_for('static', filename='icon/fetCuff.png') }}" class="visual-img"> 
                             <div class="visual-name">کف</div>
                         {% endif %}
-                        {% if customer.size_cuff %}<span class="visual-size">{{ customer.size_cuff }}</span>{% endif %}
+                        {% if customer.size_cuff %}<span class="visual-extra">سائز : {{ customer.size_cuff }}</span>{% endif %}
                     </div>
 
                     <div class="visual-box">
-                        <img src="{{ url_for('static', filename='icon/sholder.png') }}" class="visual-img">
-                        <div class="visual-name">شولڈر</div>
                         {% if customer.mora %}
-                            <div class="visual-extra">موڑا: {{ customer.mora }}</div>
+                            <div class="visual-extra">موڑا : {{ customer.mora }}</div>
                         {% endif %}
+                        <img src="{{ url_for('static', filename='icon/sholder.png') }}" class="visual-img">
                         {% if customer.darmyan %}
-                            <div class="visual-extra">درمیان: {{ customer.darmyan }}</div>
+                            <div class="visual-extra">درمیان : {{ customer.darmyan }}</div>
                         {% endif %}
+                        <!-- <div class="visual-name">شولڈر</div> -->
+                        
+                        
                     </div>
 
                     <div class="visual-box">
@@ -218,10 +220,10 @@
                         {% endif %}
                         
                         {% if customer.pocket_size %}
-                            <div class="visual-extra">L: {{ customer.pocket_size }}</div>
+                            <div class="visual-extra">لمبائی : {{ customer.pocket_size }}</div>
                         {% endif %}
                         {% if customer.pocket_width %}
-                            <div class="visual-extra">W: {{ customer.pocket_width }}</div>
+                            <div class="visual-extra">چوڑائی : {{ customer.pocket_width }}</div>
                         {% endif %}
                     </div>
 
