@@ -4,40 +4,36 @@
     <meta charset="UTF-8">
     <title>Update Customer</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    
     <style>
-        /* --- COPYING THE COMPACT STYLES FROM ADD_USER --- */
-        body { background-color: #f0f2f5; font-family: 'Segoe UI', sans-serif; padding-bottom: 40px; }
-        .page-header { background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%); color: white; padding: 20px 20px 50px 20px; text-align: center; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .page-header h1 { margin: 0; font-size: 28px; }
-        .container { max-width: 1000px; margin: -40px auto 0 auto; background: #fff; padding: 25px; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); position: relative; }
-        h3 { margin-top: 20px; margin-bottom: 15px; font-size: 16px; border-bottom: 1px solid #eee; padding-bottom: 5px; color: #2c3e50; }
+        /* --- STYLES MATCHING ADD_USER --- */
+        body { background-color: #f0f2f5; font-family: 'Segoe UI', 'Noto Nastaliq Urdu', sans-serif; padding-bottom: 40px; }
+        .page-header { 
+    background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%); 
+    color: white; 
+    padding: 20px 20px 100px 20px; /* CHANGED 50px TO 100px */
+    text-align: center; 
+    border-bottom-left-radius: 20px; 
+    border-bottom-right-radius: 20px; 
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
+}
+        .container { max-width: 1000px; margin: -40px auto 0; background: #fff; padding: 25px; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); position: relative; }
+        h3 { margin-top: 20px; border-bottom: 1px solid #eee; padding-bottom: 5px; color: #2c3e50; }
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .full-width { grid-column: span 2; }
         .input-row { display: flex; align-items: center; margin-bottom: 8px; }
-        .input-row label { width: 130px; min-width: 130px; font-size: 14px; color: #555; font-weight: 600; }
-        .input-row input, .input-row textarea { flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; }
-        
-        /* Image Selectors */
-        .image-selector-group { display: flex; gap: 8px; margin-bottom: 10px; overflow-x: auto; }
-        .image-radio-item input[type="radio"] { display: none; }
-        .icon-box { padding: 5px; min-height: 90px; border: 2px solid #eee; border-radius: 8px; text-align: center; cursor: pointer; width: 80px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .input-row label { width: 130px; font-weight: bold; color: #555; }
+        .input-row input { flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+        .image-selector-group { display: flex; gap: 8px; overflow-x: auto; margin-bottom: 10px; }
+        .image-radio-item input { display: none; }
+        .icon-box { border: 2px solid #eee; padding: 5px; border-radius: 8px; width: 80px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 90px; }
         .icon-box img { width: 45px; height: 45px; margin-bottom: 5px; object-fit: contain; }
-        .image-radio-item input[type="radio"]:checked + .icon-box { border-color: #3498db; background-color: #eaf6ff; }
-
-        /* Size Inputs */
-        .size-selection-row { padding: 8px; margin-bottom: 10px; background: #f8f9fa; border-radius: 5px; display: flex; align-items: center; }
-        .size-label-text { font-weight: bold; font-size: 14px; color: #555; width: 130px; }
-        .size-input-field { flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; }
-
-        /* Buttons */
-        .btn-submit { margin-top: 20px; padding: 15px; background: #27ae60; font-size: 18px; width: 100%; border: none; border-radius: 5px; color: white; cursor: pointer; font-weight: bold; }
-        .back-link { font-size: 14px; margin-top: 15px; display: block; text-align: center; color: #666; text-decoration: none; }
-        .btn-top-left { position: absolute; top: 20px; left: 20px; color: white; border:1px solid white; padding:5px 15px; border-radius:20px; text-decoration:none; }
-        
-        /* Measure Box */
+        .image-radio-item input:checked + .icon-box { border-color: #3498db; background-color: #eaf6ff; }
+        .size-selection-row { display: flex; align-items: center; background: #f8f9fa; padding: 8px; border-radius: 5px; margin-bottom: 10px; }
+        .size-label-text { font-weight: bold; width: 130px; color: #555; font-size: 14px; }
+        .size-input-field { flex: 1; border: 1px solid #ccc; padding: 8px; border-radius: 4px; }
+        .btn-submit { background: #27ae60; color: white; border: none; padding: 15px; width: 100%; font-size: 18px; border-radius: 5px; cursor: pointer; margin-top: 20px; }
+        .back-link { display: block; text-align: center; margin-top: 15px; text-decoration: none; color: #666; }
         .measure-box-bg { background: #f9f9f9; padding: 15px; border-radius: 8px; border: 1px solid #eee; }
-        .measure-title { margin: 0 0 10px 0; color: #2c3e50; font-weight: bold; font-size: 15px; }
     </style>
 </head>
 <body>
@@ -45,151 +41,124 @@
     <div class="page-header">
         <h1>Update Customer</h1>
         <p>Editing: <strong>{{ customer.userName }}</strong> ({{ customer.userId }})</p>
-        <a href="/user" class="btn-top-left">Back</a>
+        <a href="/user" style="position:absolute; top:20px; left:20px; color:white; border:1px solid white; padding:5px 15px; border-radius:20px; text-decoration:none;">Back</a>
     </div>
 
     <div class="container">
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
-                    <div style="padding:10px; margin-bottom:15px; background:#d4edda; color:#155724; border-radius:4px;">
-                        {{ message }}
-                    </div>
+                    <div style="padding:10px; margin-bottom:15px; background:#d4edda; color:#155724; border-radius:4px;">{{ message }}</div>
                 {% endfor %}
             {% endif %}
         {% endwith %}
 
         <form method="POST">
-            <h3>👤 Personal Details</h3>
+            <h3>👤 ذاتی تفصیلات</h3>
             <div class="form-grid">
-                <div class="input-row"><label>Name:</label><input type="text" name="userName" value="{{ customer.userName }}" required></div>
-                <div class="input-row"><label>Phone:</label><input type="text" name="phone" value="{{ customer.phone }}" required></div>
-                <div class="input-row"><label>Suits:</label><input type="number" name="numberOfSuit" value="{{ customer.numberOfSuit }}" required></div>
-                <div class="input-row"><label>Date:</label><input type="date" name="date" value="{{ customer.date }}" required></div>
-                <div class="input-row full-width"><label>Address:</label><input type="text" name="address" value="{{ customer.address }}" required></div>
+                <div class="input-row"><label>نام:</label><input type="text" name="userName" value="{{ customer.userName }}" required></div>
+                <div class="input-row"><label>فون نمبر:</label><input type="text" name="phone" value="{{ customer.phone }}" required></div>
+                <div class="input-row"><label>سوٹ کی تعداد:</label><input type="number" name="numberOfSuit" value="{{ customer.numberOfSuit }}" required></div>
+                <div class="input-row"><label>تاریخ:</label><input type="date" name="date" value="{{ customer.date }}" required></div>
+                <div class="input-row"><label>بقایا:</label><input type="number" name="price" value="{{ customer.price }}"></div>
+                <div class="input-row full-width"><label>پتہ:</label><input type="text" name="address" value="{{ customer.address }}"></div>
             </div>
 
-            <h3>📏 Measurements</h3>
+            <h3>📏 پیمائش</h3>
             <div class="form-grid">
                 <div class="measure-box-bg">
-                    <div class="measure-title">Shirt / Kameez</div>
-                    <div class="input-row"><label>Length:</label><input type="text" name="height" value="{{ customer.height }}"></div>
-                    <div class="input-row"><label>Width:</label><input type="text" name="width" value="{{ customer.width }}"></div>
-                    <div class="input-row"><label>Chest:</label><input type="text" name="chestWidth" value="{{ customer.chestWidth }}"></div>
-                    <div class="input-row"><label>Arm:</label><input type="text" name="arm" value="{{ customer.arm }}"></div>
-                    <div class="input-row"><label>Teera:</label><input type="text" name="teera" value="{{ customer.teera }}"></div>
-                    <div class="input-row"><label>Collar:</label><input type="text" name="collar" value="{{ customer.collar }}"></div>
+                    <div class="input-row"><label>لمبائی :</label><input type="text" name="lambhai" value="{{ customer.lambhai }}"></div>
+                    <div class="input-row"><label>تیرا :</label><input type="text" name="tera" value="{{ customer.tera }}"></div>
+                    <div class="input-row"><label>بازو :</label><input type="text" name="bazo" value="{{ customer.bazo }}"></div>
+                    <div class="input-row"><label>کالر :</label><input type="text" name="collar" value="{{ customer.collar }}"></div>
+                    <div class="input-row"><label>چھاتی :</label><input type="text" name="chati" value="{{ customer.chati }}"></div>
+                    <div class="input-row"><label>کمر :</label><input type="text" name="kamar" value="{{ customer.kamar }}"></div>
+                <!-- </div>
+                <div class="measure-box-bg"> -->
+                    <div class="input-row"><label>گیحر :</label><input type="text" name="ghaihr" value="{{ customer.ghaihr }}"></div>
+                    <div class="input-row"><label>شلوار :</label><input type="text" name="shalwar" value="{{ customer.shalwar }}"></div>
+                    <div class="input-row"><label>پانچیہ :</label><input type="text" name="poncha" value="{{ customer.poncha }}"></div>
+                    <div class="input-row"><label>گیر :</label><input type="text" name="ghair" value="{{ customer.ghair }}"></div>
+                    <div class="input-row"><label>اسن :</label><input type="text" name="asan" value="{{ customer.asan }}"></div>
+                    <div class="input-row">
+                        <label>درز دار :</label>
+                        <div style="display:flex; gap:20px;">
+                            <label><input type="radio" name="drzdar" value="Yes" {% if customer.drzdar == 'Yes' %}checked{% endif %}> ہاں</label>
+                            <label><input type="radio" name="drzdar" value="No" {% if customer.drzdar != 'Yes' %}checked{% endif %}> نہیں</label>
+                        </div>
+                    </div>
                 </div>
-                
-                <div class="measure-box-bg">
-                    <div class="measure-title">Trouser / Shalwar</div>
-                    <div class="input-row"><label>Length:</label><input type="text" name="shalwarLength" value="{{ customer.shalwarLength }}"></div>
-                    <div class="input-row"><label>Poncha:</label><input type="text" name="poncha" value="{{ customer.poncha }}"></div>
-                    <div class="input-row"><label>Ghair:</label><input type="text" name="shalwarWidth" value="{{ customer.shalwarWidth }}"></div>
-                    <div class="input-row"><label>Asan:</label><input type="text" name="asan" value="{{ customer.asan }}"></div>
-                </div>
             </div>
 
-            <h3>✂️ Stitching Styles</h3>
-            
-            <!-- collor section -->
-            <label class="style-section-label" style="font-weight:bold; margin-top:10px; display:block;">1. Collar Style</label>
+            <h3>✂️ سلائی کے انداز</h3>
+
+            <label class="style-section-label"><strong>1. کلر کی انداز</strong></label>
             <div class="image-selector-group">
-                <label class="image-radio-item"><input type="radio" name="style_collar" value="Normal" {% if customer.style_collar == 'Normal' %}checked{% endif %}>
-                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/collar.png') }}"><span>Collar</span></div></label>
-                <label class="image-radio-item"><input type="radio" name="style_collar" value="Ban" {% if customer.style_collar == 'Ban' %}checked{% endif %}>
-                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/ban.png') }}"><span>Ban</span></div></label>
-                <label class="image-radio-item"><input type="radio" name="style_collar" value="Spread" {% if customer.style_collar == 'Spread' %}checked{% endif %}>
-                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/ScoopNeck.png') }}"><span>Scoop</span></div></label>
-                <label class="image-radio-item"><input type="radio" name="style_collar" value="Maghzi" {% if customer.style_collar == 'Maghzi' %}checked{% endif %}>
-                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/halfBan.png') }}"><span>Half Ban</span></div></label>
-                <!-- <label class="image-radio-item"><input type="radio" name="style_collar" value="Other" {% if customer.style_collar == 'Other' %}checked{% endif %}>
-                    <div class="icon-box"><div style="font-size:20px; font-weight:bold; margin-bottom:5px;">?</div><span>Other</span></div></label> -->
+                <label class="image-radio-item"><input type="radio" name="style_collar" value="collar" {% if customer.style_collar == 'collar' %}checked{% endif %}><div class="icon-box"><img src="{{ url_for('static', filename='icon/collar.png') }}"><span>کالر</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_collar" value="collarGoll" {% if customer.style_collar == 'collarGoll' %}checked{% endif %}><div class="icon-box"><img src="{{ url_for('static', filename='icon/collarGoll.png') }}"><span>کالر گول</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_collar" value="ban" {% if customer.style_collar == 'ban' %}checked{% endif %}><div class="icon-box"><img src="{{ url_for('static', filename='icon/ban.png') }}"><span>بین</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_collar" value="benGoll" {% if customer.style_collar == 'benGoll' %}checked{% endif %}><div class="icon-box"><img src="{{ url_for('static', filename='icon/benGoll.png') }}"><span>بین گول</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_collar" value="benChoras" {% if customer.style_collar == 'benChoras' %}checked{% endif %}><div class="icon-box"><img src="{{ url_for('static', filename='icon/benChoras.png') }}"><span>بین چورس</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_collar" value="hindiGalla" {% if customer.style_collar == 'hindiGalla' %}checked{% endif %}><div class="icon-box"><img src="{{ url_for('static', filename='icon/hindiGalla.png') }}"><span>ہندی گلہ</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_collar" value="SamneyHindiBackBen" {% if customer.style_collar == 'SamneyHindiBackBen' %}checked{% endif %}><div class="icon-box"><img src="{{ url_for('static', filename='icon/samneyHindiBackBen.png') }}"><span>ہندی بیگ بین</span></div></label>
             </div>
-            
-            <div class="size-selection-row">
-                <div class="size-label-text">Collar Size:</div>
-                <input type="text" name="size_collar" class="size-input-field" value="{{ customer.size_collar }}">
-            </div>
+            <div class="size-selection-row"><div class="size-label-text">کلر کی پیمائش:</div><input type="text" name="size_collar" class="size-input-field" value="{{ customer.size_collar }}"></div>
 
-            <!-- patti section -->
-            <label class="style-section-label" style="font-weight:bold; margin-top:10px; display:block;">2. Patti Style</label>
+            <label class="style-section-label"><strong>2. پٹی کی انداز</strong></label>
             <div class="image-selector-group">
-                <label class="image-radio-item"><input type="radio" name="style_patti" value="Normal" {% if customer.style_patti == 'Normal' %}checked{% endif %}>
-                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/samplePatti.png') }}"><span>Normal</span></div></label>
-                <label class="image-radio-item"><input type="radio" name="style_patti" value="Open" {% if customer.style_patti == 'Open' %}checked{% endif %}>
-                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/roundPatti.png') }}"><span>Open</span></div></label>
-                <label class="image-radio-item"><input type="radio" name="style_patti" value="Hidden" {% if customer.style_patti == 'Hidden' %}checked{% endif %}>
-                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/anglePatti.png') }}"><span>Hidden</span></div></label>
-                
+                <label class="image-radio-item"><input type="radio" name="style_patti" value="samplePatti" {% if customer.style_patti == 'samplePatti' %}checked{% endif %}><div class="icon-box"><img src="{{ url_for('static', filename='icon/samplePatti.png') }}"><span>سادہ پٹی</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_patti" value="roundPatti" {% if customer.style_patti == 'roundPatti' %}checked{% endif %}><div class="icon-box"><img src="{{ url_for('static', filename='icon/roundPatti.png') }}"><span>گول پٹی</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_patti" value="anglePatti" {% if customer.style_patti == 'anglePatti' %}checked{% endif %}><div class="icon-box"><img src="{{ url_for('static', filename='icon/anglePatti.png') }}"><span>نکدار پٹی</span></div></label>
             </div>
-            
-            <div class="size-selection-row">
-                <div class="size-label-text">Patti Width:</div>
-                <input type="text" name="size_patti" class="size-input-field" value="{{ customer.size_patti }}">
-            </div>
+            <div class="size-selection-row"><div class="size-label-text">پٹی کی چوڑائی:</div><input type="text" name="size_patti" class="size-input-field" value="{{ customer.size_patti }}"></div>
+            <div class="size-selection-row"><div class="size-label-text">کاج کی تعداد:</div><input type="text" name="kaj_count" class="size-input-field" value="{{ customer.kaj_count }}"></div>
 
-            <div class="size-selection-row">
-                <div class="size-label-text">No. of Kaj:</div>
-                <input type="text" name="kaj_count" class="size-input-field" value="{{ customer.kaj_count if customer.kaj_count else '' }}">
-            </div>
-
-            <!-- cuff section -->
-            <label class="style-section-label" style="font-weight:bold; margin-top:10px; display:block;">3. Cuff Style</label>
+            <label class="style-section-label"><strong>3. کف کی انداز</strong></label>
             <div class="image-selector-group">
-                <label class="image-radio-item"><input type="radio" name="style_cuff" value="Button" {% if customer.style_cuff == 'Button' %}checked{% endif %}>
-                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/fetCuff.png') }}"><span>Button</span></div></label>
-                <label class="image-radio-item"><input type="radio" name="style_cuff" value="French" {% if customer.style_cuff == 'French' %}checked{% endif %}>
-                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/singleKajCuff.png') }}"><span>French</span></div></label>
-                <label class="image-radio-item"><input type="radio" name="style_cuff" value="Open" {% if customer.style_cuff == 'Open' %}checked{% endif %}>
-                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/studCuff.png') }}"><span>No Cuff</span></div></label>
-                <label class="image-radio-item"><input type="radio" name="style_cuff" value="Open" {% if customer.style_cuff == 'Open' %}checked{% endif %}>
-                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/doubleKajCuff.png') }}"><span>No Cuff</span></div></label>    
-                <label class="image-radio-item"><input type="radio" name="style_cuff" value="Open" {% if customer.style_cuff == 'Open' %}checked{% endif %}>
-                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/openCuff.png') }}"><span>No Cuff</span></div></label>
-                <label class="image-radio-item"><input type="radio" name="style_cuff" value="Open" {% if customer.style_cuff == 'Open' %}checked{% endif %}>
-                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/noCuff.png') }}"><span>No Cuff</span></div></label>
-                    <!-- <label class="image-radio-item"><input type="radio" name="style_cuff" value="Half" {% if customer.style_cuff == 'Half' %}checked{% endif %}>
-                    <div class="icon-box"><div style="font-size:20px; font-weight:bold; margin-bottom:5px;">C</div><span>Half</span></div></label>
-                <label class="image-radio-item"><input type="radio" name="style_cuff" value="Design" {% if customer.style_cuff == 'Design' %}checked{% endif %}>
-                    <div class="icon-box"><div style="font-size:20px; font-weight:bold; margin-bottom:5px;">★</div><span>Design</span></div></label> -->
+                <label class="image-radio-item"><input type="radio" name="style_cuff" value="fetCuff" {% if customer.style_cuff == 'fetCuff' %}checked{% endif %}><div class="icon-box"><img src="{{ url_for('static', filename='icon/fetCuff.png') }}"><span>کف</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_cuff" value="fetChuras" {% if customer.style_cuff == 'fetChuras' %}checked{% endif %}><div class="icon-box"><img src="{{ url_for('static', filename='icon/fetChuras.png') }}"><span>فٹ چورس کف</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_cuff" value="cutCuff" {% if customer.style_cuff == 'cutCuff' %}checked{% endif %}><div class="icon-box"><img src="{{ url_for('static', filename='icon/cutCuff.png') }}"><span>کٹ کف</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_cuff" value="fitGollCuff" {% if customer.style_cuff == 'fitGollCuff' %}checked{% endif %}><div class="icon-box"><img src="{{ url_for('static', filename='icon/fitGollCuff.png') }}"><span>فٹ گول کف</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_cuff" value="fitCuff" {% if customer.style_cuff == 'fitCuff' %}checked{% endif %}><div class="icon-box"><img src="{{ url_for('static', filename='icon/fitGollCuff.png') }}"><span>فٹ کف</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_cuff" value="studCuff" {% if customer.style_cuff == 'studCuff' %}checked{% endif %}><div class="icon-box"><img src="{{ url_for('static', filename='icon/studCuff.png') }}"><span>سٹڈ کف</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_cuff" value="gollBazo" {% if customer.style_cuff == 'gollBazo' %}checked{% endif %}><div class="icon-box"><img src="{{ url_for('static', filename='icon/gollBazo.png') }}"><span>گول بازو</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_cuff" value="kaniBazo" {% if customer.style_cuff == 'kaniBazo' %}checked{% endif %}><div class="icon-box"><img src="{{ url_for('static', filename='icon/KaniBazo.png') }}"><span>کنی بازو</span></div></label>
             </div>
-            
-            <div class="size-selection-row">
-                <div class="size-label-text">Cuff Width:</div>
-                <input type="text" name="size_cuff" class="size-input-field" value="{{ customer.size_cuff }}">
-            </div>
+            <div class="size-selection-row"><div class="size-label-text">کف کی چوڑائی :</div><input type="text" name="size_cuff" class="size-input-field" value="{{ customer.size_cuff }}"></div>
 
-            <!-- Front Pocket -->
-            <label class="style-section-label" style="font-weight:bold; margin-top:10px; display:block;">4. Shirt Pocket</label>
+            <label class="style-section-label"><strong>4. شولڈر</strong></label>
             <div class="image-selector-group">
-                <label class="image-radio-item"><input type="radio" name="style_pocket" value="Front" {% if 'Front' in customer.style_pocket %}checked{% endif %}>
-                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/samplePocket.png') }}"><span>Front</span></div></label>
-                <label class="image-radio-item"><input type="radio" name="style_pocket" value="Both" {% if 'Both' in customer.style_pocket %}checked{% endif %}>
-                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/buttonPocket.png') }}"><span>Both</span></div></label>
-                <label class="image-radio-item"><input type="radio" name="style_pocket" value="None" {% if 'None' in customer.style_pocket %}checked{% endif %}>
-                    <div class="icon-box"><div style="font-size:20px; font-weight:bold; margin-bottom:5px; color:#ccc;">X</div><span>None</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_bazo" value="sholder" {% if customer.style_bazo == 'sholder' %}checked{% endif %}><div class="icon-box"><img src="{{ url_for('static', filename='icon/sholder.png') }}"><span>شولڈر</span></div></label>
             </div>
+            <div class="size-selection-row"><div class="size-label-text">موڑا :</div><input type="text" name="mora" class="size-input-field" value="{{ customer.mora }}"></div>
+            <div class="size-selection-row"><div class="size-label-text">درمیان :</div><input type="text" name="darmyan" class="size-input-field" value="{{ customer.darmyan }}"></div>
 
-            <div class="size-selection-row">
-                <div class="size-label-text">Pocket Size:</div>
-                <input type="text" name="pocket_size" class="size-input-field" value="{{ customer.pocket_size if customer.pocket_size else '' }}">
-            </div>
-
-            <label class="style-section-label" style="font-weight:bold; margin-top:10px; display:block;">5. Daman Style</label>
+            <label class="style-section-label"><strong>5. سامنے جیب</strong></label>
             <div class="image-selector-group">
-                <label class="image-radio-item"><input type="radio" name="style_daman" value="Straight" {% if customer.style_daman == 'Straight' %}checked{% endif %}>
-                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/straightDaman.png') }}"><span>Straight</span></div></label>
-                <label class="image-radio-item"><input type="radio" name="style_daman" value="Round" {% if customer.style_daman == 'Round' %}checked{% endif %}>
-                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/roundDaman.png') }}"><span>Round</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_pocket" value="samplePocket" {% if 'samplePocket' in customer.style_pocket %}checked{% endif %}><div class="icon-box"><img src="{{ url_for('static', filename='icon/samplePocket.png') }}"><span>سادہ جیب</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_pocket" value="flapPocket" {% if 'flapPocket' in customer.style_pocket %}checked{% endif %}><div class="icon-box"><img src="{{ url_for('static', filename='icon/flapPocket.png') }}"><span>فلپ جیب</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_pocket" value="nokdarPocket" {% if 'nokdarPocket' in customer.style_pocket %}checked{% endif %}><div class="icon-box"><img src="{{ url_for('static', filename='icon/nokdarPocket.png') }}"><span>نکدار جیب</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_pocket" value="None" {% if 'None' in customer.style_pocket %}checked{% endif %}><div class="icon-box"><div style="font-size:20px;">❌</div><span>سامنے جیب نہیں</span></div></label>
+            </div>
+            <div class="size-selection-row"><div class="size-label-text">لمبائی:</div><input type="text" name="pocket_size" class="size-input-field" value="{{ customer.pocket_size }}"></div>
+            <div class="size-selection-row"><div class="size-label-text">چوڑائی:</div><input type="text" name="pocket_width" class="size-input-field" value="{{ customer.pocket_width }}"></div>
+
+            <label class="style-section-label"><strong>6. سایڈ جیب</strong></label>
+            <div class="image-selector-group">
+                <label class="image-radio-item"><input type="radio" name="side_pocket" value="doubleSidePocket" {% if customer.side_pocket == 'doubleSidePocket' %}checked{% endif %}><div class="icon-box"><img src="{{ url_for('static', filename='icon/doubleSidePocket.png') }}"><span>ڈبل سایڈ جیب</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="side_pocket" value="ekSidePocket" {% if customer.side_pocket == 'ekSidePocket' %}checked{% endif %}><div class="icon-box"><img src="{{ url_for('static', filename='icon/ekSidePocket.png') }}"><span>ایک سایڈ جیب</span></div></label>
             </div>
 
-            <label class="style-section-label" style="font-weight:bold; margin-top:10px; display:block;">6. Shalwar Pocket</label>
+            <label class="style-section-label"><strong>7. دامن</strong></label>
             <div class="image-selector-group">
-                <label class="image-radio-item"><input type="radio" name="style_shalwar_pocket" value="Side" {% if customer.style_shalwar_pocket == 'Side' %}checked{% endif %}>
-                    <div class="icon-box"><img src="{{ url_for('static', filename='icon/pantPocket.png') }}"><span>Side</span></div></label>
-                <label class="image-radio-item"><input type="radio" name="style_shalwar_pocket" value="None" {% if customer.style_shalwar_pocket == 'None' %}checked{% endif %}>
-                    <div class="icon-box"><div style="font-size:20px; font-weight:bold; margin-bottom:5px; color:#ccc;">X</div><span>None</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_daman" value="chorasDaman" {% if customer.style_daman == 'chorasDaman' %}checked{% endif %}><div class="icon-box"><img src="{{ url_for('static', filename='icon/chorasDaman.png') }}"><span>چورس دامن</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_daman" value="gollDaman" {% if customer.style_daman == 'gollDaman' %}checked{% endif %}><div class="icon-box"><img src="{{ url_for('static', filename='icon/gollDaman.png') }}"><span>گول دامن</span></div></label>
+            </div>
+
+            <label class="style-section-label"><strong>8. شلوار جیب</strong></label>
+            <div class="image-selector-group">
+                <label class="image-radio-item"><input type="radio" name="style_shalwar_pocket" value="Side" {% if customer.style_shalwar_pocket == 'Side' %}checked{% endif %}><div class="icon-box"><img src="{{ url_for('static', filename='icon/pantPocket.png') }}"><span>شلوار جیب</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_shalwar_pocket" value="None" {% if customer.style_shalwar_pocket == 'None' %}checked{% endif %}><div class="icon-box"><div style="font-size:20px;">❌</div><span>شلوار جیب نہیں</span></div></label>
             </div>
 
             <label class="style-section-label" style="margin-top:15px; font-weight:bold; display:block;">Special Tailor Notes:</label>
