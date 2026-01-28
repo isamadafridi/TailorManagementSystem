@@ -12,7 +12,7 @@
         
         /* HEADER */
         .page-header {
-            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            background: linear-gradient(135deg, #2c3e50 40%, #3498db 100%);
             color: white; padding: 20px 20px 60px 20px; text-align: center;
             border-bottom-left-radius: 20px; border-bottom-right-radius: 20px;
         }
@@ -49,14 +49,7 @@
             border-radius: 50px; font-weight: bold; font-size: 14px; white-space: nowrap;
         }
         
-        /* HOME BUTTON (Top Left) */
-        .btn-home {
-            position: absolute; top: 20px; left: 20px; 
-            background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); 
-            color: white; padding: 5px 15px; border-radius: 20px; text-decoration: none; 
-            font-weight: bold; backdrop-filter: blur(5px);
-        }
-        .btn-home:hover { background: rgba(255,255,255,0.4); }
+        
 
         /* TABLE STYLES */
         .custom-table {
@@ -77,8 +70,8 @@
             font-weight: bold; margin-right: 5px; display: inline-block; border: none; cursor: pointer;
         }
         .btn-print { background: #2c3e50; color: white; }
-        .btn-view { background: #3498db; color: white; }
-        .btn-edit { background: #f39c12; color: white; }
+        .btn-view { background: #187cbe; color: white; }
+        .btn-edit { background: #27ae60; color: white; }
         .btn-del { background: #e74c3c; color: white; }
 
         /* EMPTY STATE */
@@ -100,27 +93,29 @@
         .modal-buttons { display: flex; gap: 10px; margin-top: 20px; }
         .btn-modal-cancel { background: #95a5a6; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; flex: 1; font-weight: bold;}
         .btn-modal-delete { background: #c0392b; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; flex: 1; font-weight: bold;}
+        .btn-back { position: absolute; top: 20px; left: 20px; background: #3498db; color: white; border: 1px solid white; padding: 5px 15px; border-radius: 20px; text-decoration: none; font-weight: bold; }
+        .btn-back:hover { background: white; color: #3498db; }
     </style>
 </head>
 <body>
 
     <div class="page-header">
-        <h1>Customer List</h1>
-        <p>Manage all your orders here</p>
-        <a href="/" class="btn-home">🏠 Home</a>
+        <h1>تمام کسٹمر کی فہرست</h1>
+        <!-- <p>Manage all your orders here</p> -->
+        <a href="/" class="btn-back">Back</a>
     </div>
 
     <div class="container">
         <div class="toolbar">
-            <h3 style="margin:0; color:#555;">All Customers</h3>
+            <h3 style="margin:0; color:#313131;">تمام کسٹمر</h3>
             
             <div class="toolbar-actions">
                 <form action="/search" method="POST" class="search-box">
                     <input type="text" name="search_query" placeholder="Name or Phone..." required>
-                    <button type="submit">🔍 Search</button>
+                    <button type="submit">🔍 تلاش کریں</button>
                 </form>
 
-                <a href="/add_user" class="btn-add">+ Add New</a>
+                <a href="/add_user" class="btn-add">➕ نیا کسٹمر</a>
             </div>
         </div>
 
@@ -138,11 +133,11 @@
         <table class="custom-table">
             <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Phone</th>
-                    <th>Date</th>
-                    <th style="text-align:center;">Actions</th>
+                    <th>آئی ڈی </th>
+                    <th>نام</th>
+                    <th>فون نمبر</th>
+                    <th>تاریح</th>
+                    <th style="text-align:center;">عمل</th>
                 </tr>
             </thead>
             <tbody>
@@ -156,11 +151,10 @@
                     <td>{{ user.phone }}</td>
                     <td>{{ user.date.strftime('%d-%m-%Y') }}</td>
                     <td style="text-align:center;">
-                        <a href="/print/{{ user.userId }}" class="action-btn btn-print">🖨️ Print</a>
-                        <a href="/view/{{ user.userId }}" class="action-btn btn-view">👁️ View</a>
-                        <a href="/update/{{ user.userId }}" class="action-btn btn-edit">✏️ Edit</a>
-                        
-                        <button onclick="openDeleteModal('{{ user.userId }}', '{{ user.userName }}')" class="action-btn btn-del">🗑️</button>
+                        <a href="/view/{{ user.userId }}" class="action-btn btn-view">👁️ دیکھیں</a>
+                        <a href="/update/{{ user.userId }}" class="action-btn btn-edit">✏️ ترمیم کریں</a>
+                        <a href="/print/{{ user.userId }}" class="action-btn btn-print">🖨️ پرنٹ کریں</a>
+                        <!-- <button onclick="openDeleteModal('{{ user.userId }}', '{{ user.userName }}')" class="action-btn btn-del">🗑️ ہٹانا</button> -->
                     </td>
                 </tr>
                 {% endfor %}

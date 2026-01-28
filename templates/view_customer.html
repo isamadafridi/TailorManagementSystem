@@ -10,7 +10,7 @@
         
         /* HEADER */
         .page-header { 
-    background: linear-gradient(135deg,  #3498db 20%, #2c3e50 80%); 
+    background: linear-gradient(135deg, #2c3e50 40%, #3498db 100%); 
     color: white; 
     padding: 20px 20px 100px 20px; /* CHANGED 50px TO 100px */
     text-align: center; 
@@ -65,8 +65,8 @@
         .btn-edit { background: #f39c12; color: white; }
         .btn-print { background: #3498db; color: white; }
         .btn-delete { background: #e74c3c; color: white; }
-        .btn-back { position: absolute; top: 20px; left: 20px; color: white; border: 1px solid white; padding: 5px 15px; border-radius: 20px; text-decoration: none; font-weight: bold; }
-        .btn-back:hover { background: white; color: #2c3e50; }
+        .btn-back { position: absolute; top: 20px; left: 20px; background: #3498db; color: white; border: 1px solid white; padding: 5px 15px; border-radius: 20px; text-decoration: none; font-weight: bold; }
+        .btn-back:hover { background: white; color: #3498db; }
 
         /* MODAL */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; }
@@ -79,13 +79,15 @@
 <body>
 
     <div class="page-header">
-        <h1>{{ customer.userName }}</h1>
-        <p>Customer ID: <strong>{{ customer.userId }}</strong></p>
+        <h1>کسٹمر ڈیٹیل</h1>
+        <!-- <p></strong></p> -->
         <a href="/user" class="btn-back">Back</a>
     </div>
 
     <div class="container">
         <div class="details-grid">
+            <div class="detail-box"><span class="detail-label">آئی ڈی</span><span class="detail-value">{{ customer.userId }}</span></div>
+            <div class="detail-box"><span class="detail-label">نام</span><span class="detail-value">{{ customer.userName }}</span></div>
             <div class="detail-box"><span class="detail-label">فون نمبر</span><span class="detail-value">{{ customer.phone }}</span></div>
             <div class="detail-box"><span class="detail-label">پتہ</span><span class="detail-value">{{ customer.address }}</span></div>
             <div class="detail-box"><span class="detail-label">سوٹ کی تعداد</span><span class="detail-value">{{ customer.numberOfSuit }}</span></div>
@@ -114,7 +116,7 @@
                         <tr><td>پانچیہ</td><td>{{ customer.poncha }}</td></tr>
                         <tr><td>گیر</td><td>{{ customer.ghair }}</td></tr>
                         <tr><td>اسن</td><td>{{ customer.asan }}</td></tr>
-                        <tr><th>درز دار</th><td>{% if customer.drzdar == 'Yes' %}ہاں{% else %}نہیں{% endif %}</td></tr>
+                        <tr><th>درز دار</th><td>{% if customer.drzdar=='Yes'%}ہاں{% else %}نہیں{% endif %}</td></tr>
                     </table>
                 </div>
             </div>
@@ -271,9 +273,9 @@
         {% endif %}
 
         <div class="action-bar">
-            <a href="/print/{{ customer.userId }}" class="btn btn-print">🖨️ Print Receipt</a>
-            <a href="/update/{{ customer.userId }}" class="btn btn-edit">✏️ Edit</a>
-            <button onclick="openModal()" class="btn btn-delete">🗑️ Delete</button>
+            <a href="/print/{{ customer.userId }}" class="btn btn-print">🖨️ پرنٹ کریں</a>
+            <a href="/update/{{ customer.userId }}" class="btn btn-edit">✏️ ترمیم کریں</a>
+            <button onclick="openModal()" class="btn btn-delete">🗑️ ہٹانا</button>
         </div>
 
     </div>

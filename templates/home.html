@@ -20,16 +20,36 @@
 
         /* 1. HERO HEADER SECTION */
         .hero-section {
-            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            background: linear-gradient(135deg,#2c3e50 40%, #3498db  100%);
             color: white;
-            padding: 30px 20px 60px 20px;
+            padding: 10px 20px 60px 20px;
             text-align: center;
             border-bottom-left-radius: 20px;
             border-bottom-right-radius: 20px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
-        .hero-section h1 { margin: 0; font-size: 32px; font-weight: 700; letter-spacing: 1px; }
+        /* MODIFIED: Added Flexbox to align Logo and Text */
+        .hero-section h1 { 
+            margin: 0; 
+            font-size: 32px; 
+            font-weight: 700; 
+            letter-spacing: 1px;
+            
+            display: flex;              /* NEW */
+            align-items: center;        /* NEW */
+            justify-content: center;    /* NEW */
+            gap: 15px;                  /* NEW */
+        }
+        
+        /* NEW: Logo Style */
+        .dashboard-logo {
+            width: 100px;
+            height: 100px;
+            /* background-color: #ffffff; */
+            object-fit: contain;
+        }
+
         .hero-section p { font-size: 15px; opacity: 0.9; margin-top: 5px; }
 
         /* 2. SEARCH BAR CONTAINER */
@@ -79,7 +99,7 @@
         }
 
         .action-card {
-            background: white;
+            background: rgb(245, 245, 245);
             padding: 25px;
             border-radius: 12px;
             text-align: center;
@@ -102,15 +122,17 @@
         .action-card p { color: #777; font-size: 13px; }
 
         /* FOOTER */
-        footer { margin-top: auto; background: #fff; padding: 15px; text-align: center; border-top: 1px solid #eee; color: #888; font-size: 13px; }
+        footer { margin-top: auto; background: #fff; padding: 1px; text-align: center; border-top: 1px solid #eee; color: #888; font-size: 13px; }
     </style>
 </head>
 <body>
 
     <div class="hero-section">
-        <h1>✂️ Tailor Management System</h1>
-        <p>Manage your orders, measurements, and customers efficiently.</p>
-    </div>
+        <h1>
+            <img src="{{ url_for('static', filename='logo.png') }}" class="dashboard-logo" alt="Logo">
+            AS TAILOR
+        </h1>
+        </div>
 
     <div class="search-wrapper">
         <form class="search-box" action="/search" method="POST">
@@ -134,31 +156,26 @@
     <div class="dashboard-container">
         <a href="/add_user" class="action-card">
             <span class="card-icon">➕</span>
-            <h3>New Order</h3>
-            <p>Add a new customer and take measurements.</p>
+            <h3>نیا کسٹمر</h3>
+            <p>ایک نیا گاہک شامل کریں اور پیمائش کریں۔</p>
         </a>
 
         <a href="/user" class="action-card">
             <span class="card-icon">📋</span>
-            <h3>View Customers</h3>
-            <p>See all orders, print receipts, or update details.</p>
+            <h3>کسٹمر لسٹ</h3>
+            <p>تمام آرڈرز دیکھیں، رسیدیں پرنٹ کریں، یا تفصیلات کو اپ ڈیٹ کریں۔</p>
         </a>
 
         <a href="/ledger" class="action-card"> 
-            <span class="card-icon">📊</span>
-            <h3>Ledger / Khata</h3>
-            <p>Track earnings, pending balances, and revenue.</p>
+            <span class="card-icon"></span>
+            <h3>کھاتہ</h3>
+            <p>باقایا، اصول ، ٹوٹول باقایا چیک کریں</p>
         </a>
 
-        <!-- <a href="/deleteCustomer" class="action-card">
-            <span class="card-icon">🗑️</span>
-            <h3>Remove Customer</h3>
-            <p>Search and permanently delete old records.</p>
-        </a> -->
-    </div>
+        </div>
 
     <footer>
-        <p>© 2026 AS Tailor Management System</p>
+        <p>© 2026 AS Tailor</p>
     </footer>
 
 </body>

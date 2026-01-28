@@ -8,7 +8,7 @@
         /* --- STYLES MATCHING ADD_USER --- */
         body { background-color: #f0f2f5; font-family:  'Noto Nastaliq Urdu', sans-serif; padding-bottom: 40px; }
         .page-header { 
-    background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%); 
+    background: linear-gradient(135deg, #2c3e50 40%, #3498db 100%); 
     color: white; 
     padding: 20px 20px 100px 20px; /* CHANGED 50px TO 100px */
     text-align: center; 
@@ -34,14 +34,16 @@
         .btn-submit { background: #27ae60; color: white; border: none; padding: 15px; width: 100%; font-size: 18px; border-radius: 5px; cursor: pointer; margin-top: 20px; }
         .back-link { display: block; text-align: center; margin-top: 15px; text-decoration: none; color: #666; }
         .measure-box-bg { background: #f9f9f9; padding: 15px; border-radius: 8px; border: 1px solid #eee; }
+        .btn-back { position: absolute; top: 20px; left: 20px; background: #3498db; color: white; border: 1px solid white; padding: 5px 15px; border-radius: 20px; text-decoration: none; font-weight: bold; }
+        .btn-back:hover { background: white; color: #3498db; }
     </style>
 </head>
 <body>
 
     <div class="page-header">
-        <h1>Update Customer</h1>
-        <p>Editing: <strong>{{ customer.userName }}</strong> ({{ customer.userId }})</p>
-        <a href="/user" style="position:absolute; top:20px; left:20px; color:white; border:1px solid white; padding:5px 15px; border-radius:20px; text-decoration:none;">Back</a>
+        <h1>کسٹمر کی تفصیلات میں ترمیم</h1>
+        <p>آئی ڈی : {{ customer.userId }} , نام: <strong>{{ customer.userName }}</strong></p>
+        <a href="/user" class="btn-back">Back</a>
     </div>
 
     <div class="container">
@@ -161,8 +163,8 @@
                 <label class="image-radio-item"><input type="radio" name="style_shalwar_pocket" value="None" {% if customer.style_shalwar_pocket == 'None' %}checked{% endif %}><div class="icon-box"><div style="font-size:20px;">❌</div><span>شلوار جیب نہیں</span></div></label>
             </div>
 
-            <label class="style-section-label" style="margin-top:15px; font-weight:bold; display:block;">Special Tailor Notes:</label>
-            <textarea name="special_notes" rows="2" style="width:100%; padding:8px; border:1px solid #ccc; border-radius:4px;">{{ customer.special_notes }}</textarea>
+            <!-- <label class="style-section-label" style="margin-top:15px; font-weight:bold; display:block;">Special Tailor Notes:</label>
+            <textarea name="special_notes" rows="2" style="width:100%; padding:8px; border:1px solid #ccc; border-radius:4px;">{{ customer.special_notes }}</textarea> -->
 
             <button type="submit" class="btn-submit">💾 Save Changes</button>
             <a href="/user" class="back-link">Cancel</a>

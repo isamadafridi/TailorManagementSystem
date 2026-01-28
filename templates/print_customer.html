@@ -8,7 +8,7 @@
         page { size: 114mm 162mm; margin: 0; }
 
         body {
-            font-family:  'Noto Nastaliq Urdu', sans-serif;
+            font-family: 'Noto Nastaliq Urdu', sans-serif;
             background: #555;
             color: black;
             margin: 0;
@@ -31,16 +31,29 @@
             flex-direction: column;
         }
 
-        /* --- HEADER --- */
+        /* --- HEADER (UPDATED WITH LOGO) --- */
         .header {
-            font-family:  'Noto Nastaliq Urdu', sans-serif;
+            font-family: 'Noto Nastaliq Urdu', sans-serif;
             border-bottom: 2px solid black;
             padding-bottom: 4px;
             margin-bottom: 4px;
-            text-align: center;
+            
+            /* ADDED FLEXBOX TO ALIGN LOGO AND TEXT */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px; /* Space between logo and text */
         }
+        
         .header h2 { margin: 0; font-size: 16px; text-transform: uppercase; }
         .header p { margin: 2px 0; font-size: 11px; }
+
+        /* NEW LOGO STYLE */
+        .header-logo {
+            width: 40px; 
+            height: 40px; 
+            object-fit: contain;
+        }
 
         /* --- CUSTOMER INFO --- */
         .info-grid {
@@ -51,10 +64,9 @@
             padding-bottom: 4px;
             margin-bottom: 4px;
             font-size: 11px;
-            /* CHANGED FROM right TO left AS REQUESTED */
             text-align: left; 
         }
-        /* THIS MAKES LABEL LEFT & DATA RIGHT */
+        
         .info-grid div {
             display: flex;
             padding: 1px;
@@ -140,10 +152,6 @@
             font-size: 8px; color: #333; margin-top: 0px; font-weight: bold;
         }
 
-        /* --- EXTRAS --- */
-        /* .extras-row { display: flex; gap: 3px; margin-top: 3px; }
-        .extra-box { border: 1px solid #333; flex: 1; text-align: right; font-size: 10px; background: #eee; padding: 2px; } */
-
         /* --- BUTTONS --- */
         .no-print { margin-top: 20px; display: flex; gap: 15px; }
         .btn { padding: 12px 25px; text-decoration: none; color: white; font-weight: bold; border-radius: 5px; cursor: pointer; border: none; font-size: 16px; }
@@ -154,7 +162,7 @@
         @media print {
             @page {
                 size: 114mm 200mm;
-                margin: 0; /* This Removes Headers & Footers */
+                margin: 0; 
             }
             body { 
                 background: white; 
@@ -169,17 +177,17 @@
             }
             .no-print { display: none !important; }
         }
-        /* --- NEW: MANUAL WRITING AREA --- */
+
+        /* --- MANUAL WRITING AREA --- */
         .manual-write-area {
-            border: 1px dashed #aaa; /* Dashed line to show it's for writing */
+            border: 1px dashed #aaa; 
             margin-top: 5px;
-            flex: 1; /* This is the magic: It fills ALL remaining empty space on the paper */
-            min-height: 80px; /* Ensures there is always at least this much space */
+            flex: 1; 
+            min-height: 80px; 
             border-radius: 4px;
             position: relative;
         }
         
-        /* Optional: Add a small label inside */
         .manual-write-area::after {
             position: absolute;
             bottom: 2px;
@@ -187,13 +195,18 @@
             font-size: 8px;
             color: #999;
         }
+        
+        .extra-box { border: 1px solid #333; flex: 1; text-align: right; font-size: 10px; background: #eee; padding: 2px; }
+
     </style>
 </head>
 <body>
 
     <div class="sticker-container">
         <div class="header">
-            <h2>AS Tailor</h2>
+            <img src="{{ url_for('static', filename='print_logo.png') }}" class="header-logo">
+            <h2>AS Tailor</h2><b></b>
+            <p>Phone Number: 033399988877</p>
         </div>
 
         <div class="info-grid">
@@ -352,8 +365,8 @@
     </div>
 
     <div class="no-print">
-        <button onclick="window.print()" class="btn btn-print">🖨️ Print Label</button>
-        <a href="javascript:history.back()" class="btn btn-back">← Back</a>
+        <button onclick="window.print()" class="btn btn-print">🖨️ رسید پرنٹ کریں</button>
+        <a href="javascript:history.back()" class="btn btn-back">واپس جائے</a>
     </div>
 
     <script>
