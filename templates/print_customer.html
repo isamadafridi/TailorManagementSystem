@@ -5,7 +5,8 @@
     <title>Order #{{ customer.userId }}</title>
     <style>
         /* --- PRINTER SETTINGS --- */
-        page { size: 114mm 162mm; margin: 0; }
+        /* Increased height to fit both copies */
+        page { size: 114mm 210mm; margin: 0; }
 
         body {
             font-family: 'Noto Nastaliq Urdu', sans-serif;
@@ -23,7 +24,8 @@
         .sticker-container {
             background: white;
             width: 112mm;  
-            height: 160mm; 
+            height: auto; /* Changed to auto so it expands */
+            min-height: 160mm;
             padding: 5px;
             box-sizing: border-box;
             font-size: 12px;
@@ -31,21 +33,18 @@
             flex-direction: column;
         }
 
-        /* --- HEADER (UPDATED) --- */
+        /* --- HEADER --- */
         .header {
             font-family: 'Noto Nastaliq Urdu', sans-serif;
             border-bottom: 2px solid black;
             padding-bottom: 4px;
             margin-bottom: 4px;
-            
-            /* Stack Rows Vertically */
             display: flex;
             flex-direction: column; 
             align-items: center;
             justify-content: center;
         }
         
-        /* New: Wrapper to keep Logo and Title side-by-side */
         .header-row {
             display: flex;
             align-items: center;
@@ -54,13 +53,11 @@
 
         .header h2 { margin: 0; font-size: 18px; text-transform: uppercase }
         
-        /* New: Style for Address/Phone */
         .header-contact {
             font-size: 10px;
             margin-top: 0px;
             font-weight: bold;
         }
-        /* NEW LOGO STYLE */
         .header-logo {
             width: 40px; 
             height: 40px; 
@@ -70,9 +67,9 @@
         /* --- CUSTOMER INFO --- */
         .info-grid {
             display: grid;
+            /* border-bottom: 1px dashed black; */
             grid-template-columns: 1fr 1fr;
             gap: 2px;
-            border-bottom: 1px dashed black;
             padding-bottom: 4px;
             margin-bottom: 4px;
             font-size: 11px;
@@ -83,9 +80,10 @@
             display: flex;
             padding: 1px;
             align-items: center;
+            /* justify-content: space-between; Ensures label and value are separated */
         }
 
-        /* --- SPLIT LAYOUT (35% Measure | 65% Icons) --- */
+        /* --- SPLIT LAYOUT --- */
         .split-layout {
             display: flex;
             flex: 1; 
@@ -93,76 +91,21 @@
             margin-bottom: 4px;
         }
 
-        /* LEFT SIDE: MEASUREMENTS */
-        .left-col-measure {
-            width: 20%;
-            border-right: 1px solid #000; 
-            padding-right: 3px;
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
+        .left-col-measure { width: 20%; border-right: 1px solid #000; padding-right: 3px; display: flex; flex-direction: column; gap: 5px; }
+        .right-col-icons { width: 80%; padding-left: 3px; }
 
-        /* RIGHT SIDE: ICONS */
-        .right-col-icons {
-            width: 80%;
-            padding-left: 3px;
-        }
-
-        /* --- MEASUREMENT TABLES --- */
-        .measure-box h3 {
-            background: black;
-            color: white;
-            font-size: 11px;
-            margin: 0 0 2px 0;
-            padding: 2px;
-            text-align: center;
-        }
-
+        /* --- TABLES & ICONS --- */
+        .measure-box h3 { background: black; color: white; font-size: 11px; margin: 0 0 2px 0; padding: 2px; text-align: center; }
         .measure-table { width: 100%; border-collapse: collapse; font-size: 11px; }
         .measure-table th { text-align: right; font-weight: normal; color: #444; padding: 1px 0; }
         .measure-table td { font-weight: bold; text-align: left; border-bottom: 1px solid #ddd; padding: 1px 0; padding-left: 5px; }
 
-        /* --- ICONS GRID --- */
-        .style-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr; 
-            gap: 2px;
-        }
-
-        .style-item {
-            border: 1px solid #333;
-            border-radius: 4px;
-            text-align: center;
-            padding: 2px;
-            min-height: 55px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background: #f9f9f9;
-        }
-        
-        .style-item img {
-            width: 25px; 
-            height: 25px;
-            object-fit: contain;
-            display: block;
-            margin-bottom: 1px;
-        }
-        
+        .style-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2px; }
+        .style-item { border: 1px solid #333; border-radius: 4px; text-align: center; padding: 2px; min-height: 55px; display: flex; flex-direction: column; justify-content: center; align-items: center; background: #f9f9f9; }
+        .style-item img { width: 25px; height: 25px; object-fit: contain; display: block; margin-bottom: 1px; }
         .style-name { font-size: 9px; font-weight: bold; line-height: 1.1; margin-top: 1px; font-family: 'Noto Nastaliq Urdu', serif; }
-        
-        .style-size { 
-            background: black; color: white; 
-            font-size: 9px; padding: 0 3px; 
-            border-radius: 2px; display: inline-block;
-            margin-top: 1px;
-        }
-
-        .style-extra {
-            font-size: 8px; color: #333; margin-top: 0px; font-weight: bold;
-        }
+        .style-size { background: black; color: white; font-size: 9px; padding: 0 3px; border-radius: 2px; display: inline-block; margin-top: 1px; }
+        .style-extra { font-size: 8px; color: #333; margin-top: 0px; font-weight: bold; }
 
         /* --- BUTTONS --- */
         .no-print { margin-top: 20px; display: flex; gap: 15px; }
@@ -170,46 +113,25 @@
         .btn-print { background: #27ae60; }
         .btn-back { background: #e74c3c; }
 
-        
+        /* --- CUTTING LINE --- */
+        .cut-line {
+            border-top: 2px dashed black;
+            margin: 15px 0 10px 0;
+            text-align: center;
+            font-size: 10px;
+            padding-top: 2px;
+        }
+
+        /* --- MANUAL WRITE AREA --- */
+        .manual-write-area { border: 1px dashed #aaa; margin-top: 5px; flex: 1; min-height: 115px; border-radius: 4px; position: relative; }
+        .manual-write-area::after { position: absolute; bottom: 2px; right: 5px; font-size: 8px; color: #999; }
+
         @media print {
-            @page {
-                size: 114mm 200mm;
-                margin: 0; 
-            }
-            body { 
-                background: white; 
-                padding: 0; 
-                margin: 0;
-            }
-            .sticker-container { 
-                box-shadow: none; 
-                width: 100%; 
-                height: 100%; 
-                margin: 0; 
-            }
+            @page { size: 114mm 210mm; margin: 0; }
+            body { background: white; padding: 0; margin: 0; }
+            .sticker-container { box-shadow: none; width: 100%; height: 100%; margin: 0; }
             .no-print { display: none !important; }
         }
-
-        /* --- MANUAL WRITING AREA --- */
-        .manual-write-area {
-            border: 1px dashed #aaa; 
-            margin-top: 5px;
-            flex: 1; 
-            min-height: 80px; 
-            border-radius: 4px;
-            position: relative;
-        }
-        
-        .manual-write-area::after {
-            position: absolute;
-            bottom: 2px;
-            right: 5px;
-            font-size: 8px;
-            color: #999;
-        }
-        
-        .extra-box { border: 1px solid #333; flex: 1; text-align: right; font-size: 10px; background: #eee; padding: 2px; }
-
     </style>
 </head>
 <body>
@@ -224,24 +146,21 @@
                 <img src="{{ url_for('static', filename='print_logo.png') }}" class="header-logo">
                 <h2>AS Tailor</h2>
             </div>
-            
             <div class="header-contact">
                 📍 Shop #1, Main Market Peshawar | 📞 0300-1234567
             </div>
         </div>
-        
 
-        <div class="info-grid">
+        <div class="info-grid" style="border-bottom: 1px dashed black;">
             <div>آئی ڈی : <strong>{{ customer.userId}}</strong></div>
             <div>نام : <strong>{{ customer.userName }}</strong></div>
             <div>فون : <strong>{{ customer.phone }}</strong></div>
             <div>سوٹ : <strong>{{ customer.numberOfSuit }}</strong></div>
-            <div>تاریخ : <strong id="printDate"></strong></div>
+            <div>تاریخ : <strong class="print-date"></strong></div>
             <div>بقایا : <strong>{{ customer.price }}</strong></div>
         </div>
 
         <div class="split-layout">
-            
             <div class="left-col-measure">
                 <div class="measure-box">
                     <h3>قمیص شلوار</h3>
@@ -252,7 +171,7 @@
                         <tr><th>کالر</th><td>{{ customer.collar }}</td></tr>
                         <tr><th>چھاتی</th><td>{{ customer.chati }}</td></tr>
                         <tr><th>کمر</th><td>{{ customer.kamar }}</td></tr>
-                    <tr><th>گیحر</th><td>{{ customer.ghaihr }}</td></tr>
+                        <tr><th>گیحر</th><td>{{ customer.ghaihr }}</td></tr>
                         <tr><th>شلوار</th><td>{{ customer.shalwar }}</td></tr>
                         <tr><th>پانچیہ</th><td>{{ customer.poncha }}</td></tr>
                         <tr><th>گیر</th><td>{{ customer.ghair }}</td></tr>
@@ -263,139 +182,113 @@
             </div>
 
             <div class="right-col-icons">
-                <div class="style-grid">
-                    
+                <div class="style-grid" >
                     <div class="style-item">
-                        {% if customer.style_collar == 'collarGoll' %} 
-                            <img src="{{ url_for('static', filename='icon/collarGoll.png') }}"><div class="style-name">کالر گول</div>
-                        {% elif customer.style_collar == 'ban' %} 
-                            <img src="{{ url_for('static', filename='icon/ban.png') }}"><div class="style-name">بین</div>
-                        {% elif customer.style_collar == 'benGoll' %} 
-                            <img src="{{ url_for('static', filename='icon/benGoll.png') }}"><div class="style-name">بین گول</div>
-                        {% elif customer.style_collar == 'benChoras' %} 
-                            <img src="{{ url_for('static', filename='icon/benChoras.png') }}"><div class="style-name">بین چورس</div>
-                        {% elif customer.style_collar == 'hindiGalla' %} 
-                            <img src="{{ url_for('static', filename='icon/hindiGalla.png') }}"><div class="style-name">ہندی گلہ</div>
-                        {% elif customer.style_collar == 'SamneyHindiBackBen' %} 
-                            <img src="{{ url_for('static', filename='icon/samneyHindiBackBen.png') }}"><div class="style-name">ہندی بیگ بین</div>
-                        {% else %} 
-                            <img src="{{ url_for('static', filename='icon/collar.png') }}"><div class="style-name">کالر</div> 
-                        {% endif %}
+                        {% if customer.style_collar == 'collarGoll' %} <img src="{{ url_for('static', filename='icon/collarGoll.png') }}"><div class="style-name">کالر گول</div>
+                        {% elif customer.style_collar == 'ban' %} <img src="{{ url_for('static', filename='icon/ban.png') }}"><div class="style-name">بین</div>
+                        {% elif customer.style_collar == 'benGoll' %} <img src="{{ url_for('static', filename='icon/benGoll.png') }}"><div class="style-name">بین گول</div>
+                        {% elif customer.style_collar == 'benChoras' %} <img src="{{ url_for('static', filename='icon/benChoras.png') }}"><div class="style-name">بین چورس</div>
+                        {% elif customer.style_collar == 'hindiGalla' %} <img src="{{ url_for('static', filename='icon/hindiGalla.png') }}"><div class="style-name">ہندی گلہ</div>
+                        {% elif customer.style_collar == 'SamneyHindiBackBen' %} <img src="{{ url_for('static', filename='icon/samneyHindiBackBen.png') }}"><div class="style-name">ہندی بیگ بین</div>
+                        {% else %} <img src="{{ url_for('static', filename='icon/collar.png') }}"><div class="style-name">کالر</div> {% endif %}
                         {% if customer.size_collar %}<span class="style-extra">سائز : {{ customer.size_collar }}</span>{% endif %}
                     </div>
 
                     <div class="style-item">
-                        {% if customer.style_patti == 'roundPatti' %} 
-                            <img src="{{ url_for('static', filename='icon/roundPatti.png') }}"><div class="style-name">گول پٹی</div>
-                        {% elif customer.style_patti == 'anglePatti' %} 
-                            <img src="{{ url_for('static', filename='icon/anglePatti.png') }}"><div class="style-name">نکدار پٹی</div>
-                        {% else %} 
-                            <img src="{{ url_for('static', filename='icon/samplePatti.png') }}"><div class="style-name">سادہ پٹی</div> 
-                        {% endif %}
+                        {% if customer.style_patti == 'roundPatti' %} <img src="{{ url_for('static', filename='icon/roundPatti.png') }}"><div class="style-name">گول پٹی</div>
+                        {% elif customer.style_patti == 'anglePatti' %} <img src="{{ url_for('static', filename='icon/anglePatti.png') }}"><div class="style-name">نکدار پٹی</div>
+                        {% else %} <img src="{{ url_for('static', filename='icon/samplePatti.png') }}"><div class="style-name">سادہ پٹی</div> {% endif %}
                         {% if customer.size_patti %}<span class="style-extra">سائز : {{ customer.size_patti }}</span>{% endif %}
                         {% if customer.kaj_count %}<div class="style-extra">کاج : {{ customer.kaj_count }}</div>{% endif %}
                     </div>
 
                     <div class="style-item">
-                        {% if customer.style_cuff == 'fetChuras' %} 
-                            <img src="{{ url_for('static', filename='icon/fetChuras.png') }}"><div class="style-name">فٹ چورس</div>
-                        {% elif customer.style_cuff == 'cutCuff' %} 
-                            <img src="{{ url_for('static', filename='icon/cutCuff.png') }}"><div class="style-name">کٹ کف</div>
-                        {% elif customer.style_cuff == 'fitGollCuff' %} 
-                            <img src="{{ url_for('static', filename='icon/fitGollCuff.png') }}"><div class="style-name">فٹ گول</div>
-                        {% elif customer.style_cuff == 'fitCuff' %} 
-                            <img src="{{ url_for('static', filename='icon/fitGollCuff.png') }}"><div class="style-name">فٹ کف</div>
-                        {% elif customer.style_cuff == 'studCuff' %} 
-                            <img src="{{ url_for('static', filename='icon/studCuff.png') }}"><div class="style-name">سٹڈ کف</div>
-                        {% elif customer.style_cuff == 'gollBazo' %} 
-                            <img src="{{ url_for('static', filename='icon/gollBazo.png') }}"><div class="style-name">گول بازو</div>
-                        {% elif customer.style_cuff == 'kaniBazo' %} 
-                            <img src="{{ url_for('static', filename='icon/KaniBazo.png') }}"><div class="style-name">کنی بازو</div>
-                        {% else %} 
-                            <img src="{{ url_for('static', filename='icon/fetCuff.png') }}"><div class="style-name">کف</div> 
-                        {% endif %}
+                        {% if customer.style_cuff == 'fetChuras' %} <img src="{{ url_for('static', filename='icon/fetChuras.png') }}"><div class="style-name">فٹ چورس</div>
+                        {% elif customer.style_cuff == 'cutCuff' %} <img src="{{ url_for('static', filename='icon/cutCuff.png') }}"><div class="style-name">کٹ کف</div>
+                        {% elif customer.style_cuff == 'fitGollCuff' %} <img src="{{ url_for('static', filename='icon/fitGollCuff.png') }}"><div class="style-name">فٹ گول</div>
+                        {% elif customer.style_cuff == 'fitCuff' %} <img src="{{ url_for('static', filename='icon/fitGollCuff.png') }}"><div class="style-name">فٹ کف</div>
+                        {% elif customer.style_cuff == 'studCuff' %} <img src="{{ url_for('static', filename='icon/studCuff.png') }}"><div class="style-name">سٹڈ کف</div>
+                        {% elif customer.style_cuff == 'gollBazo' %} <img src="{{ url_for('static', filename='icon/gollBazo.png') }}"><div class="style-name">گول بازو</div>
+                        {% elif customer.style_cuff == 'kaniBazo' %} <img src="{{ url_for('static', filename='icon/KaniBazo.png') }}"><div class="style-name">کنی بازو</div>
+                        {% else %} <img src="{{ url_for('static', filename='icon/fetCuff.png') }}"><div class="style-name">کف</div> {% endif %}
                         {% if customer.size_cuff %}<span class="style-extra">سائز : {{ customer.size_cuff }}</span>{% endif %}
                     </div>
 
                     <div class="style-item">
-                        {% if customer.mora %}
-                            <div class="style-extra">موڑا: {{ customer.mora }}</div>
-                        {% endif %}
+                        {% if customer.mora %}<div class="style-extra">موڑا: {{ customer.mora }}</div>{% endif %}
                         <img src="{{ url_for('static', filename='icon/sholder.png') }}">
-                        {% if customer.darmyan %}
-                            <div class="style-extra">درمیان : {{ customer.darmyan }}</div>
-                        {% endif %}
-                        </div>
-
-                    <div class="style-item">
-                        {% if customer.style_pocket == 'flapPocket' %} 
-                            <img src="{{ url_for('static', filename='icon/flapPocket.png') }}"><div class="style-name">فلپ جیب</div>
-                        {% elif customer.style_pocket == 'nokdarPocket' %} 
-                            <img src="{{ url_for('static', filename='icon/nokdarPocket.png') }}"><div class="style-name">نکدار جیب</div>
-                        {% elif customer.style_pocket == 'None' %} 
-                            <div style="font-size:20px;">❌</div><div class="style-name">جیب نہیں</div>
-                        {% else %} 
-                            <img src="{{ url_for('static', filename='icon/samplePocket.png') }}"><div class="style-name">سادہ جیب</div> 
-                        {% endif %}
-                        
-                        {% if customer.pocket_size %}
-                            <div class="style-extra">لمبائی : {{ customer.pocket_size }}</div>
-                        {% endif %}
-                        {% if customer.pocket_width %}
-                            <div class="style-extra">چوڑائی  : {{ customer.pocket_width }}</div>
-                        {% endif %}
+                        {% if customer.darmyan %}<div class="style-extra">درمیان : {{ customer.darmyan }}</div>{% endif %}
                     </div>
 
                     <div class="style-item">
-                        {% if customer.side_pocket == 'doubleSidePocket' %} 
-                            <img src="{{ url_for('static', filename='icon/doubleSidePocket.png') }}"><div class="style-name">ڈبل سائیڈ</div>
-                        {% elif customer.side_pocket == 'ekSidePocket' %} 
-                            <img src="{{ url_for('static', filename='icon/ekSidePocket.png') }}"><div class="style-name">ایک سائیڈ</div>
-                        {% else %}
-                             <div style="font-size:20px;">-</div><div class="style-name">سائیڈ جیب</div>
-                        {% endif %}
+                        {% if customer.style_pocket == 'flapPocket' %} <img src="{{ url_for('static', filename='icon/flapPocket.png') }}"><div class="style-name">فلپ جیب</div>
+                        {% elif customer.style_pocket == 'nokdarPocket' %} <img src="{{ url_for('static', filename='icon/nokdarPocket.png') }}"><div class="style-name">نکدار جیب</div>
+                        {% elif customer.style_pocket == 'None' %} <div style="font-size:20px;">❌</div><div class="style-name">جیب نہیں</div>
+                        {% else %} <img src="{{ url_for('static', filename='icon/samplePocket.png') }}"><div class="style-name">سادہ جیب</div> {% endif %}
+                        {% if customer.pocket_size %}<div class="style-extra">L: {{ customer.pocket_size }}</div>{% endif %}
+                        {% if customer.pocket_width %}<div class="style-extra">W: {{ customer.pocket_width }}</div>{% endif %}
                     </div>
 
                     <div class="style-item">
-                        {% if customer.style_daman == 'gollDaman' %} 
-                            <img src="{{ url_for('static', filename='icon/gollDaman.png') }}"><div class="style-name">گول دامن</div>
-                        {% else %} 
-                            <img src="{{ url_for('static', filename='icon/chorasDaman.png') }}"><div class="style-name">چورس دامن</div> 
-                        {% endif %}
+                        {% if customer.side_pocket == 'doubleSidePocket' %} <img src="{{ url_for('static', filename='icon/doubleSidePocket.png') }}"><div class="style-name">ڈبل سائیڈ</div>
+                        {% elif customer.side_pocket == 'ekSidePocket' %} <img src="{{ url_for('static', filename='icon/ekSidePocket.png') }}"><div class="style-name">ایک سائیڈ</div>
+                        {% else %} <div style="font-size:20px;">-</div><div class="style-name">سائیڈ جیب</div> {% endif %}
                     </div>
 
                     <div class="style-item">
-                        {% if customer.style_shalwar_pocket == 'Side' %} 
-                            <img src="{{ url_for('static', filename='icon/pantPocket.png') }}"><div class="style-name">شلوار جیب</div>
-                        {% else %} 
-                            <div style="font-size:20px;">❌</div><div class="style-name">شلوار جیب نہیں</div> 
-                        {% endif %}
+                        {% if customer.style_daman == 'gollDaman' %} <img src="{{ url_for('static', filename='icon/gollDaman.png') }}"><div class="style-name">گول دامن</div>
+                        {% else %} <img src="{{ url_for('static', filename='icon/chorasDaman.png') }}"><div class="style-name">چورس دامن</div> {% endif %}
                     </div>
 
+                    <div class="style-item">
+                        {% if customer.style_shalwar_pocket == 'Side' %} <img src="{{ url_for('static', filename='icon/pantPocket.png') }}"><div class="style-name">شلوار جیب</div>
+                        {% else %} <div style="font-size:20px;">❌</div><div class="style-name">شلوار جیب نہیں</div> {% endif %}
+                    </div>
                 </div>
 
                 <div class="manual-write-area">
-                    <div class="extra-box" style="width:100%; text-align:right;">
-                        <strong>نوٹ:</strong> {{ customer.special_notes }}
+                    <div  style="width:100%; text-align:right;">
+                        <strong>:نوٹ</strong> {{ customer.special_notes }}
                     </div>
                 </div>
-                
-
             </div>
+        </div>
+
+        <div class="cut-line"> Customer Copy</div>
+
+        <div class="header">
+            <div class="header-row">
+                <img src="{{ url_for('static', filename='print_logo.png') }}" class="header-logo">
+                <h2>AS Tailor</h2>
+            </div>
+            <div class="header-contact">
+                📍 Shop #1, Main Market Peshawar | 📞 0300-1234567
+            </div>
+        </div>
+
+        <div class="info-grid" >
+            <div>ID: <strong>{{ customer.userId}}</strong></div>
+            <div>Name: <strong>{{ customer.userName }}</strong></div>
+            <div>Phone No : <strong>{{ customer.phone }}</strong></div>
+            <div>Sout: <strong>{{ customer.numberOfSuit }}</strong></div>
+            <div>Date: <strong class="print-date"></strong></div>
+            <div>Baqaya: <strong>{{ customer.price }}</strong></div>
+        </div>
+        <div style="text-align:center; font-size:12px; margin-top:15px; border-top:1px solid #000; padding-top:5px; font-weight:bold;">
+            Thank you for visiting! <br> تشریف لانے کا شکریہ
         </div>
 
     </div>
 
-    <!-- <div class="no-print">
-        <button onclick="window.print()" class="btn btn-print">🖨️ رسید پرنٹ کریں</button>
-        <a href="javascript:history.back()" class="btn btn-back">واپس جائے</a>
-    </div> -->
-
     <script>
         const d = new Date();
-        // Format: DD-MM-YYYY
         const formattedDate = ("0" + d.getDate()).slice(-2) + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + d.getFullYear();
-        document.getElementById("printDate").innerText = formattedDate;
+        
+        // Update ALL elements with class "print-date"
+        const dateElements = document.getElementsByClassName("print-date");
+        for(let i = 0; i < dateElements.length; i++) {
+            dateElements[i].innerText = formattedDate;
+        }
     </script>
 
 </body>

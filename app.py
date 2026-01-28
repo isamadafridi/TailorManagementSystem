@@ -6,6 +6,7 @@ from sqlalchemy import or_
 from sqlalchemy import func
 import sys
 import os
+import re
 
 app = Flask(__name__)
 app.secret_key = 'super_secret_key_123'
@@ -147,6 +148,23 @@ def home():
 def add_user():
     if request.method == 'POST':
         try:
+            # --- NEW VALIDATION LOGIC START ---
+            phone_input = request.form['phone']
+
+            # 1. Check Format (Must be 03XX-XXXXXXX)
+            # Regex Explanation: ^0 starts with 0, \d{3} means 3 digits, - matches dash, \d{7} means 7 digits
+            if not re.match(r"^0\d{3}-\d{7}$", phone_input):
+                flash('Error: Phone format must be 03XX-XXXXXXX', 'danger')
+                return redirect(url_for('add_user'))
+
+            # 2. Check Uniqueness (Must not exist in DB)
+            existing_user = User.query.filter_by(phone=phone_input).first()
+            if existing_user:
+                flash(f'Error: Phone number {phone_input} is already registered!', 'danger')
+                return redirect(url_for('add_user'))
+            # --- NEW VALIDATION LOGIC END ---
+
+
             userId = generate_unique_id('AB', User, User.userId)
             
             # Handle Pocket Style (Checkbox/Radio lists)
@@ -162,7 +180,7 @@ def add_user():
             new_user = User(
                 userId=userId,
                 userName=request.form['userName'],
-                phone=request.form['phone'],
+                phone=phone_input, # Use the validated variable
                 numberOfSuit=num_suits,
                 address=request.form['address'],
                 date=datetime.strptime(request.form['date'], '%Y-%m-%d').date(),
@@ -222,7 +240,6 @@ def add_user():
             return redirect(url_for('add_user'))
     
     return render_template('add_user.html')
-
 @app.route('/user')
 def user():
     all_users = User.query.all()
@@ -239,8 +256,27 @@ def update_customer(user_id):
 
     if request.method == 'POST':
         try:
+            # --- NEW VALIDATION LOGIC START ---
+            phone_input = request.form['phone']
+
+            # 1. Check Format (Must be 03XX-XXXXXXX)
+            if not re.match(r"^0\d{3}-\d{7}$", phone_input):
+                flash('Error: Phone format must be 03XX-XXXXXXX', 'danger')
+                return redirect(url_for('update_customer', user_id=user_id))
+
+            # 2. Check Uniqueness (But ignore if it belongs to THIS customer)
+            existing_user = User.query.filter_by(phone=phone_input).first()
+            
+            # If a user exists AND it is NOT the current user we are editing
+            if existing_user and existing_user.userId != user_id:
+                flash(f'Error: Phone number {phone_input} is already registered to another customer!', 'danger')
+                return redirect(url_for('update_customer', user_id=user_id))
+            # --- NEW VALIDATION LOGIC END ---
+
+
             customer.userName = request.form['userName']
-            customer.phone = request.form['phone']
+            customer.phone = phone_input # Use the validated input
+            
             try: customer.numberOfSuit = int(request.form['numberOfSuit'])
             except: customer.numberOfSuit = 1
             
@@ -283,7 +319,7 @@ def update_customer(user_id):
             else:
                  customer.style_pocket = request.form.get('style_pocket')
 
-            # Update Sizes (Using Unique Names - FIXED LOGIC)
+            # Update Sizes
             customer.size_cuff = request.form.get('size_cuff')
             customer.mora = request.form.get('mora')
             customer.darmyan = request.form.get('darmyan')
@@ -299,14 +335,15 @@ def update_customer(user_id):
 
             db.session.commit()
             flash('Customer Updated Successfully!', 'success')
+            
             # Redirect to View 
             return redirect(url_for('view_customer', user_id=user_id))
             
         except Exception as e:
             flash(f"Update Error: {str(e)}", 'danger')
+            return redirect(url_for('update_customer', user_id=user_id))
 
     return render_template('update_customer.html', customer=customer)
-
 @app.route('/view/<string:user_id>')
 def view_customer(user_id):
     customer = User.query.filter_by(userId=user_id).first_or_404()

@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <style>
         /* --- STYLES --- */
-        body { background-color: #f0f2f5; font-family: 'Noto Nastaliq Urdu', sans-serif; padding-bottom: 40px; }
+        body { background-color: #f0f2f5; font-family: 'Noto Nastaliq Urdu'; padding-bottom: 40px; }
         .page-header { background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%); color: white; padding: 20px 20px 100px 20px; text-align: center; border-radius: 0 0 20px 20px; }
         .container { max-width: 1000px; margin: -40px auto 0; background: #fff; padding: 25px; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); position: relative; }
         h3 { margin-top: 20px; border-bottom: 1px solid #eee; padding-bottom: 5px; color: #2c3e50; }
@@ -58,7 +58,15 @@
             <h3>👤 ذاتی تفصیلات</h3>
             <div class="form-grid">
                 <div class="input-row"><label>نام:</label><input type="text" name="userName" required></div>
-                <div class="input-row"><label>فون نمبر:</label><input type="text" name="phone" required></div>
+                <div class="input-row">
+                <label>فون نمبر:</label>
+                <input type="text" name="phone" id="phoneInput" 
+                    placeholder="0300-1234567" 
+                    maxlength="12" 
+                    pattern="0[0-9]{3}-[0-9]{7}" 
+                    title="Format: 0300-1234567" 
+                    required>
+                </div>
                 <div class="input-row"><label>سوٹ کی تعداد:</label><input type="number" name="numberOfSuit" value="1" required></div>
                 <div class="input-row"><label>تاریخ:</label><input type="date" name="date" required></div>
                 <!-- <div class="input-row"><label>بقایا (Advance):</label><input type="number" name="price" value="0"></div> -->
@@ -173,6 +181,25 @@
 
     <script>
         document.querySelector('input[name="date"]').valueAsDate = new Date();
+    </script>
+    <!-- When the user types the 4th digit, it automatically inserts the dash - -->
+    <script>
+        const phoneInput = document.getElementById('phoneInput');
+
+        phoneInput.addEventListener('input', function (e) {
+            let value = e.target.value.replace(/\D/g, ''); // Remove non-numbers
+            
+            if (value.length > 11) {
+                value = value.substring(0, 11); // Limit to 11 digits total
+            }
+
+            // Add the dash after 4 digits
+            if (value.length > 4) {
+                value = value.substring(0, 4) + '-' + value.substring(4);
+            }
+
+            e.target.value = value;
+        });
     </script>
 
 </body>
