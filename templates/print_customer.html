@@ -31,23 +31,35 @@
             flex-direction: column;
         }
 
-        /* --- HEADER (UPDATED WITH LOGO) --- */
+        /* --- HEADER (UPDATED) --- */
         .header {
             font-family: 'Noto Nastaliq Urdu', sans-serif;
             border-bottom: 2px solid black;
             padding-bottom: 4px;
             margin-bottom: 4px;
             
-            /* ADDED FLEXBOX TO ALIGN LOGO AND TEXT */
+            /* Stack Rows Vertically */
             display: flex;
+            flex-direction: column; 
             align-items: center;
             justify-content: center;
-            gap: 10px; /* Space between logo and text */
         }
         
-        .header h2 { margin: 0; font-size: 16px; text-transform: uppercase; }
-        .header p { margin: 2px 0; font-size: 11px; }
+        /* New: Wrapper to keep Logo and Title side-by-side */
+        .header-row {
+            display: flex;
+            align-items: center;
+            gap: 0px;
+        }
 
+        .header h2 { margin: 0; font-size: 18px; text-transform: uppercase }
+        
+        /* New: Style for Address/Phone */
+        .header-contact {
+            font-size: 10px;
+            margin-top: 0px;
+            font-weight: bold;
+        }
         /* NEW LOGO STYLE */
         .header-logo {
             width: 40px; 
@@ -201,13 +213,23 @@
     </style>
 </head>
 <body>
+    <div class="no-print">
+        <button onclick="window.print()" class="btn btn-print">🖨️ رسید پرنٹ کریں</button>
+        <a href="javascript:history.back()" class="btn btn-back">واپس جائے</a>
+    </div>
 
     <div class="sticker-container">
         <div class="header">
-            <img src="{{ url_for('static', filename='print_logo.png') }}" class="header-logo">
-            <h2>AS Tailor</h2><b></b>
-            <p>Phone Number: 033399988877</p>
+            <div class="header-row">
+                <img src="{{ url_for('static', filename='print_logo.png') }}" class="header-logo">
+                <h2>AS Tailor</h2>
+            </div>
+            
+            <div class="header-contact">
+                📍 Shop #1, Main Market Peshawar | 📞 0300-1234567
+            </div>
         </div>
+        
 
         <div class="info-grid">
             <div>آئی ڈی : <strong>{{ customer.userId}}</strong></div>
@@ -364,10 +386,10 @@
 
     </div>
 
-    <div class="no-print">
+    <!-- <div class="no-print">
         <button onclick="window.print()" class="btn btn-print">🖨️ رسید پرنٹ کریں</button>
         <a href="javascript:history.back()" class="btn btn-back">واپس جائے</a>
-    </div>
+    </div> -->
 
     <script>
         const d = new Date();
