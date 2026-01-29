@@ -225,8 +225,8 @@
                         {% elif customer.style_pocket == 'nokdarPocket' %} <img src="{{ url_for('static', filename='icon/nokdarPocket.png') }}"><div class="style-name">نکدار جیب</div>
                         {% elif customer.style_pocket == 'None' %} <div style="font-size:20px;">❌</div><div class="style-name">جیب نہیں</div>
                         {% else %} <img src="{{ url_for('static', filename='icon/samplePocket.png') }}"><div class="style-name">سادہ جیب</div> {% endif %}
-                        {% if customer.pocket_size %}<div class="style-extra">L: {{ customer.pocket_size }}</div>{% endif %}
-                        {% if customer.pocket_width %}<div class="style-extra">W: {{ customer.pocket_width }}</div>{% endif %}
+                        {% if customer.pocket_size %}<div class="style-extra">لمبائی : {{ customer.pocket_size }}</div>{% endif %}
+                        {% if customer.pocket_width %}<div class="style-extra">چوڑائی: {{ customer.pocket_width }}</div>{% endif %}
                     </div>
 
                     <div class="style-item">
