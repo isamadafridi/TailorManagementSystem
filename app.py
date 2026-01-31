@@ -62,7 +62,9 @@ def update_database_schema():
             ("style_patti", "VARCHAR(50)"),
             ("pocket_size", "VARCHAR(50)"),
             ("style_bazo", "VARCHAR(50)"),
-            ("side_pocket", "VARCHAR(50)")
+            ("side_pocket", "VARCHAR(50)"),
+            ("design_button", "VARCHAR(50)"),
+            ("salai", "VARCHAR(50)")
         ]
 
         with db.engine.connect() as conn:
@@ -119,9 +121,10 @@ class User(db.Model):
     style_patti = db.Column(db.String(50))
     style_daman = db.Column(db.String(50))
     style_shalwar_pocket = db.Column(db.String(50)) 
-    
-    style_bazo = db.Column(db.String(50)) # Shoulder Style
-    side_pocket = db.Column(db.String(50)) # Side Pocket Style
+    style_bazo =  db.Column(db.String(50)) 
+    side_pocket = db.Column(db.String(50))
+    design_button = db.Column(db.String(50))
+    salai = db.Column(db.String(50))
 
     # --- Sizes ---
     size_collar = db.Column(db.String(20))
@@ -165,7 +168,7 @@ def add_user():
             # --- NEW VALIDATION LOGIC END ---
 
 
-            userId = generate_unique_id('AB', User, User.userId)
+            userId = generate_unique_id('AS', User, User.userId)
             
             # Handle Pocket Style (Checkbox/Radio lists)
             pocket_list = request.form.getlist('style_pocket')
@@ -193,7 +196,6 @@ def add_user():
                 collar=request.form.get('collar'),
                 chati=request.form.get('chati'),
                 kamar=request.form.get('kamar'),
-                
                 ghaihr=request.form.get('ghaihr'),
                 shalwar=request.form.get('shalwar'),
                 poncha=request.form.get('poncha'),
@@ -208,23 +210,22 @@ def add_user():
                 style_daman=request.form.get('style_daman'),
                 style_patti=request.form.get('style_patti'),
                 style_shalwar_pocket=request.form.get('style_shalwar_pocket'),
-                
-                # New Styles (Direct Catch)
                 style_bazo=request.form.get('style_bazo'),
                 side_pocket=request.form.get('side_pocket'),
+                design_button=request.form.get('design_button'),
+                salai=request.form.get('salai'),
 
-                # Sizes
+                # style Sizes
                 size_collar=request.form.get('size_collar'),
                 size_patti=request.form.get('size_patti'),
                 kaj_count=request.form.get('kaj_count'),
+                pocket_size=request.form.get('pocket_size'),
+                pocket_width=request.form.get('pocket_width'), 
                 
                 # Unique Size Names (Direct Catch - No Lists)
                 size_cuff=request.form.get('size_cuff'),
                 mora=request.form.get('mora'),       
                 darmyan=request.form.get('darmyan'), 
-                
-                pocket_size=request.form.get('pocket_size'),
-                pocket_width=request.form.get('pocket_width'), 
                 
                 special_notes=request.form.get('special_notes')
             )
@@ -240,6 +241,7 @@ def add_user():
             return redirect(url_for('add_user'))
     
     return render_template('add_user.html')
+
 @app.route('/user')
 def user():
     all_users = User.query.all()
@@ -307,10 +309,10 @@ def update_customer(user_id):
             customer.style_daman = request.form.get('style_daman')
             customer.style_patti = request.form.get('style_patti')
             customer.style_shalwar_pocket = request.form.get('style_shalwar_pocket')
-            
-            # Update New Styles
             customer.style_bazo = request.form.get('style_bazo')
             customer.side_pocket = request.form.get('side_pocket')
+            customer.design_button=request.form.get('design_button')
+            customer.salai=request.form.get('salai')
 
             # Handle Pockets
             pocket_list = request.form.getlist('style_pocket')
@@ -344,6 +346,7 @@ def update_customer(user_id):
             return redirect(url_for('update_customer', user_id=user_id))
 
     return render_template('update_customer.html', customer=customer)
+
 @app.route('/view/<string:user_id>')
 def view_customer(user_id):
     customer = User.query.filter_by(userId=user_id).first_or_404()

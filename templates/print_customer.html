@@ -147,7 +147,10 @@
                 <h2>AS Tailor</h2>
             </div>
             <div class="header-contact">
-                📍 Shop #1, Main Market Peshawar | 📞 0300-1234567
+                📍 Malik Said Azam Markeet 2nd Floor Shop #9 
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                <img src="{{ url_for('static', filename='icon/whatsapp.png') }}" style="width:12px; height:12px; vertical-align: middle; margin-bottom: 2px;"> 
+                0310-0916638
             </div>
         </div>
 
@@ -223,7 +226,7 @@
                     <div class="style-item">
                         {% if customer.style_pocket == 'flapPocket' %} <img src="{{ url_for('static', filename='icon/flapPocket.png') }}"><div class="style-name">فلپ جیب</div>
                         {% elif customer.style_pocket == 'nokdarPocket' %} <img src="{{ url_for('static', filename='icon/nokdarPocket.png') }}"><div class="style-name">نکدار جیب</div>
-                        {% elif customer.style_pocket == 'None' %} <div style="font-size:20px;">❌</div><div class="style-name">جیب نہیں</div>
+                        {% elif customer.style_pocket == 'None' %} <div style="font-size:20px;">❌</div><div class="style-name">سامنےجیب نہیں</div>
                         {% else %} <img src="{{ url_for('static', filename='icon/samplePocket.png') }}"><div class="style-name">سادہ جیب</div> {% endif %}
                         {% if customer.pocket_size %}<div class="style-extra">لمبائی : {{ customer.pocket_size }}</div>{% endif %}
                         {% if customer.pocket_width %}<div class="style-extra">چوڑائی: {{ customer.pocket_width }}</div>{% endif %}
@@ -244,11 +247,47 @@
                         {% if customer.style_shalwar_pocket == 'Side' %} <img src="{{ url_for('static', filename='icon/pantPocket.png') }}"><div class="style-name">شلوار جیب</div>
                         {% else %} <div style="font-size:20px;">❌</div><div class="style-name">شلوار جیب نہیں</div> {% endif %}
                     </div>
+
+                    <div class="style-item">
+                        {% if customer.design_button == 'sample_button' %}
+                            <div class="style-name">سادہ بٹن</div>
+                        {% elif customer.design_button == 'steel_button' %}
+                            <div class="style-name">سٹیل بٹن</div>
+                        {% elif customer.design_button == 'ring_button' %}
+                            <div class="style-name">رینگ بٹن</div>
+                        {% elif customer.design_button == 'apple_button' %}
+                            <div class="style-name">بعیر کاج (ایپل بٹن)</div>
+                        {% else %}
+                            <div class="style-name">بعیر کاج (گول بٹن)</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="style-item">
+                        {% if customer.salai == 'single_salai' %}
+                            <div class="style-name">سنگل سلایئ</div>
+                        {% elif customer.salai == 'double_salai' %}
+                            <div class="style-name">ڈبل سلایئ</div>
+                        {% elif customer.salai == 'single_chamaktar' %}
+                            <div class="style-name">سنگل چمک تار</div>
+                        {% elif customer.salai == 'double_chamaktar' %}
+                            <div class="style-name">ڈبل چمک تار</div>
+                            {% elif customer.salai == 'triple_chamaktar' %}
+                            <div class="style-name">ٹرپل چمک تار</div>
+                        {% elif customer.salai == 'choka_salai' %}
+                            <div class="style-name">چوکہ سلا یئ</div>
+                        {% elif customer.salai == 'zanjari' %}
+                            <div class="style-name">زنجیریئ</div>
+                        {% else %}
+                            <div class="style-name">KTK</div>
+                        {% endif %}
+                    </div>
+                    
+
                 </div>
 
                 <div class="manual-write-area">
                     <div  style="width:100%; text-align:right;">
-                        <strong>:نوٹ</strong> {{ customer.special_notes }}
+                        <strong>:نوٹ</strong> 
                     </div>
                 </div>
             </div>
@@ -262,7 +301,10 @@
                 <h2>AS Tailor</h2>
             </div>
             <div class="header-contact">
-                📍 Shop #1, Main Market Peshawar | 📞 0300-1234567
+                📍Malik Said Azam Markeet 2nd Floor Shop #9 
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <img src="{{ url_for('static', filename='icon/whatsapp.png') }}" style="width:12px; height:12px; vertical-align: middle; margin-bottom: 2px;"> 
+                0310-0916638
             </div>
         </div>
 
@@ -273,6 +315,9 @@
             <div>Sout: <strong>{{ customer.numberOfSuit }}</strong></div>
             <div>Date: <strong class="print-date"></strong></div>
             <div>Baqaya: <strong>{{ customer.price }}</strong></div>
+        </div>
+        <div style="text-align:center; font-size:12px; margin-top:15px; border-top:1px solid #000; padding-top:5px;">
+            بجلی فیل ہونےکی صورت میں کپڑے لیٹ بھی ہو سکتے ہے۔ کپڑے ایک ماہ کے اندر وصول کریں بعد میں ہم زمہ دار نہ ہونگے۔ ناپ دیتے وقت دیتے وقت اپنی تسلی کریں۔  
         </div>
         <div style="text-align:center; font-size:12px; margin-top:15px; border-top:1px solid #000; padding-top:5px; font-weight:bold;">
             Thank you for visiting! <br> تشریف لانے کا شکریہ

@@ -20,7 +20,9 @@ new_columns = [
     ("remaining_balance", "INTEGER DEFAULT 0"),
     ("kaj_count", "VARCHAR(50)"),
     ("pocket_size", "VARCHAR(50)"),
-    ("style_patti", "VARCHAR(50)")
+    ("style_patti", "VARCHAR(50)"),
+    ("design_button", "VARCHAR(50)"),
+    ("salai", "VARCHAR(50)")
 ]
 
 # 3. Check and Add Columns

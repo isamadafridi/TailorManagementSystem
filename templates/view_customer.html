@@ -46,9 +46,9 @@
         /* VISUAL STYLE GRID */
         .visual-style-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
         .visual-box {
-            border: 2px solid #eee; border-radius: 8px; padding: 10px;
+            border: 2px solid #eee; border-radius: 8px; padding: 8px;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            text-align: center; background: white; transition: 0.2s; min-height: 110px;
+            text-align: center; background: white; transition: 0.2s; min-height: 90px;
         }
         .visual-box:hover { border-color: #3498db; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
         .visual-img { width: 45px; height: 45px; object-fit: contain; margin-bottom: 5px; }
@@ -259,6 +259,40 @@
                         {% else %} 
                             <div style="font-size:30px;">❌</div>
                             <div class="visual-name">شلوار جیب نہیں</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="visual-box">
+                        {% if customer.design_button == 'sample_button' %}
+                            <div class="visual-name">سادہ بٹن</div>
+                        {% elif customer.design_button == 'steel_button' %}
+                            <div class="visual-name">سٹیل بٹن</div>
+                        {% elif customer.design_button == 'ring_button' %}
+                            <div class="visual-name">رینگ بٹن</div>
+                        {% elif customer.design_button == 'apple_button' %}
+                            <div class="visual-name">بعیر کاج(ایپل بٹن)</div>
+                        {% else %}
+                            <div class="visual-name">بعیر کاج (گول بٹن)</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="visual-box">
+                        {% if customer.salai == 'single_salai' %}
+                            <div class="visual-name">سنگل سلایئ</div>
+                        {% elif customer.salai == 'double_salai' %}
+                            <div class="visual-name">ڈبل سلایئ</div>
+                        {% elif customer.salai == 'single_chamaktar' %}
+                            <div class="visual-name">سنگل چمک تار</div>
+                        {% elif customer.salai == 'double_chamaktar' %}
+                            <div class="visual-name">ڈبل چمک تار</div>
+                            {% elif customer.salai == 'triple_chamaktar' %}
+                            <div class="visual-name">ٹرپل چمک تار</div>
+                        {% elif customer.salai == 'choka_salai' %}
+                            <div class="visual-name">چوکہ سلا یئ</div>
+                        {% elif customer.salai == 'zanjari' %}
+                            <div class="visual-name">زنجیریئ</div>
+                        {% else %}
+                            <div class="visual-name">KTK</div>
                         {% endif %}
                     </div>
 

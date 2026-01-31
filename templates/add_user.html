@@ -69,7 +69,7 @@
                 </div>
                 <div class="input-row"><label>سوٹ کی تعداد:</label><input type="number" name="numberOfSuit" value="1" required></div>
                 <div class="input-row"><label>تاریخ:</label><input type="date" name="date" required></div>
-                <!-- <div class="input-row"><label>بقایا (Advance):</label><input type="number" name="price" value="0"></div> -->
+                <div class="input-row"><label>ریٹ:</label><input type="number" name="price" value="0"></div>
                 <div class="input-row full-width"><label>پتہ:</label><input type="text" name="address"></div>
             </div>
 
@@ -104,7 +104,7 @@
 
             <label style="font-weight:bold; display:block; margin-top:10px;">1. کلر کی انداز</label>
             <div class="image-selector-group">
-                <label class="image-radio-item"><input type="radio" name="style_collar" value="collar"><div class="icon-box"><img src="{{ url_for('static', filename='icon/collar.png') }}"><span>کالر</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_collar" value="collar"><div class="icon-box"><img src="{{ url_for('static', filename='icon/collar.png') }}"><span>فرنچ</span></div></label>
                 <label class="image-radio-item"><input type="radio" name="style_collar" value="collarGoll"><div class="icon-box"><img src="{{ url_for('static', filename='icon/collarGoll.png') }}"><span>کالر گول</span></div></label>
                 <label class="image-radio-item"><input type="radio" name="style_collar" value="ban" checked><div class="icon-box"><img src="{{ url_for('static', filename='icon/ban.png') }}"><span>بین</span></div></label>
                 <label class="image-radio-item"><input type="radio" name="style_collar" value="benGoll"><div class="icon-box"><img src="{{ url_for('static', filename='icon/benGoll.png') }}"><span>بین گول</span></div></label>
@@ -136,9 +136,9 @@
             </div>
             <div class="size-selection-row"><div class="size-label-text">کف کی چوڑائی :</div><input type="text" name="size_cuff" class="size-input-field"></div>
 
-            <label style="font-weight:bold; display:block; margin-top:10px;">4. شولڈر</label>
+            <label style="font-weight:bold; display:block; margin-top:10px;">4. سنٹر</label>
             <div class="image-selector-group">
-                <label class="image-radio-item"><input type="radio" name="style_bazo" value="sholder" checked><div class="icon-box"><img src="{{ url_for('static', filename='icon/sholder.png') }}"><span>شولڈر</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="style_bazo" value="sholder" checked><div class="icon-box"><img src="{{ url_for('static', filename='icon/sholder.png') }}"><span>سنٹر</span></div></label>
             </div>
             <div class="size-selection-row"><div class="size-label-text">موڑا :</div><input type="text" name="mora" class="size-input-field"></div>
             <div class="size-selection-row"><div class="size-label-text">درمیان :</div><input type="text" name="darmyan" class="size-input-field"></div>
@@ -171,8 +171,30 @@
                 <label class="image-radio-item"><input type="radio" name="style_shalwar_pocket" value="None" checked><div class="icon-box"><div style="font-size:20px;">❌</div><span>نہیں</span></div></label>
             </div>
 
-            <label style="font-weight:bold; display:block; margin-top:15px;">Special Tailor Notes:</label>
-            <textarea name="special_notes" rows="2" style="width:100%; padding:8px; border:1px solid #ccc;"></textarea>
+            <label style="font-weight:bold; display:block; margin-top:10px;">9. بٹن</label>
+            <div class="image-selector-group">
+                <label class="image-radio-item"><input type="radio" name="design_button" value="sample_button" checked><div class="icon-box"><span>سادہ بٹن</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="design_button" value="steel_button"><div class="icon-box"><span>سٹیل بٹن</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="design_button" value="ring_button"><div class="icon-box"><span>رینگ بٹن</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="design_button" value="apple_button"><div class="icon-box"><span>بعیر کاج(ایپل بٹن)</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="design_button" value="goll_button" ><div class="icon-box"><span>بعیر کاج (گول بٹن)</span></div></label>
+            </div>
+
+            <label style="font-weight:bold; display:block; margin-top:10px;">10. سلا یئ</label>
+            <div class="image-selector-group">
+                <label class="image-radio-item"><input type="radio" name="salai" value="single_salai" checked><div class="icon-box"><span>سنگل سلایئ</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="salai" value="double_salai"><div class="icon-box"><span>ڈبل سلایئ</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="salai" value="single_chamaktar"><div class="icon-box"><span>سنگل چمک تار</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="salai" value="double_chamaktar"><div class="icon-box"><span>ڈبل چمک تار</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="salai" value="triple_chamaktar" ><div class="icon-box"><span>ٹرپل چمک تار</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="salai" value="choka_salai" ><div class="icon-box"><span>چوکہ سلا یئ</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="salai" value="zanjari" ><div class="icon-box"><span>زنجیریئ</span></div></label>
+                <label class="image-radio-item"><input type="radio" name="salai" value="ktk" ><div class="icon-box"><span>KTK</span></div></label>
+                
+            </div>
+
+            <!-- <label style="font-weight:bold; display:block; margin-top:15px;">Special Tailor Notes:</label>
+            <textarea name="special_notes" rows="2" style="width:100%; padding:8px; border:1px solid #ccc;"></textarea> -->
 
             <button type="submit" class="btn-submit">Save & View Profile</button>
             <a href="/user" class="back-link">Cancel</a>
